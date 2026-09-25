@@ -1,0 +1,79 @@
+
+;; Function main (main, funcdef_no=1732, decl_uid=44216, cgraph_uid=466, symbol_order=498)
+
+int main ()
+{
+  struct basic_ostream & D.49132;
+  struct __ostream_type & D.49131;
+  int n;
+  int D.49129;
+  int n.1_1;
+  int n.2_2;
+  int n.3_3;
+  long long int _4;
+  struct __ostream_type & _5;
+  int times.4_6;
+  struct basic_ostream & _7;
+  int _8;
+  struct __ostream_type & _15;
+  struct basic_ostream & _18;
+  int _20;
+  int _21;
+
+  <bb 2> :
+  std::basic_istream<char>::operator>> (&cin, &n);
+
+  <bb 3> :
+  n.1_1 = n;
+  if (n.1_1 < 0)
+    goto <bb 5>; [INV]
+  else
+    goto <bb 4>; [INV]
+
+  <bb 4> :
+  n.2_2 = n;
+  if (n.2_2 > 20)
+    goto <bb 5>; [INV]
+  else
+    goto <bb 6>; [INV]
+
+  <bb 5> :
+  _21 = 0;
+  // predicted unlikely by early return (on trees) predictor.
+  goto <bb 11>; [INV]
+
+  <bb 6> :
+  n.3_3 = n;
+  _4 = factorial (n.3_3);
+  _15 = std::basic_ostream<char>::operator<< (&cout, _4);
+
+  <bb 7> :
+  _5 = _15;
+  std::basic_ostream<char>::operator<< (_5, endl);
+
+  <bb 8> :
+  times.4_6 = times;
+  _18 = std::basic_ostream<char>::operator<< (&cout, times.4_6);
+
+  <bb 9> :
+  _7 = _18;
+  std::basic_ostream<char>::operator<< (_7, endl);
+
+  <bb 10> :
+  _20 = 0;
+
+  <bb 11> :
+  # _8 = PHI <_21(5), _20(10)>
+  n ={v} {CLOBBER};
+
+  <bb 12> :
+<L4>:
+  return _8;
+
+  <bb 13> :
+<L5>:
+  resx 1
+
+}
+
+

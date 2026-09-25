@@ -1,0 +1,14 @@
+\subsection{LLVM IR 等价实现（成员B负责）}
+\TODOBOX{本节由成员B完成。必须以上一节同一份 \texttt{main.sy} 为语义基准，手工编写等价 LLVM IR，链接 SysY 运行时库，并使用 LLVM/Clang 编译或执行。实验应使用表中的三组统一输入验证结果，并保留必要截图。}
+
+成员B完成时建议按以下顺序组织本节：
+\begin{enumerate}[label=\arabic*)]
+  \item 说明 SysY 中数组、循环、条件分支、函数参数/返回值和运行时库调用如何映射到 LLVM IR；
+  \item 给出完整 \texttt{main.ll}；
+  \item 给出 LLVM/Clang 编译、链接命令及目标文件/可执行文件检查；
+  \item 给出三组运行结果截图与结果表；
+  \item 说明 \texttt{getint}/\texttt{putint}/\texttt{putch} 与 SysY 运行时库的链接；
+  \item 解释 \texttt{br}、\texttt{call}、\texttt{getelementptr}、\texttt{load/store} 等关键指令与源程序结构的对应关系。
+\end{enumerate}
+
+\TODOBOX{成员B完成后，将自己的实验文字和截图直接替换本节占位内容；截图建议放入 \texttt{figures/shared/q2\_llvm/}。}

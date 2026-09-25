@@ -1,0 +1,92 @@
+\usepackage[a4paper,top=2.5cm,bottom=2.5cm,left=2.6cm,right=2.6cm]{geometry}
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\setmainfont{Liberation Serif}
+\setsansfont{Liberation Sans}
+\setmonofont{Noto Sans Mono CJK SC}
+\setCJKmainfont{Noto Serif CJK SC}
+\setCJKsansfont{Noto Sans CJK SC}
+\setCJKmonofont{Noto Sans Mono CJK SC}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{url}
+\usepackage{lastpage}
+\usepackage{enumitem}
+
+\hypersetup{colorlinks=false,pdfborder={0 0 0}}
+\setstretch{1.35}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0pt}
+\captionsetup{font=small,labelsep=space}
+\renewcommand{\figurename}{图}
+\renewcommand{\tablename}{表}
+\renewcommand{\lstlistingname}{代码}
+\renewcommand{\refname}{参考文献}
+\titleformat{\section}{\bfseries\zihao{3}}{\thesection}{0.8em}{}
+\titleformat{\subsection}{\bfseries\zihao{4}}{\thesubsection}{0.8em}{}
+\titleformat{\subsubsection}{\bfseries\zihao{-4}}{\thesubsubsection}{0.8em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{\small 编译原理上机作业调研报告}
+\fancyfoot[C]{\small 第 \thepage\ 页 / 共 \pageref{LastPage} 页}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+\setlength{\headheight}{14pt}
+\emergencystretch=3em
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  numbers=left,
+  numberstyle=\scriptsize,
+  numbersep=8pt,
+  frame=single,
+  breaklines=true,
+  breakatwhitespace=false,
+  showstringspaces=false,
+  columns=fullflexible,
+  keepspaces=true,
+  tabsize=4,
+  captionpos=b,
+  backgroundcolor=\color{white},
+  rulecolor=\color{black},
+  keywordstyle=\bfseries,
+  commentstyle=\itshape
+}
+\lstdefinelanguage{bash}{
+  morekeywords={cd,ls,pwd,grep,find,head,tail,echo,file,nm,objdump,readelf,which,type,export,rm,cp,make},
+  sensitive=true,
+  morecomment=[l]{\#},
+  morestring=[b]"
+}
+\lstdefinelanguage{RiscVAsm}{
+  morekeywords={li,mv,j,call,ret,bnez,blez,bge,slli,add,lw,sw,remw,addw,addi,addiw,sd,ld},
+  sensitive=true,
+  morecomment=[l]{\#}
+}
+\newcommand{\labfigure}[3]{%
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.92\linewidth,height=0.72\textheight,keepaspectratio]{#1}
+  \caption{#2}
+  \label{#3}
+\end{figure}}
+\newcommand{\TODOBOX}[1]{%
+\begin{center}
+\fbox{\begin{minipage}{0.92\linewidth}
+\textbf{待成员B补充：}#1
+\end{minipage}}
+\end{center}}

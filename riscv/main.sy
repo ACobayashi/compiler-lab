@@ -1,0 +1,61 @@
+//求偶数和
+int sum_even(int a[],int n)
+{
+    int i;
+    int sum;
+    i=0;
+    sum=0;
+    while(i<n)
+    {
+        if(a[i]%2==0)
+            sum=sum+a[i];
+        i=i+1;
+    }
+    return sum;
+}
+
+//统计正数个数
+int count_pos(int a[],int n)
+{
+    int i;
+    int cnt;
+    i=0;
+    cnt=0;
+    while(i<n)
+    {
+        if(a[i]>0)
+            cnt=cnt+1;
+        i=i+1;
+    }
+    return cnt;
+}
+
+int main()
+{
+    int a[10];
+    int n;
+    int i;
+    int s;
+    int c;
+
+    //输入
+    n=getint();
+    i=0;
+    while(i<n)
+    {
+        a[i]=getint();
+        i=i+1;
+    }
+
+    //计算
+    s=sum_even(a,n);
+    c=count_pos(a,n);
+
+    //输出
+    putint(s);
+    putch(10);
+    putint(c);
+    putch(10);
+
+    return 0;
+}

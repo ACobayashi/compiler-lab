@@ -1,0 +1,28 @@
+# Local transaction records
+.transaction/
+
+# Native compilation products
+*.o
+*.out
+*.exe
+/main
+/riscv/main
+/output/main_O0
+/output/main_g
+/output/main_nog
+/output/main_static
+
+# LaTeX build intermediates
+*.aux
+*.log
+*.toc
+*.xdv
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+
+# Editor and OS metadata
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

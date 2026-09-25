@@ -1,0 +1,16 @@
+/usr/include/c++/11/bits/locale_facets.h:879:21: missed: statement clobbers memory: std::ctype<char>::_M_widen_init (_14);
+/usr/include/c++/11/bits/locale_facets.h:880:23: missed: statement clobbers memory: _27 = OBJ_TYPE_REF(_25;_14->6) (_14, 10);
+/usr/include/c++/11/ostream:685:19: missed: statement clobbers memory: _8 = std::basic_ostream<char>::put (__os_1(D), _7);
+/usr/include/c++/11/ostream:707:24: missed: statement clobbers memory: std::basic_ostream<char>::flush (_8);
+/usr/include/c++/11/bits/basic_ios.h:50:18: missed: statement clobbers memory: std::__throw_bad_cast ();
+main.cpp:19:27: missed: couldn't vectorize loop
+main.cpp:21:18: missed: not vectorized: relevant stmt not supported: _1 = (long long int) i_15;
+main.cpp:19:27: missed: couldn't vectorize loop
+main.cpp:21:18: missed: not vectorized: relevant stmt not supported: _13 = (long long int) i_23;
+main.cpp:31:12: missed: statement clobbers memory: std::basic_istream<char>::operator>> (&cin, &n);
+/usr/include/c++/11/ostream:202:25: missed: statement clobbers memory: _11 = std::basic_ostream<char>::_M_insert<long long int> (&cout, result_26);
+/usr/include/c++/11/ostream:113:13: missed: statement clobbers memory: std::endl.isra (_11);
+main.cpp:39:13: missed: statement clobbers memory: _9 = std::basic_ostream<char>::operator<< (&cout, times.4_4);
+/usr/include/c++/11/ostream:113:13: missed: statement clobbers memory: std::endl.isra (_9);
+/usr/include/c++/11/iostream:74:25: missed: statement clobbers memory: std::ios_base::Init::Init (&__ioinit);
+/usr/include/c++/11/iostream:74:25: missed: statement clobbers memory: __cxxabiv1::__cxa_atexit (__dt_comp , &__ioinit, &__dso_handle);

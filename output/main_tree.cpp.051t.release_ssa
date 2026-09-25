@@ -1,0 +1,167 @@
+
+;; Function factorial (_Z9factoriali, funcdef_no=1731, decl_uid=44208, cgraph_uid=465, symbol_order=497)
+
+Released 0 names, 0.00%, removed 0 holes
+long long int factorial (int n)
+{
+  int i;
+  long long int result;
+  long long int D.49124;
+  long long int _1;
+  int times.0_2;
+  int _3;
+  long long int _11;
+
+  <bb 2> :
+  result_6 = 1;
+  i_7 = 2;
+  goto <bb 4>; [INV]
+
+  <bb 3> :
+  _1 = (long long int) i_5;
+  result_12 = result_4 * _1;
+  i_13 = i_5 + 1;
+
+  <bb 4> :
+  # result_4 = PHI <result_6(2), result_12(3)>
+  # i_5 = PHI <i_7(2), i_13(3)>
+  if (i_5 <= n_8(D))
+    goto <bb 3>; [INV]
+  else
+    goto <bb 5>; [INV]
+
+  <bb 5> :
+  times.0_2 = times;
+  _3 = times.0_2 + 1;
+  times = _3;
+  _11 = result_4;
+
+  <bb 6> :
+<L3>:
+  return _11;
+
+}
+
+
+
+;; Function main (main, funcdef_no=1732, decl_uid=44216, cgraph_uid=466, symbol_order=498)
+
+Released 0 names, 0.00%, removed 0 holes
+int main ()
+{
+  struct basic_ostream & D.49132;
+  struct __ostream_type & D.49131;
+  int n;
+  int D.49129;
+  int n.1_1;
+  int n.2_2;
+  int n.3_3;
+  long long int _4;
+  struct __ostream_type & _5;
+  int times.4_6;
+  struct basic_ostream & _7;
+  int _8;
+  struct __ostream_type & _15;
+  struct basic_ostream & _18;
+  int _20;
+  int _21;
+
+  <bb 2> :
+  std::basic_istream<char>::operator>> (&cin, &n);
+
+  <bb 3> :
+  n.1_1 = n;
+  if (n.1_1 < 0)
+    goto <bb 5>; [INV]
+  else
+    goto <bb 4>; [INV]
+
+  <bb 4> :
+  n.2_2 = n;
+  if (n.2_2 > 20)
+    goto <bb 5>; [INV]
+  else
+    goto <bb 6>; [INV]
+
+  <bb 5> :
+  _21 = 0;
+  // predicted unlikely by early return (on trees) predictor.
+  goto <bb 11>; [INV]
+
+  <bb 6> :
+  n.3_3 = n;
+  _4 = factorial (n.3_3);
+  _15 = std::basic_ostream<char>::operator<< (&cout, _4);
+
+  <bb 7> :
+  _5 = _15;
+  std::basic_ostream<char>::operator<< (_5, endl);
+
+  <bb 8> :
+  times.4_6 = times;
+  _18 = std::basic_ostream<char>::operator<< (&cout, times.4_6);
+
+  <bb 9> :
+  _7 = _18;
+  std::basic_ostream<char>::operator<< (_7, endl);
+
+  <bb 10> :
+  _20 = 0;
+
+  <bb 11> :
+  # _8 = PHI <_21(5), _20(10)>
+  n ={v} {CLOBBER};
+
+  <bb 12> :
+<L4>:
+  return _8;
+
+  <bb 13> :
+<L5>:
+  n ={v} {CLOBBER};
+  resx 1
+
+}
+
+
+
+;; Function __static_initialization_and_destruction_0 (_Z41__static_initialization_and_destruction_0ii, funcdef_no=2233, decl_uid=49116, cgraph_uid=967, symbol_order=1026)
+
+Released 0 names, 0.00%, removed 0 holes
+void __static_initialization_and_destruction_0 (int __initialize_p, int __priority)
+{
+  <bb 2> :
+  if (__initialize_p_2(D) == 1)
+    goto <bb 3>; [INV]
+  else
+    goto <bb 5>; [INV]
+
+  <bb 3> :
+  if (__priority_4(D) == 65535)
+    goto <bb 4>; [INV]
+  else
+    goto <bb 5>; [INV]
+
+  <bb 4> :
+  std::ios_base::Init::Init (&__ioinit);
+  __cxxabiv1::__cxa_atexit (__dt_comp , &__ioinit, &__dso_handle);
+
+  <bb 5> :
+  return;
+
+}
+
+
+
+;; Function _GLOBAL__sub_I_times (_GLOBAL__sub_I_times, funcdef_no=2234, decl_uid=49122, cgraph_uid=968, symbol_order=1145)
+
+Released 0 names, 0.00%, removed 0 holes
+void _GLOBAL__sub_I_times ()
+{
+  <bb 2> :
+  __static_initialization_and_destruction_0 (1, 65535);
+  return;
+
+}
+
+

@@ -1,0 +1,86 @@
+
+;; Function main (main, funcdef_no=1732, decl_uid=44216, cgraph_uid=466, symbol_order=498)
+
+Before removal of unreachable regions:
+Eh tree:
+   2 must_not_throw
+   1 cleanup land:{1,<L5>}
+Reachable regions: n_bits = 3, set = {1 }
+Reachable landing pads: n_bits = 2, set = {1 }
+Removing unreachable region 2
+
+
+After removal of unreachable regions:
+Eh tree:
+   1 cleanup land:{1,<L5>}
+
+
+Removing basic block 13
+Removing unreachable region 1
+Merging blocks 2 and 3
+Merging blocks 6 and 7
+Merging blocks 6 and 8
+Merging blocks 6 and 9
+Merging blocks 6 and 10
+int main ()
+{
+  struct basic_ostream & D.49132;
+  struct __ostream_type & D.49131;
+  int n;
+  int D.49129;
+  int n.1_1;
+  int n.2_2;
+  int n.3_3;
+  long long int _4;
+  struct __ostream_type & _5;
+  int times.4_6;
+  struct basic_ostream & _7;
+  int _8;
+  struct __ostream_type & _15;
+  struct basic_ostream & _18;
+  int _20;
+  int _21;
+
+  <bb 2> :
+  std::basic_istream<char>::operator>> (&cin, &n);
+  n.1_1 = n;
+  if (n.1_1 < 0)
+    goto <bb 4>; [INV]
+  else
+    goto <bb 3>; [INV]
+
+  <bb 3> :
+  n.2_2 = n;
+  if (n.2_2 > 20)
+    goto <bb 4>; [INV]
+  else
+    goto <bb 5>; [INV]
+
+  <bb 4> :
+  _21 = 0;
+  // predicted unlikely by early return (on trees) predictor.
+  goto <bb 6>; [INV]
+
+  <bb 5> :
+  n.3_3 = n;
+  _4 = factorial (n.3_3);
+  _15 = std::basic_ostream<char>::operator<< (&cout, _4);
+  _5 = _15;
+  std::basic_ostream<char>::operator<< (_5, endl);
+  times.4_6 = times;
+  _18 = std::basic_ostream<char>::operator<< (&cout, times.4_6);
+  _7 = _18;
+  std::basic_ostream<char>::operator<< (_7, endl);
+  _20 = 0;
+
+  <bb 6> :
+  # _8 = PHI <_21(4), _20(5)>
+  n ={v} {CLOBBER};
+
+  <bb 7> :
+<L4>:
+  return _8;
+
+}
+
+

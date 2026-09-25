@@ -1,0 +1,16 @@
+\section{结论}
+本实验围绕语言处理系统的完整工作过程和 SysY 程序的等价实现进行了分阶段研究。成员A的小题1实验表明，预处理阶段完成头文件展开、宏替换与条件编译；编译器内部可以通过 token、tree、CFG、RTL 和汇编代码观察词法、语法、语义、中间表示、优化与代码生成过程；汇编器将文本汇编转换为可重定位目标文件，链接器再解析符号和库依赖形成最终可执行文件。对 \texttt{-DDEBUG}、\texttt{-O2}、\texttt{-g}、\texttt{-fno-omit-frame-pointer}、\texttt{-static} 和自动并行化选项的对照还说明，命令行参数会直接影响不同阶段的输出形式和最终程序组织。
+
+小题2采用同一份 SysY 程序作为语义基准。已完成的 RISC-V 部分将数组访问、循环、条件分支、函数调用和运行时输入输出映射为 RV64 指令与调用约定，并成功链接 SysY 运行时库，在 QEMU 下通过三组输入得到预期结果。该过程说明，与源程序等价不仅要求计算结果一致，还需要正确处理参数传递、数组地址计算、控制流、栈帧以及外部运行时函数等低层问题。
+
+\TODOBOX{成员B完成 LLVM IR 与自己的小题1后，两人共同补写结论最后一段：概括成员B小题1的主要观察；总结 LLVM IR 中基本块、临时值/SSA、getelementptr、load/store、br、call 与 SysY 结构的对应关系；最后比较 LLVM IR 与 RISC-V 在抽象层次、控制流表示和机器相关性方面的差异。完成最终校对后删除本占位框。}
+
+\begin{thebibliography}{99}
+\bibitem{course_overview} 编译原理课程组. \emph{了解编译器、LLVM IR 编程及汇编编程实验指导} [课程资料].
+\bibitem{course_env} 编译原理课程组. \emph{编译器开发环境部署} [课程资料].
+\bibitem{sysy_lang} SysY 语言工作组. \emph{SysY 语言定义（2022版）} [课程资料].
+\bibitem{sysy_runtime} SysY 语言工作组. \emph{SysY 运行时库说明} [课程资料].
+\bibitem{gcc} Free Software Foundation. \emph{Using the GNU Compiler Collection (GCC)}. GCC Online Documentation.
+\bibitem{llvm} LLVM Project. \emph{LLVM Language Reference Manual}.
+\bibitem{riscv} RISC-V International. \emph{The RISC-V Instruction Set Manual, Volume I: Unprivileged Architecture}.
+\end{thebibliography}

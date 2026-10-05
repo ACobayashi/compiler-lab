@@ -1,14 +1,58 @@
 \subsection{LLVM IR 等价实现（成员B负责）}
-\TODOBOX{本节由成员B完成。必须以上一节同一份 \texttt{main.sy} 为语义基准，手工编写等价 LLVM IR，链接 SysY 运行时库，并使用 LLVM/Clang 编译或执行。实验应使用表中的三组统一输入验证结果，并保留必要截图。}
+本节以代码~\ref{lst:sysy-main} 中的小题2共享 SysY 程序为语义基准，手工编写 LLVM IR，而不是由 C/SysY 编译器自动生成。IR 保持三个函数 \texttt{sum\_even}、\texttt{count\_pos} 和 \texttt{main}；它使用 SSA 临时值和基本块表示循环与分支，并调用课程运行时库完成输入输出。文件位于 \texttt{llvm/memberB/main.ll}。
 
-成员B完成时建议按以下顺序组织本节：
-\begin{enumerate}[label=\arabic*)]
-  \item 说明 SysY 中数组、循环、条件分支、函数参数/返回值和运行时库调用如何映射到 LLVM IR；
-  \item 给出完整 \texttt{main.ll}；
-  \item 给出 LLVM/Clang 编译、链接命令及目标文件/可执行文件检查；
-  \item 给出三组运行结果截图与结果表；
-  \item 说明 \texttt{getint}/\texttt{putint}/\texttt{putch} 与 SysY 运行时库的链接；
-  \item 解释 \texttt{br}、\texttt{call}、\texttt{getelementptr}、\texttt{load/store} 等关键指令与源程序结构的对应关系。
-\end{enumerate}
+\subsubsection{源程序结构到 LLVM IR 的映射}
+\begin{table}[H]
+\centering
+\caption{SysY 结构与手写 LLVM IR 的对应关系}
+\begin{tabularx}{0.94\linewidth}{>{\ttfamily}p{3.2cm} >{\ttfamily}p{4.1cm} X}
+\toprule
+\normalfont SysY 结构 & \normalfont LLVM IR 指令/结构 & \normalfont 含义 \\
+\midrule
+\texttt{int a[10]} & \texttt{alloca [10 x i32]} & 在 \texttt{main} 栈帧分配 10 个 32 位整数 \\
+\texttt{a[i]} & \texttt{getelementptr}, \texttt{load/store} & 计算元素地址并读写内存 \\
+\texttt{while (i<n)} & \texttt{br}, \texttt{icmp slt} & 比较循环条件并在基本块间跳转 \\
+\texttt{a[i] \% 2 == 0} & \texttt{srem}, \texttt{icmp eq} & 有符号取余后判断是否为偶数 \\
+\texttt{if / else} & 条件 \texttt{br} 与 \texttt{phi} & 分支选路并合并更新后的累加值 \\
+函数参数/返回值 & \texttt{i32*}, \texttt{i32}, \texttt{ret} & 数组首地址和长度作为参数，结果作为整数返回 \\
+输入/输出 & \texttt{call} & 调用 SysY 运行时库的 \texttt{getint}、\texttt{putint}、\texttt{putch} 接口 \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
-\TODOBOX{成员B完成后，将自己的实验文字和截图直接替换本节占位内容；截图建议放入 \texttt{figures/shared/q2\_llvm/}。}
+在 \texttt{sum\_even} 中，循环头的 \texttt{phi} 节点选择初值 $0$ 或上一轮的下标/和；偶数分支计算新的和，不满足条件的分支保留原和，再由另一个 \texttt{phi} 合并。\texttt{count\_pos} 采用相同结构统计正数。\texttt{main} 在栈上分配数组，通过 \texttt{getint} 逐项读入，再把首元素地址和 $n$ 传给两个计算函数。上述控制流和数据流均为手工编写的 LLVM IR。
+
+\subsubsection{完整 LLVM IR 程序}
+\lstinputlisting[caption={手写 LLVM IR：与共享 SysY 程序等价的 main.ll},label={lst:memberb-main-ll}]{../llvm/memberB/main.ll}
+
+\subsubsection{汇编、目标文件与运行时库链接}
+实验固定在 Ubuntu 22.04、LLVM/Clang 14 容器中完成，IR 的 target triple 为 \texttt{x86\_64-pc-linux-gnu}。课程运行时实现使用仓库现有的 \texttt{riscv/lib/sylib.c}；这里只复用其标准 C 源码编译成本机共享库/目标文件，不修改或覆盖成员A的 RISC-V 目标库。仓库内的 \texttt{llvm/memberB/Makefile} 将验证产物隔离在本目录下的 \texttt{build/}：
+\begin{lstlisting}[language=bash]
+cd llvm/memberB
+make all
+llvm-readelf -h build/main.o
+llvm-readelf -rW build/main.o
+nm build/main-native | grep -E "getint|putint|putch|sum_even|count_pos| main$"
+make test
+\end{lstlisting}
+\texttt{llvm-as} 将文本 IR 汇编为 bitcode，用以检查 IR 语法；Clang 把同一 IR 降低为可重定位本机目标文件，并与运行时库对象链接成原生可执行文件。另将 \texttt{sylib.c} 编译为共享库，交由 \texttt{lli -load=...} 载入，从而验证 IR 也可由 LLVM JIT 执行。目标文件中的运行时符号由 \texttt{nm} 检查。
+
+\subsubsection{三组统一测试结果}
+分别以 \texttt{make test-native} 和 \texttt{make test-lli} 执行统一测试集。每组数据分别经由 Clang 生成的本机可执行文件和 LLVM \texttt{lli} 执行；SysY 运行时在标准错误输出额外打印 \texttt{TOTAL} 计时行，表中只列出程序标准输出的两个计算结果。
+\begin{table}[H]
+\centering
+\caption{LLVM IR 原生执行与 lli 执行结果}
+\begin{tabularx}{0.94\linewidth}{c X c X}
+\toprule
+组别 & 输入 & 预期输出 & native / lli 实际输出 \\
+\midrule
+1 & 5；1 2 -3 4 6 & 12；4 & 12；4（两种方式均通过） \\
+2 & 4；-2 3 8 -5 & 6；2 & 6；2（两种方式均通过） \\
+3 & 5；1 3 5 7 9 & 0；5 & 0；5（两种方式均通过） \\
+\bottomrule
+\end{tabularx}
+\end{table}
+三组输入的原生执行与 \texttt{lli} 执行输出一致，且与共享 SysY 源程序的预期值相符。第2组验证负偶数保留其代数符号参与求和；第3组验证没有偶数时累加结果为 $0$。本节保留了可重现的 IR、运行时链接 Makefile 和输入文件；目前提供的 \texttt{image/} 目录不含本节执行画面的独立截图，因此结果以可重跑命令和表格记录，不将文字结果冒充为截图。
+
+\subsubsection{LLVM IR 部分小结}
+手写 IR 中，\texttt{br} 将 \texttt{while} 和 \texttt{if/else} 转换为显式基本块控制流；\texttt{getelementptr} 根据数组首地址和索引计算元素地址，\texttt{load/store} 读写数组元素；\texttt{phi} 在控制流汇合点选择不同前驱基本块产生的 SSA 值；\texttt{call}/\texttt{ret} 表示运行时函数、计算函数的调用和返回。与 RISC-V 汇编相比，LLVM IR 保留类型、函数和控制流等较高层次结构，暂不指定通用寄存器及具体指令编码；后端再根据 target triple 将 IR 映射到目标架构。

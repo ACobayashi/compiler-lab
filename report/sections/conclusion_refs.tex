@@ -3,7 +3,7 @@
 
 小题2采用同一份 SysY 程序作为语义基准。已完成的 RISC-V 部分将数组访问、循环、条件分支、函数调用和运行时输入输出映射为 RV64 指令与调用约定，并成功链接 SysY 运行时库，在 QEMU 下通过三组输入得到预期结果。该过程说明，与源程序等价不仅要求计算结果一致，还需要正确处理参数传递、数组地址计算、控制流、栈帧以及外部运行时函数等低层问题。
 
-\TODOBOX{成员B完成 LLVM IR 与自己的小题1后，两人共同补写结论最后一段：概括成员B小题1的主要观察；总结 LLVM IR 中基本块、临时值/SSA、getelementptr、load/store、br、call 与 SysY 结构的对应关系；最后比较 LLVM IR 与 RISC-V 在抽象层次、控制流表示和机器相关性方面的差异。完成最终校对后删除本占位框。}
+成员B的小题1进一步通过 Clang token/AST、GCC 控制流图、LLVM IR 优化前后对照以及 AArch64 ELF 符号和重定位信息观察了编译阶段间的转换；小题2的手写 IR 则用基本块、SSA 临时值、\texttt{phi}、\texttt{getelementptr}、\texttt{load/store}、\texttt{br} 和 \texttt{call} 显式表达共享 SysY 程序中的数组、循环、分支和运行时调用。三组统一测试在 IR 原生可执行文件、LLVM \texttt{lli} 和成员A的 RISC-V/QEMU 路径中均得到预期结果。LLVM IR 的抽象层次高于 RISC-V 汇编：它保留类型与显式控制流，但不指定具体通用寄存器和机器指令编码；RISC-V 实现则需要直接遵循目标架构的寄存器、指令和调用约定。两种实现展示了同一源程序语义向中间表示和机器相关目标代码的不同映射方式。
 
 \begin{thebibliography}{99}
 \bibitem{course_overview} 编译原理课程组. \emph{了解编译器、LLVM IR 编程及汇编编程实验指导} [课程资料].

@@ -1,0 +1,728 @@
+TranslationUnitDecl 0x4e6b98 <<invalid sloc>> <invalid sloc>
+|-TypedefDecl 0x4e73c0 <<invalid sloc>> <invalid sloc> implicit __int128_t '__int128'
+| `-BuiltinType 0x4e7160 '__int128'
+|-TypedefDecl 0x4e7430 <<invalid sloc>> <invalid sloc> implicit __uint128_t 'unsigned __int128'
+| `-BuiltinType 0x4e7180 'unsigned __int128'
+|-TypedefDecl 0x4e7738 <<invalid sloc>> <invalid sloc> implicit __NSConstantString 'struct __NSConstantString_tag'
+| `-RecordType 0x4e7510 'struct __NSConstantString_tag'
+|   `-Record 0x4e7488 '__NSConstantString_tag'
+|-TypedefDecl 0x4e77d0 <<invalid sloc>> <invalid sloc> implicit __builtin_ms_va_list 'char *'
+| `-PointerType 0x4e7790 'char *'
+|   `-BuiltinType 0x4e6c40 'char'
+|-TypedefDecl 0x4e7ac8 <<invalid sloc>> <invalid sloc> implicit referenced __builtin_va_list 'struct __va_list_tag[1]'
+| `-ConstantArrayType 0x4e7a70 'struct __va_list_tag[1]' 1
+|   `-RecordType 0x4e78b0 'struct __va_list_tag'
+|     `-Record 0x4e7828 '__va_list_tag'
+|-TypedefDecl 0x4e7b38 </usr/lib/llvm-14/lib/clang/14.0.0/include/stddef.h:46:1, col:23> col:23 referenced size_t 'unsigned long'
+| `-BuiltinType 0x4e6d60 'unsigned long'
+|-TypedefDecl 0x56f180 </usr/lib/llvm-14/lib/clang/14.0.0/include/stdarg.h:14:1, col:27> col:27 va_list '__builtin_va_list':'struct __va_list_tag[1]'
+| `-TypedefType 0x56f150 '__builtin_va_list' sugar
+|   |-Typedef 0x4e7ac8 '__builtin_va_list'
+|   `-ConstantArrayType 0x4e7a70 'struct __va_list_tag[1]' 1
+|     `-RecordType 0x4e78b0 'struct __va_list_tag'
+|       `-Record 0x4e7828 '__va_list_tag'
+|-TypedefDecl 0x56f1e8 <line:32:1, col:27> col:27 referenced __gnuc_va_list '__builtin_va_list':'struct __va_list_tag[1]'
+| `-TypedefType 0x56f150 '__builtin_va_list' sugar
+|   |-Typedef 0x4e7ac8 '__builtin_va_list'
+|   `-ConstantArrayType 0x4e7a70 'struct __va_list_tag[1]' 1
+|     `-RecordType 0x4e78b0 'struct __va_list_tag'
+|       `-Record 0x4e7828 '__va_list_tag'
+|-TypedefDecl 0x56f258 </usr/include/x86_64-linux-gnu/bits/types.h:31:1, col:23> col:23 __u_char 'unsigned char'
+| `-BuiltinType 0x4e6d00 'unsigned char'
+|-TypedefDecl 0x56f2c8 <line:32:1, col:28> col:28 __u_short 'unsigned short'
+| `-BuiltinType 0x4e6d20 'unsigned short'
+|-TypedefDecl 0x56f338 <line:33:1, col:22> col:22 __u_int 'unsigned int'
+| `-BuiltinType 0x4e6d40 'unsigned int'
+|-TypedefDecl 0x56f3a8 <line:34:1, col:27> col:27 __u_long 'unsigned long'
+| `-BuiltinType 0x4e6d60 'unsigned long'
+|-TypedefDecl 0x56f418 <line:37:1, col:21> col:21 referenced __int8_t 'signed char'
+| `-BuiltinType 0x4e6c60 'signed char'
+|-TypedefDecl 0x56f488 <line:38:1, col:23> col:23 referenced __uint8_t 'unsigned char'
+| `-BuiltinType 0x4e6d00 'unsigned char'
+|-TypedefDecl 0x56f4f8 <line:39:1, col:26> col:26 referenced __int16_t 'short'
+| `-BuiltinType 0x4e6c80 'short'
+|-TypedefDecl 0x56f568 <line:40:1, col:28> col:28 referenced __uint16_t 'unsigned short'
+| `-BuiltinType 0x4e6d20 'unsigned short'
+|-TypedefDecl 0x56f5d8 <line:41:1, col:20> col:20 referenced __int32_t 'int'
+| `-BuiltinType 0x4e6ca0 'int'
+|-TypedefDecl 0x56f648 <line:42:1, col:22> col:22 referenced __uint32_t 'unsigned int'
+| `-BuiltinType 0x4e6d40 'unsigned int'
+|-TypedefDecl 0x56f6b8 <line:44:1, col:25> col:25 referenced __int64_t 'long'
+| `-BuiltinType 0x4e6cc0 'long'
+|-TypedefDecl 0x56f728 <line:45:1, col:27> col:27 referenced __uint64_t 'unsigned long'
+| `-BuiltinType 0x4e6d60 'unsigned long'
+|-TypedefDecl 0x56f7b0 <line:52:1, col:18> col:18 __int_least8_t '__int8_t':'signed char'
+| `-TypedefType 0x56f780 '__int8_t' sugar
+|   |-Typedef 0x56f418 '__int8_t'
+|   `-BuiltinType 0x4e6c60 'signed char'
+|-TypedefDecl 0x56f840 <line:53:1, col:19> col:19 __uint_least8_t '__uint8_t':'unsigned char'
+| `-TypedefType 0x56f810 '__uint8_t' sugar
+|   |-Typedef 0x56f488 '__uint8_t'
+|   `-BuiltinType 0x4e6d00 'unsigned char'
+|-TypedefDecl 0x56f8d0 <line:54:1, col:19> col:19 __int_least16_t '__int16_t':'short'
+| `-TypedefType 0x56f8a0 '__int16_t' sugar
+|   |-Typedef 0x56f4f8 '__int16_t'
+|   `-BuiltinType 0x4e6c80 'short'
+|-TypedefDecl 0x56f960 <line:55:1, col:20> col:20 __uint_least16_t '__uint16_t':'unsigned short'
+| `-TypedefType 0x56f930 '__uint16_t' sugar
+|   |-Typedef 0x56f568 '__uint16_t'
+|   `-BuiltinType 0x4e6d20 'unsigned short'
+|-TypedefDecl 0x56f9f0 <line:56:1, col:19> col:19 __int_least32_t '__int32_t':'int'
+| `-TypedefType 0x56f9c0 '__int32_t' sugar
+|   |-Typedef 0x56f5d8 '__int32_t'
+|   `-BuiltinType 0x4e6ca0 'int'
+|-TypedefDecl 0x56fa80 <line:57:1, col:20> col:20 __uint_least32_t '__uint32_t':'unsigned int'
+| `-TypedefType 0x56fa50 '__uint32_t' sugar
+|   |-Typedef 0x56f648 '__uint32_t'
+|   `-BuiltinType 0x4e6d40 'unsigned int'
+|-TypedefDecl 0x56fb10 <line:58:1, col:19> col:19 __int_least64_t '__int64_t':'long'
+| `-TypedefType 0x56fae0 '__int64_t' sugar
+|   |-Typedef 0x56f6b8 '__int64_t'
+|   `-BuiltinType 0x4e6cc0 'long'
+|-TypedefDecl 0x56fba0 <line:59:1, col:20> col:20 __uint_least64_t '__uint64_t':'unsigned long'
+| `-TypedefType 0x56fb70 '__uint64_t' sugar
+|   |-Typedef 0x56f728 '__uint64_t'
+|   `-BuiltinType 0x4e6d60 'unsigned long'
+|-TypedefDecl 0x56fc10 <line:63:1, col:18> col:18 __quad_t 'long'
+| `-BuiltinType 0x4e6cc0 'long'
+|-TypedefDecl 0x56fc80 <line:64:1, col:27> col:27 __u_quad_t 'unsigned long'
+| `-BuiltinType 0x4e6d60 'unsigned long'
+|-TypedefDecl 0x56fcf0 <line:72:1, col:18> col:18 __intmax_t 'long'
+| `-BuiltinType 0x4e6cc0 'long'
+|-TypedefDecl 0x56fd60 <line:73:1, col:27> col:27 __uintmax_t 'unsigned long'
+| `-BuiltinType 0x4e6d60 'unsigned long'
+|-TypedefDecl 0x56fdd0 <line:137:22, line:145:25> col:25 __dev_t 'unsigned long'
+| `-BuiltinType 0x4e6d60 'unsigned long'
+|-TypedefDecl 0x56fe40 <line:137:22, line:146:25> col:25 __uid_t 'unsigned int'
+| `-BuiltinType 0x4e6d40 'unsigned int'
+|-TypedefDecl 0x56feb0 <line:137:22, line:147:25> col:25 __gid_t 'unsigned int'
+| `-BuiltinType 0x4e6d40 'unsigned int'
+|-TypedefDecl 0x56ff20 <line:137:22, line:148:25> col:25 __ino_t 'unsigned long'
+| `-BuiltinType 0x4e6d60 'unsigned long'
+|-TypedefDecl 0x56ff90 <line:137:22, line:149:27> col:27 __ino64_t 'unsigned long'
+| `-BuiltinType 0x4e6d60 'unsigned long'
+|-TypedefDecl 0x570000 <line:137:22, line:150:26> col:26 __mode_t 'unsigned int'
+| `-BuiltinType 0x4e6d40 'unsigned int'
+|-TypedefDecl 0x570070 <line:137:22, line:151:27> col:27 __nlink_t 'unsigned long'
+| `-BuiltinType 0x4e6d60 'unsigned long'
+|-TypedefDecl 0x5700e0 <line:137:22, line:152:25> col:25 referenced __off_t 'long'
+| `-BuiltinType 0x4e6cc0 'long'
+|-TypedefDecl 0x57df50 <line:137:22, line:153:27> col:27 referenced __off64_t 'long'
+| `-BuiltinType 0x4e6cc0 'long'
+|-TypedefDecl 0x57dfc0 <line:137:22, line:154:25> col:25 __pid_t 'int'
+| `-BuiltinType 0x4e6ca0 'int'
+|-RecordDecl 0x57e018 </usr/include/x86_64-linux-gnu/bits/typesizes.h:73:24, col:47> col:24 struct definition
+| `-FieldDecl 0x57e160 <col:33, col:44> col:37 __val 'int[2]'
+|-TypedefDecl 0x57e208 </usr/include/x86_64-linux-gnu/bits/types.h:137:22, line:155:26> col:26 __fsid_t 'struct __fsid_t':'__fsid_t'
+| `-ElaboratedType 0x57e1b0 'struct __fsid_t' sugar
+|   `-RecordType 0x57e0a0 '__fsid_t'
+|     `-Record 0x57e018 ''
+|-TypedefDecl 0x57e290 <line:137:22, line:156:27> col:27 __clock_t 'long'
+| `-BuiltinType 0x4e6cc0 'long'
+|-TypedefDecl 0x57e300 <line:137:22, line:157:26> col:26 __rlim_t 'unsigned long'
+| `-BuiltinType 0x4e6d60 'unsigned long'
+|-TypedefDecl 0x57e370 <line:137:22, line:158:28> col:28 __rlim64_t 'unsigned long'
+| `-BuiltinType 0x4e6d60 'unsigned long'
+|-TypedefDecl 0x57e3e0 <line:137:22, line:159:24> col:24 __id_t 'unsigned int'
+| `-BuiltinType 0x4e6d40 'unsigned int'
+|-TypedefDecl 0x57e450 <line:137:22, line:160:26> col:26 __time_t 'long'
+| `-BuiltinType 0x4e6cc0 'long'
+|-TypedefDecl 0x57e4c0 <line:137:22, line:161:30> col:30 __useconds_t 'unsigned int'
+| `-BuiltinType 0x4e6d40 'unsigned int'
+|-TypedefDecl 0x57e530 <line:137:22, line:162:31> col:31 __suseconds_t 'long'
+| `-BuiltinType 0x4e6cc0 'long'
+|-TypedefDecl 0x57e5a0 <line:137:22, line:163:33> col:33 __suseconds64_t 'long'
+| `-BuiltinType 0x4e6cc0 'long'
+|-TypedefDecl 0x57e610 <line:137:22, line:165:27> col:27 __daddr_t 'int'
+| `-BuiltinType 0x4e6ca0 'int'
+|-TypedefDecl 0x57e680 <line:137:22, line:166:25> col:25 __key_t 'int'
+| `-BuiltinType 0x4e6ca0 'int'
+|-TypedefDecl 0x57e6f0 <line:137:22, line:169:29> col:29 __clockid_t 'int'
+| `-BuiltinType 0x4e6ca0 'int'
+|-TypedefDecl 0x57e760 <line:137:22, line:172:27> col:27 __timer_t 'void *'
+| `-PointerType 0x4e7320 'void *'
+|   `-BuiltinType 0x4e6c00 'void'
+|-TypedefDecl 0x57e7d0 <line:137:22, line:175:29> col:29 __blksize_t 'long'
+| `-BuiltinType 0x4e6cc0 'long'
+|-TypedefDecl 0x57e840 <line:137:22, line:180:28> col:28 __blkcnt_t 'long'
+| `-BuiltinType 0x4e6cc0 'long'
+|-TypedefDecl 0x57e8b0 <line:137:22, line:181:30> col:30 __blkcnt64_t 'long'
+| `-BuiltinType 0x4e6cc0 'long'
+|-TypedefDecl 0x57e920 <line:137:22, line:184:30> col:30 __fsblkcnt_t 'unsigned long'
+| `-BuiltinType 0x4e6d60 'unsigned long'
+|-TypedefDecl 0x57e990 <line:137:22, line:185:32> col:32 __fsblkcnt64_t 'unsigned long'
+| `-BuiltinType 0x4e6d60 'unsigned long'
+|-TypedefDecl 0x57ea00 <line:137:22, line:188:30> col:30 __fsfilcnt_t 'unsigned long'
+| `-BuiltinType 0x4e6d60 'unsigned long'
+|-TypedefDecl 0x57ea70 <line:137:22, line:189:32> col:32 __fsfilcnt64_t 'unsigned long'
+| `-BuiltinType 0x4e6d60 'unsigned long'
+|-TypedefDecl 0x57eae0 <line:137:22, line:192:28> col:28 __fsword_t 'long'
+| `-BuiltinType 0x4e6cc0 'long'
+|-TypedefDecl 0x57eb50 <line:137:22, line:194:27> col:27 __ssize_t 'long'
+| `-BuiltinType 0x4e6cc0 'long'
+|-TypedefDecl 0x57ebc0 <line:137:22, line:197:33> col:33 __syscall_slong_t 'long'
+| `-BuiltinType 0x4e6cc0 'long'
+|-TypedefDecl 0x57ec30 <line:137:22, line:199:33> col:33 __syscall_ulong_t 'unsigned long'
+| `-BuiltinType 0x4e6d60 'unsigned long'
+|-TypedefDecl 0x57ecc0 <line:203:1, col:19> col:19 __loff_t '__off64_t':'long'
+| `-TypedefType 0x57ec90 '__off64_t' sugar
+|   |-Typedef 0x57df50 '__off64_t'
+|   `-BuiltinType 0x4e6cc0 'long'
+|-TypedefDecl 0x57ed30 <line:204:1, col:15> col:15 __caddr_t 'char *'
+| `-PointerType 0x4e7790 'char *'
+|   `-BuiltinType 0x4e6c40 'char'
+|-TypedefDecl 0x57eda0 <line:137:22, line:207:25> col:25 __intptr_t 'long'
+| `-BuiltinType 0x4e6cc0 'long'
+|-TypedefDecl 0x57ee10 <line:137:22, line:210:23> col:23 __socklen_t 'unsigned int'
+| `-BuiltinType 0x4e6d40 'unsigned int'
+|-TypedefDecl 0x57ee80 <line:215:1, col:13> col:13 __sig_atomic_t 'int'
+| `-BuiltinType 0x4e6ca0 'int'
+|-RecordDecl 0x57ef60 </usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h:13:9, line:21:1> line:13:9 struct definition
+| |-FieldDecl 0x57f018 <line:15:3, col:7> col:7 __count 'int'
+| |-RecordDecl 0x57f068 <line:16:3, line:20:3> line:16:3 union definition
+| | |-FieldDecl 0x57f128 <<built-in>:99:23, /usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h:18:19> col:19 __wch 'unsigned int'
+| | `-FieldDecl 0x57f218 <line:19:5, col:18> col:10 __wchb 'char[4]'
+| `-FieldDecl 0x57f2c8 <line:16:3, line:20:5> col:5 __value 'union (unnamed union at /usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h:16:3)':'union __mbstate_t::(unnamed at /usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h:16:3)'
+|-TypedefDecl 0x57f378 <line:13:1, line:21:3> col:3 referenced __mbstate_t 'struct __mbstate_t':'__mbstate_t'
+| `-ElaboratedType 0x57f320 'struct __mbstate_t' sugar
+|   `-RecordType 0x57efe0 '__mbstate_t'
+|     `-Record 0x57ef60 ''
+|-RecordDecl 0x57f3e8 </usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h:10:9, line:14:1> line:10:16 struct _G_fpos_t definition
+| |-FieldDecl 0x57f4c0 <line:12:3, col:11> col:11 __pos '__off_t':'long'
+| `-FieldDecl 0x57f540 <line:13:3, col:15> col:15 __state '__mbstate_t':'__mbstate_t'
+|-TypedefDecl 0x57f5e8 <line:10:1, line:14:3> col:3 referenced __fpos_t 'struct _G_fpos_t':'struct _G_fpos_t'
+| `-ElaboratedType 0x57f590 'struct _G_fpos_t' sugar
+|   `-RecordType 0x57f470 'struct _G_fpos_t'
+|     `-Record 0x57f3e8 '_G_fpos_t'
+|-RecordDecl 0x57f658 </usr/include/x86_64-linux-gnu/bits/types/__fpos64_t.h:10:9, line:14:1> line:10:16 struct _G_fpos64_t definition
+| |-FieldDecl 0x57f710 <line:12:3, col:13> col:13 __pos '__off64_t':'long'
+| `-FieldDecl 0x57f770 <line:13:3, col:15> col:15 __state '__mbstate_t':'__mbstate_t'
+|-TypedefDecl 0x57f818 <line:10:1, line:14:3> col:3 __fpos64_t 'struct _G_fpos64_t':'struct _G_fpos64_t'
+| `-ElaboratedType 0x57f7c0 'struct _G_fpos64_t' sugar
+|   `-RecordType 0x57f6e0 'struct _G_fpos64_t'
+|     `-Record 0x57f658 '_G_fpos64_t'
+|-RecordDecl 0x57f888 </usr/include/x86_64-linux-gnu/bits/types/__FILE.h:4:1, col:8> col:8 struct _IO_FILE
+|-TypedefDecl 0x57f980 <line:5:1, col:25> col:25 __FILE 'struct _IO_FILE':'struct _IO_FILE'
+| `-ElaboratedType 0x57f930 'struct _IO_FILE' sugar
+|   `-RecordType 0x57f910 'struct _IO_FILE'
+|     `-Record 0x57fd98 '_IO_FILE'
+|-RecordDecl 0x57f9d8 prev 0x57f888 </usr/include/x86_64-linux-gnu/bits/types/FILE.h:4:1, col:8> col:8 struct _IO_FILE
+|-TypedefDecl 0x57fa78 <line:7:1, col:25> col:25 referenced FILE 'struct _IO_FILE':'struct _IO_FILE'
+| `-ElaboratedType 0x57f930 'struct _IO_FILE' sugar
+|   `-RecordType 0x57f910 'struct _IO_FILE'
+|     `-Record 0x57fd98 '_IO_FILE'
+|-RecordDecl 0x57fad0 prev 0x57f9d8 </usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h:35:1, col:8> col:8 struct _IO_FILE
+|-RecordDecl 0x57fb50 <line:36:1, col:8> col:8 struct _IO_marker
+|-RecordDecl 0x57fbf0 <line:37:1, col:8> col:8 struct _IO_codecvt
+|-RecordDecl 0x57fc90 <line:38:1, col:8> col:8 struct _IO_wide_data
+|-TypedefDecl 0x57fd40 <line:43:1, col:14> col:14 referenced _IO_lock_t 'void'
+| `-BuiltinType 0x4e6c00 'void'
+|-RecordDecl 0x57fd98 prev 0x57fad0 <line:49:1, line:99:1> line:49:8 struct _IO_FILE definition
+| |-FieldDecl 0x57fe30 <line:51:3, col:7> col:7 _flags 'int'
+| |-FieldDecl 0x57fe98 <line:54:3, col:9> col:9 _IO_read_ptr 'char *'
+| |-FieldDecl 0x57ff00 <line:55:3, col:9> col:9 _IO_read_end 'char *'
+| |-FieldDecl 0x580ff8 <line:56:3, col:9> col:9 _IO_read_base 'char *'
+| |-FieldDecl 0x581060 <line:57:3, col:9> col:9 _IO_write_base 'char *'
+| |-FieldDecl 0x5810c8 <line:58:3, col:9> col:9 _IO_write_ptr 'char *'
+| |-FieldDecl 0x581130 <line:59:3, col:9> col:9 _IO_write_end 'char *'
+| |-FieldDecl 0x581198 <line:60:3, col:9> col:9 _IO_buf_base 'char *'
+| |-FieldDecl 0x581200 <line:61:3, col:9> col:9 _IO_buf_end 'char *'
+| |-FieldDecl 0x581268 <line:64:3, col:9> col:9 _IO_save_base 'char *'
+| |-FieldDecl 0x5812d0 <line:65:3, col:9> col:9 _IO_backup_base 'char *'
+| |-FieldDecl 0x581338 <line:66:3, col:9> col:9 _IO_save_end 'char *'
+| |-FieldDecl 0x581440 <line:68:3, col:22> col:22 _markers 'struct _IO_marker *'
+| |-FieldDecl 0x581510 <line:70:3, col:20> col:20 _chain 'struct _IO_FILE *'
+| |-FieldDecl 0x581578 <line:72:3, col:7> col:7 _fileno 'int'
+| |-FieldDecl 0x5815e0 <line:73:3, col:7> col:7 _flags2 'int'
+| |-FieldDecl 0x581640 <line:74:3, col:11> col:11 _old_offset '__off_t':'long'
+| |-FieldDecl 0x5816a8 <line:77:3, col:18> col:18 _cur_column 'unsigned short'
+| |-FieldDecl 0x581710 <line:78:3, col:15> col:15 _vtable_offset 'signed char'
+| |-FieldDecl 0x5817f8 <line:79:3, col:19> col:8 _shortbuf 'char[1]'
+| |-FieldDecl 0x5818a8 <line:81:3, col:15> col:15 _lock '_IO_lock_t *'
+| |-FieldDecl 0x581908 <line:89:3, col:13> col:13 _offset '__off64_t':'long'
+| |-FieldDecl 0x581a10 <line:91:3, col:23> col:23 _codecvt 'struct _IO_codecvt *'
+| |-FieldDecl 0x581b10 <line:92:3, col:25> col:25 _wide_data 'struct _IO_wide_data *'
+| |-FieldDecl 0x581b88 <line:93:3, col:20> col:20 _freeres_list 'struct _IO_FILE *'
+| |-FieldDecl 0x581bf0 <line:94:3, col:9> col:9 _freeres_buf 'void *'
+| |-FieldDecl 0x581c70 <line:95:3, col:10> col:10 __pad5 'size_t':'unsigned long'
+| |-FieldDecl 0x581cd8 <line:96:3, col:7> col:7 _mode 'int'
+| `-FieldDecl 0x581f38 <line:98:3, col:74> col:8 _unused2 'char[20]'
+|-TypedefDecl 0x585d60 </usr/include/stdio.h:84:1, col:18> col:18 referenced fpos_t '__fpos_t':'struct _G_fpos_t'
+| `-TypedefType 0x581f90 '__fpos_t' sugar
+|   |-Typedef 0x57f5e8 '__fpos_t'
+|   `-ElaboratedType 0x57f590 'struct _G_fpos_t' sugar
+|     `-RecordType 0x57f470 'struct _G_fpos_t'
+|       `-Record 0x57f3e8 '_G_fpos_t'
+|-VarDecl 0x585e18 <line:143:1, col:14> col:14 stdin 'FILE *' extern
+|-VarDecl 0x585ed8 <line:144:1, col:14> col:14 stdout 'FILE *' extern
+|-VarDecl 0x585f50 <line:145:1, col:14> col:14 stderr 'FILE *' extern
+|-FunctionDecl 0x5860a0 <line:152:1, /usr/include/x86_64-linux-gnu/sys/cdefs.h:79:54> /usr/include/stdio.h:152:12 remove 'int (const char *)' extern
+| |-ParmVarDecl 0x585fd0 <col:20, col:32> col:32 __filename 'const char *'
+| `-NoThrowAttr 0x586148 </usr/include/x86_64-linux-gnu/sys/cdefs.h:79:35>
+|-FunctionDecl 0x586310 </usr/include/stdio.h:154:1, /usr/include/x86_64-linux-gnu/sys/cdefs.h:79:54> /usr/include/stdio.h:154:12 rename 'int (const char *, const char *)' extern
+| |-ParmVarDecl 0x5861b8 <col:20, col:32> col:32 __old 'const char *'
+| |-ParmVarDecl 0x586238 <col:39, col:51> col:51 __new 'const char *'
+| `-NoThrowAttr 0x5863c0 </usr/include/x86_64-linux-gnu/sys/cdefs.h:79:35>
+|-FunctionDecl 0x586520 </usr/include/stdio.h:178:1, col:34> col:12 fclose 'int (FILE *)' extern
+| `-ParmVarDecl 0x586428 <col:20, col:26> col:26 __stream 'FILE *'
+|-FunctionDecl 0x5866b8 <line:188:1, /usr/include/x86_64-linux-gnu/sys/cdefs.h:281:58> /usr/include/stdio.h:188:14 tmpfile 'FILE *(void)' extern
+| `-RestrictAttr 0x586758 </usr/include/x86_64-linux-gnu/sys/cdefs.h:281:47> malloc
+|-FunctionDecl 0x586940 </usr/include/stdio.h:205:1, /usr/include/x86_64-linux-gnu/sys/cdefs.h:79:54> /usr/include/stdio.h:205:14 tmpnam 'char *(char *)' extern
+| |-ParmVarDecl 0x586840 <col:22, col:35> col:26 'char *':'char *'
+| `-NoThrowAttr 0x5869e8 </usr/include/x86_64-linux-gnu/sys/cdefs.h:79:35>
+|-FunctionDecl 0x586ae8 </usr/include/stdio.h:230:1, col:34> col:12 fflush 'int (FILE *)' extern
+| `-ParmVarDecl 0x586a50 <col:20, col:26> col:26 __stream 'FILE *'
+|-FunctionDecl 0x5892e8 <line:258:14> col:14 implicit fopen 'FILE *(const char *, const char *)' extern
+| |-ParmVarDecl 0x5893e0 <<invalid sloc>> <invalid sloc> 'const char *'
+| |-ParmVarDecl 0x589448 <<invalid sloc>> <invalid sloc> 'const char *'
+| `-BuiltinAttr 0x589388 <<invalid sloc>> Implicit 838
+|-FunctionDecl 0x5894c0 prev 0x5892e8 <col:1, /usr/include/x86_64-linux-gnu/sys/cdefs.h:281:58> /usr/include/stdio.h:258:14 fopen 'FILE *(const char *, const char *)' extern
+| |-ParmVarDecl 0x586ba8 <col:21, col:44> col:44 __filename 'const char *restrict'
+| |-ParmVarDecl 0x586c28 <line:259:7, col:30> col:30 __modes 'const char *restrict'
+| |-BuiltinAttr 0x5895c8 <<invalid sloc>> Inherited Implicit 838
+| `-RestrictAttr 0x589570 </usr/include/x86_64-linux-gnu/sys/cdefs.h:281:47> malloc
+|-FunctionDecl 0x589828 </usr/include/stdio.h:265:1, line:267:34> line:265:14 freopen 'FILE *(const char *restrict, const char *restrict, FILE *restrict)' extern
+| |-ParmVarDecl 0x589608 <col:23, col:46> col:46 __filename 'const char *restrict'
+| |-ParmVarDecl 0x589688 <line:266:9, col:32> col:32 __modes 'const char *restrict'
+| `-ParmVarDecl 0x589700 <line:267:9, col:26> col:26 __stream 'FILE *restrict'
+|-FunctionDecl 0x589a88 <line:328:1, /usr/include/x86_64-linux-gnu/sys/cdefs.h:79:54> /usr/include/stdio.h:328:13 setbuf 'void (FILE *restrict, char *restrict)' extern
+| |-ParmVarDecl 0x5898f0 <col:21, col:38> col:38 __stream 'FILE *restrict'
+| |-ParmVarDecl 0x589970 <col:48, col:65> col:65 __buf 'char *restrict'
+| `-NoThrowAttr 0x589b38 </usr/include/x86_64-linux-gnu/sys/cdefs.h:79:35>
+|-FunctionDecl 0x589e60 </usr/include/stdio.h:332:1, /usr/include/x86_64-linux-gnu/sys/cdefs.h:79:54> /usr/include/stdio.h:332:12 setvbuf 'int (FILE *restrict, char *restrict, int, size_t)' extern
+| |-ParmVarDecl 0x589ba0 <col:21, col:38> col:38 __stream 'FILE *restrict'
+| |-ParmVarDecl 0x589c20 <col:48, col:65> col:65 __buf 'char *restrict'
+| |-ParmVarDecl 0x589ca0 <line:333:7, col:11> col:11 __modes 'int'
+| |-ParmVarDecl 0x589d18 <col:20, col:27> col:27 __n 'size_t':'unsigned long'
+| `-NoThrowAttr 0x589f20 </usr/include/x86_64-linux-gnu/sys/cdefs.h:79:35>
+|-FunctionDecl 0x58a170 </usr/include/stdio.h:350:12> col:12 implicit fprintf 'int (FILE *, const char *, ...)' extern
+| |-ParmVarDecl 0x58c2f0 <<invalid sloc>> <invalid sloc> 'FILE *'
+| |-ParmVarDecl 0x58c358 <<invalid sloc>> <invalid sloc> 'const char *'
+| |-BuiltinAttr 0x58a210 <<invalid sloc>> Implicit 825
+| `-FormatAttr 0x58c3d0 <col:12> Implicit printf 2 3
+|-FunctionDecl 0x58c408 prev 0x58a170 <col:1, line:351:43> line:350:12 fprintf 'int (FILE *, const char *, ...)' extern
+| |-ParmVarDecl 0x589f88 <col:21, col:38> col:38 __stream 'FILE *restrict'
+| |-ParmVarDecl 0x58a008 <line:351:7, col:30> col:30 __format 'const char *restrict'
+| |-BuiltinAttr 0x58c4e8 <<invalid sloc>> Inherited Implicit 825
+| `-FormatAttr 0x58c510 <line:350:12> Inherited printf 2 3
+|-FunctionDecl 0x58c678 <line:356:12> col:12 implicit used printf 'int (const char *, ...)' extern
+| |-ParmVarDecl 0x58c770 <<invalid sloc>> <invalid sloc> 'const char *'
+| |-BuiltinAttr 0x58c718 <<invalid sloc>> Implicit 824
+| `-FormatAttr 0x58c7e0 <col:12> Implicit printf 1 2
+|-FunctionDecl 0x58c818 prev 0x58c678 <col:1, col:56> col:12 used printf 'int (const char *, ...)' extern
+| |-ParmVarDecl 0x58c560 <col:20, col:43> col:43 __format 'const char *restrict'
+| |-BuiltinAttr 0x58c8f0 <<invalid sloc>> Inherited Implicit 824
+| `-FormatAttr 0x58c918 <col:12> Inherited printf 1 2
+|-FunctionDecl 0x58cb08 <line:358:12> col:12 implicit sprintf 'int (char *, const char *, ...)' extern
+| |-ParmVarDecl 0x58cc00 <<invalid sloc>> <invalid sloc> 'char *'
+| |-ParmVarDecl 0x58cc68 <<invalid sloc>> <invalid sloc> 'const char *'
+| |-BuiltinAttr 0x58cba8 <<invalid sloc>> Implicit 827
+| `-FormatAttr 0x58cce0 <col:12> Implicit printf 2 3
+|-FunctionDecl 0x58cd18 prev 0x58cb08 <col:1, /usr/include/x86_64-linux-gnu/sys/cdefs.h:80:49> /usr/include/stdio.h:358:12 sprintf 'int (char *, const char *, ...)' extern
+| |-ParmVarDecl 0x58c968 <col:21, col:38> col:38 __s 'char *restrict'
+| |-ParmVarDecl 0x58c9e8 <line:359:7, col:30> col:30 __format 'const char *restrict'
+| |-BuiltinAttr 0x58ce20 <<invalid sloc>> Inherited Implicit 827
+| |-FormatAttr 0x58ce48 <line:358:12> Inherited printf 2 3
+| `-NoThrowAttr 0x58cdc8 </usr/include/x86_64-linux-gnu/sys/cdefs.h:80:37>
+|-FunctionDecl 0x58d180 </usr/include/stdio.h:365:12> col:12 implicit vfprintf 'int (FILE *, const char *, struct __va_list_tag *)' extern
+| |-ParmVarDecl 0x58d278 <<invalid sloc>> <invalid sloc> 'FILE *'
+| |-ParmVarDecl 0x58d300 <<invalid sloc>> <invalid sloc> 'const char *'
+| |-ParmVarDecl 0x58d368 <<invalid sloc>> <invalid sloc> 'struct __va_list_tag *'
+| |-BuiltinAttr 0x58d220 <<invalid sloc>> Implicit 829
+| `-FormatAttr 0x58d3e8 <col:12> Implicit printf 2 0
+|-FunctionDecl 0x58d420 prev 0x58d180 <col:1, line:366:28> line:365:12 vfprintf 'int (FILE *, const char *, struct __va_list_tag *)' extern
+| |-ParmVarDecl 0x58ce90 <col:22, col:39> col:39 __s 'FILE *restrict'
+| |-ParmVarDecl 0x58cf10 <col:44, col:67> col:67 __format 'const char *restrict'
+| |-ParmVarDecl 0x58d010 <line:366:8, col:23> col:23 __arg 'struct __va_list_tag *':'struct __va_list_tag *'
+| |-BuiltinAttr 0x58d508 <<invalid sloc>> Inherited Implicit 829
+| `-FormatAttr 0x58d530 <line:365:12> Inherited printf 2 0
+|-FunctionDecl 0x58d710 <line:371:12> col:12 implicit vprintf 'int (const char *, struct __va_list_tag *)' extern
+| |-ParmVarDecl 0x58d808 <<invalid sloc>> <invalid sloc> 'const char *'
+| |-ParmVarDecl 0x58d870 <<invalid sloc>> <invalid sloc> 'struct __va_list_tag *'
+| |-BuiltinAttr 0x58d7b0 <<invalid sloc>> Implicit 828
+| `-FormatAttr 0x58d8e8 <col:12> Implicit printf 1 0
+|-FunctionDecl 0x58d920 prev 0x58d710 <col:1, col:74> col:12 vprintf 'int (const char *, struct __va_list_tag *)' extern
+| |-ParmVarDecl 0x58d580 <col:21, col:44> col:44 __format 'const char *restrict'
+| |-ParmVarDecl 0x58d5f8 <col:54, col:69> col:69 __arg 'struct __va_list_tag *':'struct __va_list_tag *'
+| |-BuiltinAttr 0x58da00 <<invalid sloc>> Inherited Implicit 828
+| `-FormatAttr 0x58da28 <col:12> Inherited printf 1 0
+|-FunctionDecl 0x58dca0 <line:373:12> col:12 implicit vsprintf 'int (char *, const char *, struct __va_list_tag *)' extern
+| |-ParmVarDecl 0x58dd98 <<invalid sloc>> <invalid sloc> 'char *'
+| |-ParmVarDecl 0x58de00 <<invalid sloc>> <invalid sloc> 'const char *'
+| |-ParmVarDecl 0x58de68 <<invalid sloc>> <invalid sloc> 'struct __va_list_tag *'
+| |-BuiltinAttr 0x58dd40 <<invalid sloc>> Implicit 831
+| `-FormatAttr 0x58dee8 <col:12> Implicit printf 2 0
+|-FunctionDecl 0x58df20 prev 0x58dca0 <col:1, /usr/include/x86_64-linux-gnu/sys/cdefs.h:80:49> /usr/include/stdio.h:373:12 vsprintf 'int (char *, const char *, struct __va_list_tag *)' extern
+| |-ParmVarDecl 0x58da78 <col:22, col:39> col:39 __s 'char *restrict'
+| |-ParmVarDecl 0x58daf8 <col:44, col:67> col:67 __format 'const char *restrict'
+| |-ParmVarDecl 0x58db70 <line:374:8, col:23> col:23 __arg 'struct __va_list_tag *':'struct __va_list_tag *'
+| |-BuiltinAttr 0x58e030 <<invalid sloc>> Inherited Implicit 831
+| |-FormatAttr 0x58e058 <line:373:12> Inherited printf 2 0
+| `-NoThrowAttr 0x58dfd8 </usr/include/x86_64-linux-gnu/sys/cdefs.h:80:37>
+|-FunctionDecl 0x58e350 </usr/include/stdio.h:378:12> col:12 implicit snprintf 'int (char *, unsigned long, const char *, ...)' extern
+| |-ParmVarDecl 0x58e448 <<invalid sloc>> <invalid sloc> 'char *'
+| |-ParmVarDecl 0x58e4b0 <<invalid sloc>> <invalid sloc> 'unsigned long'
+| |-ParmVarDecl 0x58e518 <<invalid sloc>> <invalid sloc> 'const char *'
+| |-BuiltinAttr 0x58e3f0 <<invalid sloc>> Implicit 826
+| `-FormatAttr 0x58e598 <col:12> Implicit printf 3 4
+|-FunctionDecl 0x58e5d0 prev 0x58e350 <col:1, line:380:62> line:378:12 snprintf 'int (char *, unsigned long, const char *, ...)' extern
+| |-ParmVarDecl 0x58e0a8 <col:22, col:39> col:39 __s 'char *restrict'
+| |-ParmVarDecl 0x58e120 <col:44, col:51> col:51 __maxlen 'size_t':'unsigned long'
+| |-ParmVarDecl 0x58e1a0 <line:379:8, col:31> col:31 __format 'const char *restrict'
+| |-BuiltinAttr 0x58e718 <<invalid sloc>> Inherited Implicit 826
+| |-NoThrowAttr 0x58e688 </usr/include/x86_64-linux-gnu/sys/cdefs.h:80:37>
+| `-FormatAttr 0x58e6e0 </usr/include/stdio.h:380:32, col:60> printf 3 4
+|-FunctionDecl 0x58ea60 <line:382:12> col:12 implicit vsnprintf 'int (char *, unsigned long, const char *, struct __va_list_tag *)' extern
+| |-ParmVarDecl 0x58eb58 <<invalid sloc>> <invalid sloc> 'char *'
+| |-ParmVarDecl 0x58ebc0 <<invalid sloc>> <invalid sloc> 'unsigned long'
+| |-ParmVarDecl 0x58ec28 <<invalid sloc>> <invalid sloc> 'const char *'
+| |-ParmVarDecl 0x58ec90 <<invalid sloc>> <invalid sloc> 'struct __va_list_tag *'
+| |-BuiltinAttr 0x58eb00 <<invalid sloc>> Implicit 830
+| `-FormatAttr 0x58ed18 <col:12> Implicit printf 3 0
+|-FunctionDecl 0x58ed50 prev 0x58ea60 <col:1, line:384:62> line:382:12 vsnprintf 'int (char *, unsigned long, const char *, struct __va_list_tag *)' extern
+| |-ParmVarDecl 0x58e758 <col:23, col:40> col:40 __s 'char *restrict'
+| |-ParmVarDecl 0x58e7d0 <col:45, col:52> col:52 __maxlen 'size_t':'unsigned long'
+| |-ParmVarDecl 0x58e850 <line:383:9, col:32> col:32 __format 'const char *restrict'
+| |-ParmVarDecl 0x58e8c8 <col:42, col:57> col:57 __arg 'struct __va_list_tag *':'struct __va_list_tag *'
+| |-BuiltinAttr 0x58eea0 <<invalid sloc>> Inherited Implicit 830
+| |-NoThrowAttr 0x58ee10 </usr/include/x86_64-linux-gnu/sys/cdefs.h:80:37>
+| `-FormatAttr 0x58ee68 </usr/include/stdio.h:384:32, col:60> printf 3 0
+|-FunctionDecl 0x58eff8 <line:415:12> col:12 implicit fscanf 'int (FILE *restrict, const char *restrict, ...)' extern
+| |-ParmVarDecl 0x58f0f0 <<invalid sloc>> <invalid sloc> 'FILE *restrict'
+| |-ParmVarDecl 0x58f158 <<invalid sloc>> <invalid sloc> 'const char *restrict'
+| |-BuiltinAttr 0x58f098 <<invalid sloc>> Implicit 833
+| `-FormatAttr 0x58f1d0 <col:12> Implicit scanf 2 3
+|-FunctionDecl 0x58f208 prev 0x58eff8 <col:1, line:416:42> line:415:12 fscanf 'int (FILE *restrict, const char *restrict, ...)' extern
+| |-ParmVarDecl 0x58eed8 <col:20, col:37> col:37 __stream 'FILE *restrict'
+| |-ParmVarDecl 0x58ef58 <line:416:6, col:29> col:29 __format 'const char *restrict'
+| |-BuiltinAttr 0x58f2e8 <<invalid sloc>> Inherited Implicit 833
+| `-FormatAttr 0x590340 <line:415:12> Inherited scanf 2 3
+|-FunctionDecl 0x590428 <line:421:12> col:12 implicit used scanf 'int (const char *restrict, ...)' extern
+| |-ParmVarDecl 0x590520 <<invalid sloc>> <invalid sloc> 'const char *restrict'
+| |-BuiltinAttr 0x5904c8 <<invalid sloc>> Implicit 832
+| `-FormatAttr 0x590590 <col:12> Implicit scanf 1 2
+|-FunctionDecl 0x5905c8 prev 0x590428 <col:1, col:55> col:12 used scanf 'int (const char *restrict, ...)' extern
+| |-ParmVarDecl 0x590390 <col:19, col:42> col:42 __format 'const char *restrict'
+| |-BuiltinAttr 0x5906a0 <<invalid sloc>> Inherited Implicit 832
+| `-FormatAttr 0x5906c8 <col:12> Inherited scanf 1 2
+|-FunctionDecl 0x5908b8 <line:423:12> col:12 implicit sscanf 'int (const char *restrict, const char *restrict, ...)' extern
+| |-ParmVarDecl 0x5909b0 <<invalid sloc>> <invalid sloc> 'const char *restrict'
+| |-ParmVarDecl 0x590a18 <<invalid sloc>> <invalid sloc> 'const char *restrict'
+| |-BuiltinAttr 0x590958 <<invalid sloc>> Implicit 834
+| `-FormatAttr 0x590a90 <col:12> Implicit scanf 2 3
+|-FunctionDecl 0x590ac8 prev 0x5908b8 <col:1, /usr/include/x86_64-linux-gnu/sys/cdefs.h:79:54> /usr/include/stdio.h:423:12 sscanf 'int (const char *restrict, const char *restrict, ...)' extern
+| |-ParmVarDecl 0x590718 <col:20, col:43> col:43 __s 'const char *restrict'
+| |-ParmVarDecl 0x590798 <line:424:6, col:29> col:29 __format 'const char *restrict'
+| |-BuiltinAttr 0x590bd0 <<invalid sloc>> Inherited Implicit 834
+| |-FormatAttr 0x590bf8 <line:423:12> Inherited scanf 2 3
+| `-NoThrowAttr 0x590b78 </usr/include/x86_64-linux-gnu/sys/cdefs.h:79:35>
+|-TypedefDecl 0x590c48 </usr/include/x86_64-linux-gnu/bits/floatn-common.h:214:1, col:15> col:15 _Float32 'float'
+| `-BuiltinType 0x4e6da0 'float'
+|-TypedefDecl 0x590cb8 <line:251:1, col:16> col:16 _Float64 'double'
+| `-BuiltinType 0x4e6dc0 'double'
+|-TypedefDecl 0x590d28 <line:268:1, col:16> col:16 _Float32x 'double'
+| `-BuiltinType 0x4e6dc0 'double'
+|-TypedefDecl 0x590d98 <line:285:1, col:21> col:21 _Float64x 'long double'
+| `-BuiltinType 0x4e6de0 'long double'
+|-FunctionDecl 0x590f90 prev 0x58f208 </usr/include/stdio.h:434:1, /usr/include/x86_64-linux-gnu/sys/cdefs.h:247:79> /usr/include/stdio.h:434:24 fscanf 'int (FILE *restrict, const char *restrict, ...)' extern
+| |-ParmVarDecl 0x590e00 <col:33, col:50> col:50 __stream 'FILE *restrict'
+| |-ParmVarDecl 0x590e80 <line:435:5, col:28> col:28 __format 'const char *restrict'
+| |-BuiltinAttr 0x5910b8 <<invalid sloc>> Inherited Implicit 833
+| |-FormatAttr 0x5910e0 <line:415:12> Inherited scanf 2 3
+| `-AsmLabelAttr 0x591030 <<scratch space>:32:1> "__isoc99_fscanf" IsLiteralLabel
+|-FunctionDecl 0x591238 prev 0x5905c8 </usr/include/stdio.h:437:1, /usr/include/x86_64-linux-gnu/sys/cdefs.h:247:79> /usr/include/stdio.h:437:24 used scanf 'int (const char *restrict, ...)' extern
+| |-ParmVarDecl 0x591130 <col:32, col:55> col:55 __format 'const char *restrict'
+| |-BuiltinAttr 0x56a708 <<invalid sloc>> Inherited Implicit 832
+| |-FormatAttr 0x56a730 <line:421:12> Inherited scanf 1 2
+| `-AsmLabelAttr 0x5912d8 <<scratch space>:34:1> "__isoc99_scanf" IsLiteralLabel
+|-FunctionDecl 0x56a8d0 prev 0x590ac8 </usr/include/stdio.h:439:1, /usr/include/x86_64-linux-gnu/sys/cdefs.h:79:54> /usr/include/stdio.h:439:28 sscanf 'int (const char *restrict, const char *restrict, ...)' extern
+| |-ParmVarDecl 0x56a780 <col:37, col:60> col:60 __s 'const char *restrict'
+| |-ParmVarDecl 0x56a800 <line:440:9, col:32> col:32 __format 'const char *restrict'
+| |-BuiltinAttr 0x56aa20 <<invalid sloc>> Inherited Implicit 834
+| |-FormatAttr 0x56aa48 <line:423:12> Inherited scanf 2 3
+| |-AsmLabelAttr 0x56a970 <<scratch space>:36:1> "__isoc99_sscanf" IsLiteralLabel
+| `-NoThrowAttr 0x56a9f8 </usr/include/x86_64-linux-gnu/sys/cdefs.h:79:35>
+|-FunctionDecl 0x56acc0 </usr/include/stdio.h:459:12> col:12 implicit vfscanf 'int (FILE *restrict, const char *restrict, struct __va_list_tag *)' extern
+| |-ParmVarDecl 0x56adb8 <<invalid sloc>> <invalid sloc> 'FILE *restrict'
+| |-ParmVarDecl 0x56ae20 <<invalid sloc>> <invalid sloc> 'const char *restrict'
+| |-ParmVarDecl 0x56ae88 <<invalid sloc>> <invalid sloc> 'struct __va_list_tag *'
+| |-BuiltinAttr 0x56ad60 <<invalid sloc>> Implicit 836
+| `-FormatAttr 0x56af08 <col:12> Implicit scanf 2 0
+|-FunctionDecl 0x56af40 prev 0x56acc0 <col:1, line:461:51> line:459:12 vfscanf 'int (FILE *restrict, const char *restrict, struct __va_list_tag *)' extern
+| |-ParmVarDecl 0x56aa90 <col:21, col:38> col:38 __s 'FILE *restrict'
+| |-ParmVarDecl 0x56ab10 <col:43, col:66> col:66 __format 'const char *restrict'
+| |-ParmVarDecl 0x56ab88 <line:460:7, col:22> col:22 __arg 'struct __va_list_tag *':'struct __va_list_tag *'
+| |-BuiltinAttr 0x56b060 <<invalid sloc>> Inherited Implicit 836
+| `-FormatAttr 0x56aff8 <line:461:22, col:49> scanf 2 0
+|-FunctionDecl 0x56b248 <line:467:12> col:12 implicit vscanf 'int (const char *restrict, struct __va_list_tag *)' extern
+| |-ParmVarDecl 0x56b340 <<invalid sloc>> <invalid sloc> 'const char *restrict'
+| |-ParmVarDecl 0x56b3a8 <<invalid sloc>> <invalid sloc> 'struct __va_list_tag *'
+| |-BuiltinAttr 0x56b2e8 <<invalid sloc>> Implicit 835
+| `-FormatAttr 0x56b420 <col:12> Implicit scanf 1 0
+|-FunctionDecl 0x56b458 prev 0x56b248 <col:1, line:468:51> line:467:12 vscanf 'int (const char *restrict, struct __va_list_tag *)' extern
+| |-ParmVarDecl 0x56b0a0 <col:20, col:43> col:43 __format 'const char *restrict'
+| |-ParmVarDecl 0x56b118 <col:53, col:68> col:68 __arg 'struct __va_list_tag *':'struct __va_list_tag *'
+| |-BuiltinAttr 0x56b570 <<invalid sloc>> Inherited Implicit 835
+| `-FormatAttr 0x56b508 <line:468:22, col:49> scanf 1 0
+|-FunctionDecl 0x59ea50 <line:471:12> col:12 implicit vsscanf 'int (const char *restrict, const char *restrict, struct __va_list_tag *)' extern
+| |-ParmVarDecl 0x59eb48 <<invalid sloc>> <invalid sloc> 'const char *restrict'
+| |-ParmVarDecl 0x59ebb0 <<invalid sloc>> <invalid sloc> 'const char *restrict'
+| |-ParmVarDecl 0x59ec18 <<invalid sloc>> <invalid sloc> 'struct __va_list_tag *'
+| |-BuiltinAttr 0x59eaf0 <<invalid sloc>> Implicit 837
+| `-FormatAttr 0x59ec98 <col:12> Implicit scanf 2 0
+|-FunctionDecl 0x59ecd0 prev 0x59ea50 <col:1, line:473:59> line:471:12 vsscanf 'int (const char *restrict, const char *restrict, struct __va_list_tag *)' extern
+| |-ParmVarDecl 0x56b5b0 <col:21, col:44> col:44 __s 'const char *restrict'
+| |-ParmVarDecl 0x56b630 <line:472:7, col:30> col:30 __format 'const char *restrict'
+| |-ParmVarDecl 0x59e890 <col:40, col:55> col:55 __arg 'struct __va_list_tag *':'struct __va_list_tag *'
+| |-BuiltinAttr 0x59ee18 <<invalid sloc>> Inherited Implicit 837
+| |-NoThrowAttr 0x59ed88 </usr/include/x86_64-linux-gnu/sys/cdefs.h:79:35>
+| `-FormatAttr 0x59ede0 </usr/include/stdio.h:473:30, col:57> scanf 2 0
+|-FunctionDecl 0x59f0a8 prev 0x56af40 <line:479:1, line:483:51> line:479:24 vfscanf 'int (FILE *restrict, const char *restrict, struct __va_list_tag *)' extern
+| |-ParmVarDecl 0x59ee50 <line:480:11, col:28> col:28 __s 'FILE *restrict'
+| |-ParmVarDecl 0x59eed0 <line:481:4, col:27> col:27 __format 'const char *restrict'
+| |-ParmVarDecl 0x59ef48 <col:37, col:52> col:52 __arg 'struct __va_list_tag *':'struct __va_list_tag *'
+| |-BuiltinAttr 0x59f210 <<invalid sloc>> Inherited Implicit 836
+| |-AsmLabelAttr 0x59f148 <<scratch space>:39:1> "__isoc99_vfscanf" IsLiteralLabel
+| `-FormatAttr 0x59f1d8 </usr/include/stdio.h:483:22, col:49> scanf 2 0
+|-FunctionDecl 0x59f3e8 prev 0x56b458 <line:484:1, line:486:51> line:484:24 vscanf 'int (const char *restrict, struct __va_list_tag *)' extern
+| |-ParmVarDecl 0x59f250 <col:33, col:56> col:56 __format 'const char *restrict'
+| |-ParmVarDecl 0x59f2c8 <line:485:5, col:20> col:20 __arg 'struct __va_list_tag *':'struct __va_list_tag *'
+| |-BuiltinAttr 0x59f548 <<invalid sloc>> Inherited Implicit 835
+| |-AsmLabelAttr 0x59f488 <<scratch space>:41:1> "__isoc99_vscanf" IsLiteralLabel
+| `-FormatAttr 0x59f510 </usr/include/stdio.h:486:22, col:49> scanf 1 0
+|-FunctionDecl 0x59f7a8 prev 0x59ecd0 <line:487:1, line:491:51> line:487:28 vsscanf 'int (const char *restrict, const char *restrict, struct __va_list_tag *)' extern
+| |-ParmVarDecl 0x59f588 <line:488:8, col:31> col:31 __s 'const char *restrict'
+| |-ParmVarDecl 0x59f608 <line:489:8, col:31> col:31 __format 'const char *restrict'
+| |-ParmVarDecl 0x59f680 <line:490:8, col:23> col:23 __arg 'struct __va_list_tag *':'struct __va_list_tag *'
+| |-BuiltinAttr 0x59f948 <<invalid sloc>> Inherited Implicit 837
+| |-AsmLabelAttr 0x59f848 <<scratch space>:43:1> "__isoc99_vsscanf" IsLiteralLabel
+| |-NoThrowAttr 0x59f8e8 </usr/include/x86_64-linux-gnu/sys/cdefs.h:79:35>
+| `-FormatAttr 0x59f910 </usr/include/stdio.h:491:22, col:49> scanf 2 0
+|-FunctionDecl 0x59fa18 <line:513:1, col:33> col:12 fgetc 'int (FILE *)' extern
+| `-ParmVarDecl 0x59f980 <col:19, col:25> col:25 __stream 'FILE *'
+|-FunctionDecl 0x59fb68 <line:514:1, col:32> col:12 getc 'int (FILE *)' extern
+| `-ParmVarDecl 0x59fad0 <col:18, col:24> col:24 __stream 'FILE *'
+|-FunctionDecl 0x59fce0 <line:520:1, col:25> col:12 getchar 'int (void)' extern
+|-FunctionDecl 0x59ff30 <line:549:1, col:42> col:12 fputc 'int (int, FILE *)' extern
+| |-ParmVarDecl 0x59fd98 <col:19, col:23> col:23 __c 'int'
+| `-ParmVarDecl 0x59fe10 <col:28, col:34> col:34 __stream 'FILE *'
+|-FunctionDecl 0x5a0110 <line:550:1, col:41> col:12 putc 'int (int, FILE *)' extern
+| |-ParmVarDecl 0x59fff8 <col:18, col:22> col:22 __c 'int'
+| `-ParmVarDecl 0x5a0070 <col:27, col:33> col:33 __stream 'FILE *'
+|-FunctionDecl 0x5a02a0 <line:556:1, col:28> col:12 putchar 'int (int)' extern
+| `-ParmVarDecl 0x5a01d8 <col:21, col:25> col:25 __c 'int'
+|-FunctionDecl 0x5a0580 <line:592:1, col:77> col:14 fgets 'char *(char *restrict, int, FILE *restrict)' extern
+| |-ParmVarDecl 0x5a0360 <col:21, col:38> col:38 __s 'char *restrict'
+| |-ParmVarDecl 0x5a03e0 <col:43, col:47> col:47 __n 'int'
+| `-ParmVarDecl 0x5a0458 <col:52, col:69> col:69 __stream 'FILE *restrict'
+|-FunctionDecl 0x5a07e0 <line:655:1, col:72> col:12 fputs 'int (const char *restrict, FILE *restrict)' extern
+| |-ParmVarDecl 0x5a0650 <col:19, col:42> col:42 __s 'const char *restrict'
+| `-ParmVarDecl 0x5a06c8 <col:47, col:64> col:64 __stream 'FILE *restrict'
+|-FunctionDecl 0x5a0960 <line:661:1, col:33> col:12 puts 'int (const char *)' extern
+| `-ParmVarDecl 0x5a08c8 <col:18, col:30> col:30 __s 'const char *'
+|-FunctionDecl 0x5a0b38 <line:668:1, col:43> col:12 ungetc 'int (int, FILE *)' extern
+| |-ParmVarDecl 0x5a0a20 <col:20, col:24> col:24 __c 'int'
+| `-ParmVarDecl 0x5a0a98 <col:29, col:35> col:35 __stream 'FILE *'
+|-FunctionDecl 0x5a0ef8 <line:675:15> col:15 implicit fread 'unsigned long (void *, unsigned long, unsigned long, FILE *)' extern
+| |-ParmVarDecl 0x5a0ff0 <<invalid sloc>> <invalid sloc> 'void *'
+| |-ParmVarDecl 0x5a1058 <<invalid sloc>> <invalid sloc> 'unsigned long'
+| |-ParmVarDecl 0x5a10c0 <<invalid sloc>> <invalid sloc> 'unsigned long'
+| |-ParmVarDecl 0x5a1128 <<invalid sloc>> <invalid sloc> 'FILE *'
+| `-BuiltinAttr 0x5a0f98 <<invalid sloc>> Implicit 839
+|-FunctionDecl 0x5a11b0 prev 0x5a0ef8 <col:1, line:676:45> line:675:15 fread 'unsigned long (void *, unsigned long, unsigned long, FILE *)' extern
+| |-ParmVarDecl 0x5a0c00 <col:22, col:39> col:39 __ptr 'void *restrict'
+| |-ParmVarDecl 0x5a0c78 <col:46, col:53> col:53 __size 'size_t':'unsigned long'
+| |-ParmVarDecl 0x5a0cf0 <line:676:8, col:15> col:15 __n 'size_t':'unsigned long'
+| |-ParmVarDecl 0x5a0d68 <col:20, col:37> col:37 __stream 'FILE *restrict'
+| `-BuiltinAttr 0x5a12a0 <<invalid sloc>> Inherited Implicit 839
+|-FunctionDecl 0x5a1608 <line:681:15> col:15 implicit fwrite 'unsigned long (const void *, unsigned long, unsigned long, FILE *)' extern
+| |-ParmVarDecl 0x5a1700 <<invalid sloc>> <invalid sloc> 'const void *'
+| |-ParmVarDecl 0x5a1768 <<invalid sloc>> <invalid sloc> 'unsigned long'
+| |-ParmVarDecl 0x5a17d0 <<invalid sloc>> <invalid sloc> 'unsigned long'
+| |-ParmVarDecl 0x5a1838 <<invalid sloc>> <invalid sloc> 'FILE *'
+| `-BuiltinAttr 0x5a16a8 <<invalid sloc>> Implicit 840
+|-FunctionDecl 0x5a18e0 prev 0x5a1608 <col:1, line:682:41> line:681:15 fwrite 'unsigned long (const void *, unsigned long, unsigned long, FILE *)' extern
+| |-ParmVarDecl 0x5a1310 <col:23, col:46> col:46 __ptr 'const void *restrict'
+| |-ParmVarDecl 0x5a1388 <col:53, col:60> col:60 __size 'size_t':'unsigned long'
+| |-ParmVarDecl 0x5a1400 <line:682:9, col:16> col:16 __n 'size_t':'unsigned long'
+| |-ParmVarDecl 0x5a1478 <col:21, col:38> col:38 __s 'FILE *restrict'
+| `-BuiltinAttr 0x5a19d0 <<invalid sloc>> Inherited Implicit 840
+|-FunctionDecl 0x5a1c30 <line:713:1, col:63> col:12 fseek 'int (FILE *, long, int)' extern
+| |-ParmVarDecl 0x5a1a08 <col:19, col:25> col:25 __stream 'FILE *'
+| |-ParmVarDecl 0x5a1a88 <col:35, col:44> col:44 __off 'long'
+| `-ParmVarDecl 0x5a1b08 <col:51, col:55> col:55 __whence 'int'
+|-FunctionDecl 0x5a1df0 <line:718:1, col:38> col:17 ftell 'long (FILE *)' extern
+| `-ParmVarDecl 0x5a1cf8 <col:24, col:30> col:30 __stream 'FILE *'
+|-FunctionDecl 0x5a1f98 <line:723:1, col:35> col:13 rewind 'void (FILE *)' extern
+| `-ParmVarDecl 0x5a1ea8 <col:21, col:27> col:27 __stream 'FILE *'
+|-FunctionDecl 0x5a2260 <line:760:1, col:72> col:12 fgetpos 'int (FILE *restrict, fpos_t *restrict)' extern
+| |-ParmVarDecl 0x5a2050 <col:21, col:38> col:38 __stream 'FILE *restrict'
+| `-ParmVarDecl 0x5a2148 <col:48, col:67> col:67 __pos 'fpos_t *restrict'
+|-FunctionDecl 0x5a2510 <line:765:1, col:56> col:12 fsetpos 'int (FILE *, const fpos_t *)' extern
+| |-ParmVarDecl 0x5a2320 <col:21, col:27> col:27 __stream 'FILE *'
+| `-ParmVarDecl 0x5a23f8 <col:37, col:51> col:51 __pos 'const fpos_t *'
+|-FunctionDecl 0x5a2660 <line:786:1, /usr/include/x86_64-linux-gnu/sys/cdefs.h:79:54> /usr/include/stdio.h:786:13 clearerr 'void (FILE *)' extern
+| |-ParmVarDecl 0x5a25d0 <col:23, col:29> col:29 __stream 'FILE *'
+| `-NoThrowAttr 0x5a2708 </usr/include/x86_64-linux-gnu/sys/cdefs.h:79:35>
+|-FunctionDecl 0x5a2808 </usr/include/stdio.h:788:1, /usr/include/x86_64-linux-gnu/sys/cdefs.h:79:54> /usr/include/stdio.h:788:12 feof 'int (FILE *)' extern
+| |-ParmVarDecl 0x5a2770 <col:18, col:24> col:24 __stream 'FILE *'
+| `-NoThrowAttr 0x5a40f0 </usr/include/x86_64-linux-gnu/sys/cdefs.h:79:35>
+|-FunctionDecl 0x5a41f0 </usr/include/stdio.h:790:1, /usr/include/x86_64-linux-gnu/sys/cdefs.h:79:54> /usr/include/stdio.h:790:12 ferror 'int (FILE *)' extern
+| |-ParmVarDecl 0x5a4158 <col:20, col:26> col:26 __stream 'FILE *'
+| `-NoThrowAttr 0x5a4298 </usr/include/x86_64-linux-gnu/sys/cdefs.h:79:35>
+|-FunctionDecl 0x5a43c8 </usr/include/stdio.h:804:1, col:36> col:13 perror 'void (const char *)' extern
+| `-ParmVarDecl 0x5a4308 <col:21, col:33> col:33 __s 'const char *'
+|-FunctionDecl 0x5a4518 <line:885:1, col:27> col:12 __uflow 'int (FILE *)' extern
+| `-ParmVarDecl 0x5a4480 <col:21, col:26> col:27 'FILE *'
+|-FunctionDecl 0x5a4770 <line:886:1, col:35> col:12 __overflow 'int (FILE *, int)' extern
+| |-ParmVarDecl 0x5a45d0 <col:24, col:29> col:30 'FILE *'
+| `-ParmVarDecl 0x5a4650 <col:32> col:35 'int'
+|-VarDecl 0x5a4838 <src/main.c:5:1, col:25> col:11 used global_bias 'const int' cinit
+| `-IntegerLiteral 0x5a48a0 <col:25> 'int' 2
+|-VarDecl 0x5a48d8 <line:6:1, col:23> col:5 used processed_items 'int' cinit
+| `-IntegerLiteral 0x5a4940 <col:23> 'int' 0
+|-FunctionDecl 0x5a4bb0 <line:8:1, line:27:1> line:8:5 used weighted_sum 'int (const int *, int)'
+| |-ParmVarDecl 0x5a4a10 <col:18, col:35> col:28 used values 'const int *':'const int *'
+| |-ParmVarDecl 0x5a4a90 <col:38, col:42> col:42 used count 'int'
+| `-CompoundStmt 0x5a6958 <line:9:1, line:27:1>
+|   |-DeclStmt 0x5a4d00 <line:10:5, col:18>
+|   | `-VarDecl 0x5a4c78 <col:5, col:17> col:9 used total 'int' cinit
+|   |   `-IntegerLiteral 0x5a4ce0 <col:17> 'int' 0
+|   |-ForStmt 0x5a68d8 <line:12:5, line:24:5>
+|   | |-DeclStmt 0x5a4db8 <line:12:10, col:19>
+|   | | `-VarDecl 0x5a4d30 <col:10, col:18> col:14 used i 'int' cinit
+|   | |   `-IntegerLiteral 0x5a4d98 <col:18> 'int' 0
+|   | |-<<<NULL>>>
+|   | |-BinaryOperator 0x5a4e40 <col:21, col:25> 'int' '<'
+|   | | |-ImplicitCastExpr 0x5a4e10 <col:21> 'int' <LValueToRValue>
+|   | | | `-DeclRefExpr 0x5a4dd0 <col:21> 'int' lvalue Var 0x5a4d30 'i' 'int'
+|   | | `-ImplicitCastExpr 0x5a4e28 <col:25> 'int' <LValueToRValue>
+|   | |   `-DeclRefExpr 0x5a4df0 <col:25> 'int' lvalue ParmVar 0x5a4a90 'count' 'int'
+|   | |-UnaryOperator 0x5a4e80 <col:32, col:34> 'int' prefix '++'
+|   | | `-DeclRefExpr 0x5a4e60 <col:34> 'int' lvalue Var 0x5a4d30 'i' 'int'
+|   | `-CompoundStmt 0x5a68b0 <line:13:5, line:24:5>
+|   |   |-DeclStmt 0x5a6638 <line:14:9, col:54>
+|   |   | `-VarDecl 0x5a4eb0 <col:9, include/config.h:6:61> src/main.c:14:13 used adjusted 'int' cinit
+|   |   |   `-ParenExpr 0x5a5098 <include/config.h:6:29, col:61> 'int'
+|   |   |     `-BinaryOperator 0x5a5078 <col:30, col:60> 'int' '+'
+|   |   |       |-BinaryOperator 0x5a5000 <col:30, line:5:22> 'int' '*'
+|   |   |       | |-ImplicitCastExpr 0x5a4fe8 <line:6:30, col:36> 'int' <LValueToRValue>
+|   |   |       | | `-ParenExpr 0x5a4fa8 <col:30, col:36> 'const int' lvalue
+|   |   |       | |   `-ArraySubscriptExpr 0x5a4f88 <src/main.c:14:31, col:39> 'const int' lvalue
+|   |   |       | |     |-ImplicitCastExpr 0x5a4f58 <col:31> 'const int *':'const int *' <LValueToRValue>
+|   |   |       | |     | `-DeclRefExpr 0x5a4f18 <col:31> 'const int *':'const int *' lvalue ParmVar 0x5a4a10 'values' 'const int *':'const int *'
+|   |   |       | |     `-ImplicitCastExpr 0x5a4f70 <col:38> 'int' <LValueToRValue>
+|   |   |       | |       `-DeclRefExpr 0x5a4f38 <col:38> 'int' lvalue Var 0x5a4d30 'i' 'int'
+|   |   |       | `-IntegerLiteral 0x5a4fc8 <include/config.h:5:22> 'int' 3
+|   |   |       `-ImplicitCastExpr 0x5a5060 <line:6:55, col:60> 'int' <LValueToRValue>
+|   |   |         `-ParenExpr 0x5a5040 <col:55, col:60> 'const int' lvalue
+|   |   |           `-DeclRefExpr 0x5a5020 <src/main.c:14:42> 'const int' lvalue Var 0x5a4838 'global_bias' 'const int'
+|   |   |-IfStmt 0x5a6848 <line:15:9, line:22:9> has_else
+|   |   | |-BinaryOperator 0x5a66e8 <line:15:13, col:29> 'int' '=='
+|   |   | | |-BinaryOperator 0x5a66a8 <col:13, col:24> 'int' '%'
+|   |   | | | |-ImplicitCastExpr 0x5a6690 <col:13> 'int' <LValueToRValue>
+|   |   | | | | `-DeclRefExpr 0x5a6650 <col:13> 'int' lvalue Var 0x5a4eb0 'adjusted' 'int'
+|   |   | | | `-IntegerLiteral 0x5a6670 <col:24> 'int' 2
+|   |   | | `-IntegerLiteral 0x5a66c8 <col:29> 'int' 0
+|   |   | |-CompoundStmt 0x5a6790 <line:16:9, line:18:9>
+|   |   | | `-CompoundAssignOperator 0x5a6760 <line:17:13, col:22> 'int' '+=' ComputeLHSTy='int' ComputeResultTy='int'
+|   |   | |   |-DeclRefExpr 0x5a6708 <col:13> 'int' lvalue Var 0x5a4c78 'total' 'int'
+|   |   | |   `-ImplicitCastExpr 0x5a6748 <col:22> 'int' <LValueToRValue>
+|   |   | |     `-DeclRefExpr 0x5a6728 <col:22> 'int' lvalue Var 0x5a4eb0 'adjusted' 'int'
+|   |   | `-CompoundStmt 0x5a6830 <line:20:9, line:22:9>
+|   |   |   `-CompoundAssignOperator 0x5a6800 <line:21:13, col:22> 'int' '-=' ComputeLHSTy='int' ComputeResultTy='int'
+|   |   |     |-DeclRefExpr 0x5a67a8 <col:13> 'int' lvalue Var 0x5a4c78 'total' 'int'
+|   |   |     `-ImplicitCastExpr 0x5a67e8 <col:22> 'int' <LValueToRValue>
+|   |   |       `-DeclRefExpr 0x5a67c8 <col:22> 'int' lvalue Var 0x5a4eb0 'adjusted' 'int'
+|   |   `-UnaryOperator 0x5a6898 <line:23:9, col:11> 'int' prefix '++'
+|   |     `-DeclRefExpr 0x5a6878 <col:11> 'int' lvalue Var 0x5a48d8 'processed_items' 'int'
+|   `-ReturnStmt 0x5a6948 <line:26:5, col:12>
+|     `-ImplicitCastExpr 0x5a6930 <col:12> 'int' <LValueToRValue>
+|       `-DeclRefExpr 0x5a6910 <col:12> 'int' lvalue Var 0x5a4c78 'total' 'int'
+`-FunctionDecl 0x5a6a20 <line:29:1, line:50:1> line:29:5 main 'int (void)'
+  `-CompoundStmt 0x5a7b90 <line:30:1, line:50:1>
+    |-DeclStmt 0x5a6b88 <line:31:5, col:18>
+    | `-VarDecl 0x5a6b00 <col:5, col:17> col:9 used count 'int' cinit
+    |   `-IntegerLiteral 0x5a6b68 <col:17> 'int' 0
+    |-DeclStmt 0x5a6d78 <line:32:5, col:32>
+    | `-VarDecl 0x5a6c40 <col:5, col:31> col:9 used values 'int[8]' cinit
+    |   `-InitListExpr 0x5a6d20 <col:29, col:31> 'int[8]'
+    |     |-array_filler: ImplicitValueInitExpr 0x5a6d68 <<invalid sloc>> 'int'
+    |     `-IntegerLiteral 0x5a6ca8 <col:30> 'int' 0
+    |-IfStmt 0x5a7118 <line:34:5, line:37:5>
+    | |-BinaryOperator 0x5a70b0 <line:34:9, include/config.h:4:19> 'int' '||'
+    | | |-BinaryOperator 0x5a7018 <src/main.c:34:9, col:45> 'int' '||'
+    | | | |-BinaryOperator 0x5a6f80 <col:9, col:32> 'int' '!='
+    | | | | |-CallExpr 0x5a6f00 <col:9, col:27> 'int'
+    | | | | | |-ImplicitCastExpr 0x5a6ee8 <col:9> 'int (*)(const char *restrict, ...)' <FunctionToPointerDecay>
+    | | | | | | `-DeclRefExpr 0x5a6d90 <col:9> 'int (const char *restrict, ...)' Function 0x591238 'scanf' 'int (const char *restrict, ...)'
+    | | | | | |-ImplicitCastExpr 0x5a6f48 <col:15> 'const char *' <NoOp>
+    | | | | | | `-ImplicitCastExpr 0x5a6f30 <col:15> 'char *' <ArrayToPointerDecay>
+    | | | | | |   `-StringLiteral 0x5a6de8 <col:15> 'char[3]' lvalue "%d"
+    | | | | | `-UnaryOperator 0x5a6e58 <col:21, col:22> 'int *' prefix '&' cannot overflow
+    | | | | |   `-DeclRefExpr 0x5a6e08 <col:22> 'int' lvalue Var 0x5a6b00 'count' 'int'
+    | | | | `-IntegerLiteral 0x5a6f60 <col:32> 'int' 1
+    | | | `-BinaryOperator 0x5a6ff8 <col:37, col:45> 'int' '<'
+    | | |   |-ImplicitCastExpr 0x5a6fe0 <col:37> 'int' <LValueToRValue>
+    | | |   | `-DeclRefExpr 0x5a6fa0 <col:37> 'int' lvalue Var 0x5a6b00 'count' 'int'
+    | | |   `-IntegerLiteral 0x5a6fc0 <col:45> 'int' 1
+    | | `-BinaryOperator 0x5a7090 <col:50, include/config.h:4:19> 'int' '>'
+    | |   |-ImplicitCastExpr 0x5a7078 <src/main.c:34:50> 'int' <LValueToRValue>
+    | |   | `-DeclRefExpr 0x5a7038 <col:50> 'int' lvalue Var 0x5a6b00 'count' 'int'
+    | |   `-IntegerLiteral 0x5a7058 <include/config.h:4:19> 'int' 8
+    | `-CompoundStmt 0x5a7100 <src/main.c:35:5, line:37:5>
+    |   `-ReturnStmt 0x5a70f0 <line:36:9, col:16>
+    |     `-IntegerLiteral 0x5a70d0 <col:16> 'int' 1
+    |-ForStmt 0x5a74f0 <line:39:5, line:45:5>
+    | |-DeclStmt 0x5a71d8 <line:39:10, col:19>
+    | | `-VarDecl 0x5a7150 <col:10, col:18> col:14 used i 'int' cinit
+    | |   `-IntegerLiteral 0x5a71b8 <col:18> 'int' 0
+    | |-<<<NULL>>>
+    | |-BinaryOperator 0x5a7260 <col:21, col:25> 'int' '<'
+    | | |-ImplicitCastExpr 0x5a7230 <col:21> 'int' <LValueToRValue>
+    | | | `-DeclRefExpr 0x5a71f0 <col:21> 'int' lvalue Var 0x5a7150 'i' 'int'
+    | | `-ImplicitCastExpr 0x5a7248 <col:25> 'int' <LValueToRValue>
+    | |   `-DeclRefExpr 0x5a7210 <col:25> 'int' lvalue Var 0x5a6b00 'count' 'int'
+    | |-UnaryOperator 0x5a72a0 <col:32, col:34> 'int' prefix '++'
+    | | `-DeclRefExpr 0x5a7280 <col:34> 'int' lvalue Var 0x5a7150 'i' 'int'
+    | `-CompoundStmt 0x5a74d8 <line:40:5, line:45:5>
+    |   `-IfStmt 0x5a74b8 <line:41:9, line:44:9>
+    |     |-BinaryOperator 0x5a7450 <line:41:13, col:40> 'int' '!='
+    |     | |-CallExpr 0x5a73d0 <col:13, col:35> 'int'
+    |     | | |-ImplicitCastExpr 0x5a73b8 <col:13> 'int (*)(const char *restrict, ...)' <FunctionToPointerDecay>
+    |     | | | `-DeclRefExpr 0x5a72b8 <col:13> 'int (const char *restrict, ...)' Function 0x591238 'scanf' 'int (const char *restrict, ...)'
+    |     | | |-ImplicitCastExpr 0x5a7418 <col:19> 'const char *' <NoOp>
+    |     | | | `-ImplicitCastExpr 0x5a7400 <col:19> 'char *' <ArrayToPointerDecay>
+    |     | | |   `-StringLiteral 0x5a72d8 <col:19> 'char[3]' lvalue "%d"
+    |     | | `-UnaryOperator 0x5a7388 <col:25, col:34> 'int *' prefix '&' cannot overflow
+    |     | |   `-ArraySubscriptExpr 0x5a7368 <col:26, col:34> 'int' lvalue
+    |     | |     |-ImplicitCastExpr 0x5a7338 <col:26> 'int *' <ArrayToPointerDecay>
+    |     | |     | `-DeclRefExpr 0x5a72f8 <col:26> 'int[8]' lvalue Var 0x5a6c40 'values' 'int[8]'
+    |     | |     `-ImplicitCastExpr 0x5a7350 <col:33> 'int' <LValueToRValue>
+    |     | |       `-DeclRefExpr 0x5a7318 <col:33> 'int' lvalue Var 0x5a7150 'i' 'int'
+    |     | `-IntegerLiteral 0x5a7430 <col:40> 'int' 1
+    |     `-CompoundStmt 0x5a74a0 <line:42:9, line:44:9>
+    |       `-ReturnStmt 0x5a7490 <line:43:13, col:20>
+    |         `-IntegerLiteral 0x5a7470 <col:20> 'int' 1
+    |-DeclStmt 0x5a79b8 <line:47:5, col:45>
+    | `-VarDecl 0x5a7540 <col:5, col:44> col:9 used result 'int' cinit
+    |   `-CallExpr 0x5a7940 <col:18, col:44> 'int'
+    |     |-ImplicitCastExpr 0x5a7928 <col:18> 'int (*)(const int *, int)' <FunctionToPointerDecay>
+    |     | `-DeclRefExpr 0x5a75a8 <col:18> 'int (const int *, int)' Function 0x5a4bb0 'weighted_sum' 'int (const int *, int)'
+    |     |-ImplicitCastExpr 0x5a7988 <col:31> 'const int *':'const int *' <NoOp>
+    |     | `-ImplicitCastExpr 0x5a7970 <col:31> 'int *' <ArrayToPointerDecay>
+    |     |   `-DeclRefExpr 0x5a7890 <col:31> 'int[8]' lvalue Var 0x5a6c40 'values' 'int[8]'
+    |     `-ImplicitCastExpr 0x5a79a0 <col:39> 'int' <LValueToRValue>
+    |       `-DeclRefExpr 0x5a78b0 <col:39> 'int' lvalue Var 0x5a6b00 'count' 'int'
+    |-CallExpr 0x5a7ac8 <line:48:5, col:64> 'int'
+    | |-ImplicitCastExpr 0x5a7ab0 <col:5> 'int (*)(const char *, ...)' <FunctionToPointerDecay>
+    | | `-DeclRefExpr 0x5a79d0 <col:5> 'int (const char *, ...)' Function 0x58c818 'printf' 'int (const char *, ...)'
+    | |-ImplicitCastExpr 0x5a7b18 <col:12> 'const char *' <NoOp>
+    | | `-ImplicitCastExpr 0x5a7b00 <col:12> 'char *' <ArrayToPointerDecay>
+    | |   `-StringLiteral 0x5a7a28 <col:12> 'char[25]' lvalue "result=%d, processed=%d\n"
+    | |-ImplicitCastExpr 0x5a7b30 <col:41> 'int' <LValueToRValue>
+    | | `-DeclRefExpr 0x5a7a58 <col:41> 'int' lvalue Var 0x5a7540 'result' 'int'
+    | `-ImplicitCastExpr 0x5a7b48 <col:49> 'int' <LValueToRValue>
+    |   `-DeclRefExpr 0x5a7a78 <col:49> 'int' lvalue Var 0x5a48d8 'processed_items' 'int'
+    `-ReturnStmt 0x5a7b80 <line:49:5, col:12>
+      `-IntegerLiteral 0x5a7b60 <col:12> 'int' 0

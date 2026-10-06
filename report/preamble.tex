@@ -1,12 +1,12 @@
 \usepackage[a4paper,top=2.5cm,bottom=2.5cm,left=2.6cm,right=2.6cm]{geometry}
 \usepackage{fontspec}
 \usepackage{xeCJK}
-\setmainfont{Liberation Serif}
-\setsansfont{Liberation Sans}
-\setmonofont{Noto Sans Mono CJK SC}
-\setCJKmainfont{Noto Serif CJK SC}
-\setCJKsansfont{Noto Sans CJK SC}
-\setCJKmonofont{Noto Sans Mono CJK SC}
+\IfFontExistsTF{Liberation Serif}{\setmainfont{Liberation Serif}}{\setmainfont{Times New Roman}}
+\IfFontExistsTF{Liberation Sans}{\setsansfont{Liberation Sans}}{\setsansfont{Arial}}
+\IfFontExistsTF{Noto Sans Mono CJK SC}{\setmonofont{Noto Sans Mono CJK SC}}{\setmonofont{Menlo}}
+\IfFontExistsTF{Noto Serif CJK SC}{\setCJKmainfont{Noto Serif CJK SC}}{\setCJKmainfont{Hiragino Sans GB}}
+\IfFontExistsTF{Noto Sans CJK SC}{\setCJKsansfont{Noto Sans CJK SC}}{\setCJKsansfont{Hiragino Sans GB}}
+\IfFontExistsTF{Noto Sans Mono CJK SC}{\setCJKmonofont{Noto Sans Mono CJK SC}}{\setCJKmonofont{Hiragino Sans GB}}
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{booktabs}
@@ -23,7 +23,7 @@
 \usepackage{setspace}
 \usepackage{titlesec}
 \usepackage{url}
-\usepackage{lastpage}
+\IfFileExists{lastpage.sty}{\usepackage{lastpage}}{}
 \usepackage{enumitem}
 
 \hypersetup{colorlinks=false,pdfborder={0 0 0}}
@@ -42,7 +42,9 @@
 \pagestyle{fancy}
 \fancyhf{}
 \fancyhead[C]{\small 编译原理上机作业调研报告}
-\fancyfoot[C]{\small 第 \thepage\ 页 / 共 \pageref{LastPage} 页}
+\IfFileExists{lastpage.sty}
+  {\fancyfoot[C]{\small 第 \thepage\ 页 / 共 \pageref{LastPage} 页}}
+  {\fancyfoot[C]{\small 第 \thepage\ 页}}
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\footrulewidth}{0pt}
 \setlength{\headheight}{14pt}

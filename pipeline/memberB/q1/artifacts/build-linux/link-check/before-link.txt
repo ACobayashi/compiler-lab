@@ -1,0 +1,137 @@
+
+main-O2-aarch64.o:     file format elf64-littleaarch64
+
+
+Disassembly of section .text:
+
+0000000000000128 <main>:
+ 128:	d10143ff 	sub	sp, sp, #0x50
+			8: R_AARCH64_ADR_PREL_PG_HI21	processed_items
+			14: R_AARCH64_LDST32_ABS_LO12_NC	processed_items
+			1c: R_AARCH64_ADR_PREL_PG_HI21	processed_items
+			24: R_AARCH64_ADD_ABS_LO12_NC	processed_items
+			30: R_AARCH64_ADR_PREL_PG_HI21	processed_items+0x4
+			34: R_AARCH64_ADD_ABS_LO12_NC	processed_items+0x4
+			60: R_AARCH64_LDST32_ABS_LO12_NC	processed_items
+			114: R_AARCH64_LDST32_ABS_LO12_NC	processed_items
+ 12c:	a9027bfd 	stp	x29, x30, [sp, #32]
+ 130:	910083fd 	add	x29, sp, #0x20
+ 134:	f9001bf5 	str	x21, [sp, #48]
+ 138:	a9044ff4 	stp	x20, x19, [sp, #64]
+ 13c:	6f00e400 	movi	v0.2d, #0x0
+ 140:	90000000 	adrp	x0, 0 <weighted_sum>
+			140: R_AARCH64_ADR_PREL_PG_HI21	.rodata.str1.1
+ 144:	91000000 	add	x0, x0, #0x0
+			144: R_AARCH64_ADD_ABS_LO12_NC	.rodata.str1.1
+ 148:	910073a1 	add	x1, x29, #0x1c
+ 14c:	b9001fbf 	str	wzr, [x29, #28]
+ 150:	ad0003e0 	stp	q0, q0, [sp]
+ 154:	94000000 	bl	0 <__isoc99_scanf>
+			154: R_AARCH64_CALL26	__isoc99_scanf
+ 158:	2a0003e8 	mov	w8, w0
+ 15c:	52800020 	mov	w0, #0x1                   	// #1
+ 160:	7100051f 	cmp	w8, #0x1
+ 164:	54000b01 	b.ne	2c4 <main+0x19c>  // b.any
+ 168:	b9401fa8 	ldr	w8, [x29, #28]
+ 16c:	7100051f 	cmp	w8, #0x1
+ 170:	54000aab 	b.lt	2c4 <main+0x19c>  // b.tstop
+ 174:	7100211f 	cmp	w8, #0x8
+ 178:	54000a6c 	b.gt	2c4 <main+0x19c>
+ 17c:	90000014 	adrp	x20, 0 <weighted_sum>
+			17c: R_AARCH64_ADR_PREL_PG_HI21	.rodata.str1.1
+ 180:	aa1f03f5 	mov	x21, xzr
+ 184:	910003f3 	mov	x19, sp
+ 188:	91000294 	add	x20, x20, #0x0
+			188: R_AARCH64_ADD_ABS_LO12_NC	.rodata.str1.1
+ 18c:	aa1403e0 	mov	x0, x20
+ 190:	aa1303e1 	mov	x1, x19
+ 194:	94000000 	bl	0 <__isoc99_scanf>
+			194: R_AARCH64_CALL26	__isoc99_scanf
+ 198:	7100041f 	cmp	w0, #0x1
+ 19c:	54000201 	b.ne	1dc <main+0xb4>  // b.any
+ 1a0:	b9801fa8 	ldrsw	x8, [x29, #28]
+ 1a4:	910006b5 	add	x21, x21, #0x1
+ 1a8:	91001273 	add	x19, x19, #0x4
+ 1ac:	eb0802bf 	cmp	x21, x8
+ 1b0:	54fffeeb 	b.lt	18c <main+0x64>  // b.tstop
+ 1b4:	92407d08 	and	x8, x8, #0xffffffff
+ 1b8:	7100011f 	cmp	w8, #0x0
+ 1bc:	5400014d 	b.le	1e4 <main+0xbc>
+ 1c0:	90000009 	adrp	x9, 0 <weighted_sum>
+			1c0: R_AARCH64_ADR_PREL_PG_HI21	processed_items
+ 1c4:	7100211f 	cmp	w8, #0x8
+ 1c8:	b940012a 	ldr	w10, [x9]
+			1c8: R_AARCH64_LDST32_ABS_LO12_NC	processed_items
+ 1cc:	54000142 	b.cs	1f4 <main+0xcc>  // b.hs, b.nlast
+ 1d0:	aa1f03eb 	mov	x11, xzr
+ 1d4:	2a1f03e1 	mov	w1, wzr
+ 1d8:	14000028 	b	278 <main+0x150>
+ 1dc:	52800020 	mov	w0, #0x1                   	// #1
+ 1e0:	14000039 	b	2c4 <main+0x19c>
+ 1e4:	90000008 	adrp	x8, 0 <weighted_sum>
+			1e4: R_AARCH64_ADR_PREL_PG_HI21	processed_items
+ 1e8:	2a1f03e1 	mov	w1, wzr
+ 1ec:	b9400102 	ldr	w2, [x8]
+			1ec: R_AARCH64_LDST32_ABS_LO12_NC	processed_items
+ 1f0:	14000031 	b	2b4 <main+0x18c>
+ 1f4:	927d710b 	and	x11, x8, #0xfffffff8
+ 1f8:	910003ec 	mov	x12, sp
+ 1fc:	6f00e400 	movi	v0.2d, #0x0
+ 200:	9100418c 	add	x12, x12, #0x10
+ 204:	4f000461 	movi	v1.4s, #0x3
+ 208:	aa0b03ed 	mov	x13, x11
+ 20c:	4f000442 	movi	v2.4s, #0x2
+ 210:	4f000423 	movi	v3.4s, #0x1
+ 214:	6f000424 	mvni	v4.4s, #0x1
+ 218:	6f00e405 	movi	v5.2d, #0x0
+ 21c:	ad7f9d86 	ldp	q6, q7, [x12, #-16]
+ 220:	f10021ad 	subs	x13, x13, #0x8
+ 224:	9100818c 	add	x12, x12, #0x20
+ 228:	4ea19cc6 	mul	v6.4s, v6.4s, v1.4s
+ 22c:	4ea19ce7 	mul	v7.4s, v7.4s, v1.4s
+ 230:	4e231cd2 	and	v18.16b, v6.16b, v3.16b
+ 234:	4ea284d0 	add	v16.4s, v6.4s, v2.4s
+ 238:	4e231cf3 	and	v19.16b, v7.16b, v3.16b
+ 23c:	4ea284f1 	add	v17.4s, v7.4s, v2.4s
+ 240:	6ea68486 	sub	v6.4s, v4.4s, v6.4s
+ 244:	6ea78487 	sub	v7.4s, v4.4s, v7.4s
+ 248:	4ea09a52 	cmeq	v18.4s, v18.4s, #0
+ 24c:	4ea09a73 	cmeq	v19.4s, v19.4s, #0
+ 250:	6eb21e06 	bit	v6.16b, v16.16b, v18.16b
+ 254:	6eb31e27 	bit	v7.16b, v17.16b, v19.16b
+ 258:	4ea084c0 	add	v0.4s, v6.4s, v0.4s
+ 25c:	4ea584e5 	add	v5.4s, v7.4s, v5.4s
+ 260:	54fffde1 	b.ne	21c <main+0xf4>  // b.any
+ 264:	4ea084a0 	add	v0.4s, v5.4s, v0.4s
+ 268:	eb08017f 	cmp	x11, x8
+ 26c:	4eb1b800 	addv	s0, v0.4s
+ 270:	1e260001 	fmov	w1, s0
+ 274:	540001c0 	b.eq	2ac <main+0x184>  // b.none
+ 278:	910003ed 	mov	x13, sp
+ 27c:	cb0b010c 	sub	x12, x8, x11
+ 280:	8b0b09ab 	add	x11, x13, x11, lsl #2
+ 284:	1280002d 	mov	w13, #0xfffffffe            	// #-2
+ 288:	b840456e 	ldr	w14, [x11], #4
+ 28c:	0b0e05ce 	add	w14, w14, w14, lsl #1
+ 290:	110009cf 	add	w15, w14, #0x2
+ 294:	4b0e01b0 	sub	w16, w13, w14
+ 298:	720001df 	tst	w14, #0x1
+ 29c:	1a9001ee 	csel	w14, w15, w16, eq  // eq = none
+ 2a0:	f100058c 	subs	x12, x12, #0x1
+ 2a4:	0b0101c1 	add	w1, w14, w1
+ 2a8:	54ffff01 	b.ne	288 <main+0x160>  // b.any
+ 2ac:	0b0a0102 	add	w2, w8, w10
+ 2b0:	b9000122 	str	w2, [x9]
+			2b0: R_AARCH64_LDST32_ABS_LO12_NC	processed_items
+ 2b4:	90000000 	adrp	x0, 0 <weighted_sum>
+			2b4: R_AARCH64_ADR_PREL_PG_HI21	.rodata.str1.1+0x3
+ 2b8:	91000000 	add	x0, x0, #0x0
+			2b8: R_AARCH64_ADD_ABS_LO12_NC	.rodata.str1.1+0x3
+ 2bc:	94000000 	bl	0 <printf>
+			2bc: R_AARCH64_CALL26	printf
+ 2c0:	2a1f03e0 	mov	w0, wzr
+ 2c4:	a9444ff4 	ldp	x20, x19, [sp, #64]
+ 2c8:	a9427bfd 	ldp	x29, x30, [sp, #32]
+ 2cc:	f9401bf5 	ldr	x21, [sp, #48]
+ 2d0:	910143ff 	add	sp, sp, #0x50
+ 2d4:	d65f03c0 	ret

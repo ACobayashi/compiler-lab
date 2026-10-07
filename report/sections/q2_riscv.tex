@@ -1,30 +1,37 @@
-\subsection{RISC-V 等价实现（成员A负责）}
-\subsubsection{SysY 到 RISC-V 的实现对应}
-RISC-V 版本保持与 \texttt{main.sy} 相同的函数划分和控制逻辑。按照 RV64 调用约定，整数和地址参数通过 \texttt{a0}、\texttt{a1} 等参数寄存器传递，整数返回值放在 \texttt{a0} 中；\texttt{main} 中需要跨函数调用保存的 $n$、循环变量和数组基址分别放入 \texttt{s0}、\texttt{s1}、\texttt{s2}，并在栈上保存 \texttt{ra} 和这些被调用者保存寄存器。栈帧大小取 80 B，为 16 的整数倍。
+\subsection{RISC-V 汇编程序}
+
+本部分由成员B负责。实验中编写了与前面 SysY 程序对应的 RISC-V 汇编代码，完成数组输入、偶数求和和正数个数统计，并与 SysY 运行时库链接。程序使用 \texttt{qemu-riscv64} 运行，先使用三组基础数据进行测试，再补充 100 组数据，并检查目标文件和最终可执行文件中的函数符号。
+
+\subsubsection{寄存器与主要指令}
+
+数组首地址和长度分别放在 \texttt{a0} 和 \texttt{a1} 中，函数返回值放在 \texttt{a0} 中。\texttt{main} 中使用 \texttt{s0} 保存 $n$，\texttt{s1} 保存循环变量，\texttt{s2} 保存数组基址，并在栈中保存 \texttt{ra} 和 \texttt{s0--s2}。栈帧大小为 80 B，保持 16 B 对齐。
 
 \begin{table}[H]
 \centering
-\caption{SysY 结构与 RISC-V 实现的对应关系}
+\caption{SysY 结构与 RISC-V 汇编写法}
 \begin{tabularx}{0.96\linewidth}{>{\ttfamily}p{3.1cm} >{\ttfamily}p{4.2cm} X}
 \toprule
-\normalfont SysY 结构 & \normalfont RISC-V 实现 & \normalfont 作用 \\
+\normalfont SysY 结构 & \normalfont RISC-V 指令/寄存器 & \normalfont 作用 \\
 \midrule
-函数参数 a、n & a0、a1 & 按照调用约定传递数组首地址和整数参数 \\
-return & a0 & 函数返回值寄存器 \\
-a[i] & slli + add + lw/sw & 将下标左移 2 位得到 $i\times4$，再与数组基地址相加 \\
-while & 条件分支 + 标签 + 回跳 & 将循环转换为基本块和跳转 \\
-a[i]\%2==0 & remw + bnez & 求余后判断是否为 0 \\
-a[i]>0 & blez & 非正数时跳过计数 \\
+函数参数 a、n & a0、a1 & 传递数组首地址和数组长度 \\
+return & a0 & 保存函数返回值 \\
+a[i] & slli + add + lw/sw & 计算数组元素地址并进行读写 \\
+while & 条件分支 + 标签 + 回跳 & 控制循环执行 \\
+a[i]\%2==0 & remw + bnez & 计算余数并判断是否为偶数 \\
+a[i]>0 & blez & 判断元素是否为正数 \\
 getint/putint/\newline putch & call & 调用 SysY 运行时库函数 \\
-main 栈帧 & addi sp,sp,-80 / +80 & 保存 ra 和 s0--s2，并保持 16 B 对齐 \\
+main 栈帧 & addi sp,sp,-80 / +80 & 保存 \texttt{ra} 和 \texttt{s0--s2} \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-汇编中使用了 \texttt{li}、\texttt{mv}、\texttt{j}、\texttt{call}、\texttt{ret}、\texttt{bnez}、\texttt{blez} 等常见伪指令，汇编器会将其展开为相应的基础指令组合。手写汇编的重点不是逐字翻译源代码，而是保持函数接口、控制流、数据访问和最终运行结果与 SysY 程序等价。
+访问 \texttt{a[i]} 时，先使用 \texttt{slli} 将下标左移 2 位得到 $i\times4$，再使用 \texttt{add} 与数组基址相加，最后通过 \texttt{lw} 或 \texttt{sw} 读写数组元素。\texttt{sum\_even} 使用 \texttt{remw} 计算元素除以 2 的余数，通过 \texttt{bnez} 跳过奇数；\texttt{count\_pos} 使用 \texttt{blez} 跳过非正数。
 
-\subsubsection{RISC-V 汇编程序}
-\begin{lstlisting}[language=RiscVAsm,caption={与 main.sy 等价的 RV64 汇编程序 main.s},label={lst:riscv-main}]
+\subsubsection{RISC-V 汇编代码}
+
+成员B编写的 RISC-V 汇编代码如下：
+
+\begin{lstlisting}[language=RiscVAsm,caption={RISC-V 汇编程序 main.s},label={lst:riscv-main}]
 .option nopic
 .attribute stack_align,16
 .text
@@ -129,16 +136,19 @@ main:
 .size main,.-main
 \end{lstlisting}
 
-\subsubsection{汇编与目标文件生成}
-首先使用 RISC-V 交叉编译器的汇编阶段把 \texttt{main.s} 转换为可重定位目标文件 \texttt{main.o}：
+\subsubsection{汇编与链接}
+
+使用 RISC-V 交叉编译器将 \texttt{main.s} 汇编为目标文件 \texttt{main.o}：
+
 \begin{lstlisting}[language=bash]
 riscv64-unknown-elf-gcc main.s -c -o main.o -w
 file main.o
 \end{lstlisting}
-\texttt{file} 输出中包含 \texttt{ELF 64-bit}、\texttt{relocatable} 和 \texttt{UCB RISC-V}，说明文本汇编已被编码为 64 位 RISC-V 目标文件，但此时仍处于可重定位状态，尚不能独立运行。
 
-\subsubsection{链接 SysY 运行时库}
-程序中的 \texttt{getint}、\texttt{putint} 和 \texttt{putch} 不是在 \texttt{main.s} 中实现的，因此需要链接课程提供的 SysY RISC-V 运行时库 \texttt{libsysy\_riscv.a}。实验采用静态链接和 \texttt{medany} 内存模型，并按课程环境把代码基址设置为 \texttt{0x90000000}：
+\texttt{file} 的结果中包含 \texttt{ELF 64-bit}、\texttt{relocatable} 和 \texttt{UCB RISC-V}，生成的 \texttt{main.o} 为 64 位 RISC-V 可重定位目标文件。
+
+程序调用了 SysY 运行时库中的 \texttt{getint}、\texttt{putint} 和 \texttt{putch}。使用下面的命令将 \texttt{main.o} 与 \texttt{libsysy\_riscv.a} 静态链接：
+
 \begin{lstlisting}[language=bash]
 riscv64-unknown-elf-gcc main.o -o main \
   -L./lib -lsysy_riscv \
@@ -146,45 +156,76 @@ riscv64-unknown-elf-gcc main.o -o main \
   -Wl,--no-relax,-Ttext=0x90000000
 \end{lstlisting}
 
-首次尝试链接时，终端优先使用了较旧的 SiFive GCC-Metal 10.2.0 工具链，其链接器无法识别官方运行库目标文件中的 \texttt{zmmul} ISA 属性。检查 \texttt{type -a} 后发现课程工具链已经安装在 \texttt{/home/lenovo/riscv-elf-toolchains/bin}，将该目录置于 \texttt{PATH} 前端并重新生成 \texttt{main.o} 后，官方 \texttt{libsysy\_riscv.a} 可以正常链接。该现象说明预编译静态库中的目标架构属性需要与所使用的汇编器、链接器版本兼容。
+第一次链接时，终端使用的是 SiFive GCC-Metal 10.2.0 工具链，链接器报告 \texttt{zmmul} ISA 属性不兼容。使用 \texttt{type -a} 检查工具链路径后，将 \texttt{/home/lenovo/riscv-elf-toolchains/bin} 放到 \texttt{PATH} 前端，并重新生成 \texttt{main.o}，之后程序正常链接。
+
+目标文件检查和链接结果如图~\ref{fig:q2-rv-link} 所示。
 
 \labfigure{figures/shared/q2_riscv/q2_1.png}{RV64 目标文件检查与 SysY 运行时库链接}{fig:q2-rv-link}
 
-\subsubsection{运行结果验证}
-链接成功后，\texttt{file} 显示 \texttt{main} 为 \texttt{ELF 64-bit LSB executable, UCB RISC-V}，并且采用静态链接。使用 \texttt{qemu-riscv64} 执行程序，对正常数据、包含负数的数据以及全奇数数据分别进行测试。运行时库额外打印的 \texttt{TOTAL} 计时行由 SysY 运行时库产生，不属于本程序的两个计算结果。
+\subsubsection{运行结果}
+
+使用 \texttt{qemu-riscv64} 运行链接后的程序：
 
 \begin{lstlisting}[language=bash]
 qemu-riscv64 ./main
 \end{lstlisting}
+
+三组测试数据的运行结果如图~\ref{fig:q2-rv-test1} 至图~\ref{fig:q2-rv-test3} 所示。
+
 \labfigure{figures/shared/q2_riscv/q2_2.png}{可执行文件类型与第 1 组运行结果}{fig:q2-rv-test1}
-\labfigure{figures/shared/q2_riscv/q2_3.png}{第 2 组运行结果（含负数）}{fig:q2-rv-test2}
-\labfigure{figures/shared/q2_riscv/q2_4.png}{第 3 组运行结果（全奇数）}{fig:q2-rv-test3}
+\labfigure{figures/shared/q2_riscv/q2_3.png}{第 2 组运行结果}{fig:q2-rv-test2}
+\labfigure{figures/shared/q2_riscv/q2_4.png}{第 3 组运行结果}{fig:q2-rv-test3}
 
 \begin{table}[H]
 \centering
-\caption{RISC-V 程序多组测试结果}
-\begin{tabularx}{0.94\linewidth}{c X c c c}
+\caption{RISC-V 程序测试结果}
+\begin{tabularx}{0.94\linewidth}{c X c c}
 \toprule
-组别 & 输入 & 预期输出 & 实际输出 & 结果 \\
+组别 & 输入 & 预期输出 & 实际输出 \\
 \midrule
-1 & 5；1 2 -3 4 6 & 12；4 & 12；4 & 正确 \\
-2 & 4；-2 3 8 -5 & 6；2 & 6；2 & 正确 \\
-3 & 5；1 3 5 7 9 & 0；5 & 0；5 & 正确 \\
+1 & 5；1 2 -3 4 6 & 12；4 & 12；4 \\
+2 & 4；-2 3 8 -5 & 6；2 & 6；2 \\
+3 & 5；1 3 5 7 9 & 0；5 & 0；5 \\
 \bottomrule
 \end{tabularx}
 \end{table}
 
-三组测试的实际输出均与对 SysY 源程序的直接计算结果一致。其中第 2 组覆盖了负数参与偶数求和的情况，第 3 组使偶数和为 0，可进一步验证条件分支和循环控制没有只针对单一输入工作。
+第1组同时包含正数、负数、奇数和偶数，程序输出 \texttt{12/4}。第2组包含负偶数 \texttt{-2}，程序输出 \texttt{6/2}。第3组全部为正奇数，程序输出 \texttt{0/5}。三组结果与前面的 SysY 程序和 LLVM IR 程序一致。
 
-\subsubsection{运行时库链接验证}
-为了进一步确认最终可执行文件确实包含 SysY 运行时库，使用 \texttt{nm} 查看链接后的符号表：
+除三组基础数据外，又使用 100 组数据测试 RISC-V 程序。其中 20 组包括空数组、零、正负数和最大长度等情况，另外 80 组使用不同的连续整数和正负数组合。
+
+\begin{table}[H]
+\centering
+\caption{RISC-V 扩展测试结果}
+\begin{tabularx}{0.78\linewidth}{X c c c}
+\toprule
+用例类别 & 用例数 & 通过数 & 失败数 \\
+\midrule
+特殊数据 & 20 & 20 & 0 \\
+普通数据 & 80 & 80 & 0 \\
+\midrule
+合计 & 100 & 100 & 0 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+100 组测试全部通过，完整的输入、预期输出和实际输出保存在 \texttt{riscv/test\_results\_100.md} 中。
+
+\subsubsection{符号检查}
+
+使用 \texttt{nm} 查看最终可执行文件中的函数符号：
+
 \begin{lstlisting}[language=bash]
 riscv64-unknown-elf-nm main \
   | grep -E "getint|putint|putch|sum_even|count_pos| main$"
 \end{lstlisting}
-\labfigure{figures/shared/q2_riscv/q2_5.png}{最终可执行文件中的自定义函数与 SysY 运行时库符号}{fig:q2-rv-nm}
 
-符号表中同时存在手写汇编定义的 \texttt{sum\_even}、\texttt{count\_pos}、\texttt{main}，以及运行时库提供的 \texttt{getint}、\texttt{putint}、\texttt{putch}。由此可以确认最终程序不仅在运行结果上正确，而且确实完成了题目要求的“RISC-V 汇编程序链接 SysY 运行库”。
+图~\ref{fig:q2-rv-nm} 中可以看到 \texttt{sum\_even}、\texttt{count\_pos} 和 \texttt{main}，同时也包含 \texttt{getint}、\texttt{putint} 和 \texttt{putch}。
 
-\subsubsection{RISC-V 部分小结}
-本实验从一份包含数组、赋值、运算、条件分支、循环和函数等语言特性的 SysY 程序出发，手工完成了等价 RV64 汇编实现。数组元素访问被转换为地址计算和 \texttt{lw/sw}，\texttt{while} 与 \texttt{if} 被转换为条件分支和标签跳转，函数参数和返回值按照 RISC-V 调用约定通过 \texttt{a0}、\texttt{a1} 等寄存器传递。\texttt{main.s} 经汇编得到可重定位目标文件，再与官方 \texttt{libsysy\_riscv.a} 静态链接得到 RISC-V 可执行文件。三组输入在 QEMU 下均得到预期结果，\texttt{nm} 也验证了 SysY 运行时库函数已经进入最终可执行文件，说明本部分完成了从 SysY 语义到 RISC-V 目标程序的等价实现与运行验证。
+\labfigure{figures/shared/q2_riscv/q2_5.png}{最终可执行文件中的程序函数与 SysY 运行时库符号}{fig:q2-rv-nm}
+
+\subsubsection{本部分小结}
+
+RISC-V 汇编中使用 \texttt{slli}、\texttt{add} 和 \texttt{lw} 访问数组元素，使用 \texttt{remw} 和 \texttt{bnez} 判断偶数，使用 \texttt{blez} 判断正数。\texttt{main} 使用 80 B 栈帧保存 \texttt{ra} 和 \texttt{s0--s2}，函数调用时通过 \texttt{a0} 和 \texttt{a1} 传递数组地址和长度。
+
+\texttt{main.s} 汇编为 \texttt{main.o} 后，与 \texttt{libsysy\_riscv.a} 静态链接生成 RISC-V 可执行文件。三组基础测试分别输出 \texttt{12/4}、\texttt{6/2} 和 \texttt{0/5}，100 组扩展测试全部通过。最终可执行文件的符号表中可以同时看到程序中的函数和 SysY 运行时库中的输入输出函数。

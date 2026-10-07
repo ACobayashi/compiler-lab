@@ -1,11 +1,13 @@
-\section{小题2：SysY 等价 LLVM IR 与 RISC-V 程序实验}
-小题2由两名成员分别完成 LLVM IR 与目标汇编两个任务。两部分共享同一份 SysY 示例程序和同一组测试数据，使两种实现围绕统一语义基准进行比较。SysY 程序由两人共同确定；成员B负责 LLVM IR，成员A负责 RISC-V 汇编。
+\section{小题2：LLVM IR 与 RISC-V 汇编编程}
 
-\subsection{共同 SysY 示例程序设计}
-SysY 是由 C 语言子集扩展而来的教学语言。本实验设计的程序读入 $n$ 个整数，计算其中所有偶数之和，并统计正数个数。程序包含数组、赋值、算术与取模运算、关系判断、\texttt{if} 条件分支、\texttt{while} 循环、函数、数组参数和函数调用等语言特性；输入输出通过 SysY 运行时库中的 \texttt{getint}、\texttt{putint} 和 \texttt{putch} 完成。为保证数组访问范围有效，测试时取 $0\le n\le 10$。
+小题2中，我们共同编写了一个 SysY 程序，程序读取整数数组，计算其中所有偶数之和，并统计正数个数。成员A根据该程序编写 LLVM IR，成员B编写 RISC-V 汇编，两种实现均调用 SysY 运行时库中的输入输出函数，并使用相同的测试数据检查运行结果。
+
+\subsection{SysY 示例程序与测试数据}
+
+我们编写的 SysY 程序包含数组、赋值、取模运算、关系判断、\texttt{if} 条件分支、\texttt{while} 循环、函数、数组参数和函数调用。程序通过 \texttt{getint} 读取输入，使用 \texttt{putint} 和 \texttt{putch} 输出结果。数组长度为 10，测试时取 $0\le n\le 10$。
 
 \begin{lstlisting}[language=C,caption={SysY 示例程序 main.sy},label={lst:sysy-main}]
-//求偶数和
+// 求偶数和
 int sum_even(int a[],int n)
 {
     int i;
@@ -21,7 +23,7 @@ int sum_even(int a[],int n)
     return sum;
 }
 
-//统计正数个数
+// 统计正数个数
 int count_pos(int a[],int n)
 {
     int i;
@@ -45,7 +47,7 @@ int main()
     int s;
     int c;
 
-    //输入
+    // 输入
     n=getint();
     i=0;
     while(i<n)
@@ -54,11 +56,11 @@ int main()
         i=i+1;
     }
 
-    //计算
+    // 计算
     s=sum_even(a,n);
     c=count_pos(a,n);
 
-    //输出
+    // 输出
     putint(s);
     putch(10);
     putint(c);
@@ -68,11 +70,11 @@ int main()
 }
 \end{lstlisting}
 
-为便于两种实现统一验证，固定使用三组测试数据。第1组同时包含正数、负数、奇数和偶数；第2组验证负偶数参与求和；第3组全部为正奇数，用于验证偶数和为 0 的情况。两名成员的 LLVM IR 与 RISC-V 实现均应使用这三组输入并得到相同输出。
+我们使用三组数据测试 LLVM IR 和 RISC-V 汇编程序。第1组包含正数、负数、奇数和偶数；第2组包含负偶数，用于检查负偶数是否正常参与求和；第3组全部为正奇数，偶数和应为 0。三组输入及预期结果如表所示。
 
 \begin{table}[H]
 \centering
-\caption{小题2统一测试数据}
+\caption{小题2测试数据}
 \begin{tabularx}{0.92\linewidth}{c X c c}
 \toprule
 组别 & 输入（第一项为 $n$） & 偶数和 & 正数个数 \\

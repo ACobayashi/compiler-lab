@@ -11,7 +11,8 @@
 \vspace{0.8em}
 
 \section*{成员分工}
-根据作业要求，小题1由两名成员分别独立完成，小题2中的两个任务由两名成员各负责一个。两人共同确定报告整体框架、SysY 示例程序和统一测试数据，并共同维护摘要、引言、结论及参考文献。成员A独立完成小题1的 GCC 语言处理系统实验，并负责小题2的 RISC-V 汇编实现；成员B独立完成自己的小题1，并负责小题2的 LLVM IR 实现。
+
+小题1中，成员A使用 C++ 阶乘程序进行 GCC 编译流程实验，成员B使用 C 程序进行 Clang/LLVM 编译流程实验。小题2中，我们共同编写 SysY 程序并确定测试数据，成员A编写 LLVM IR，成员B编写 RISC-V 汇编。进阶部分以同一份矩阵乘法 MLIR 程序为对象，成员A整理高层表示和循环 Lowering，成员B核对控制流、LLVM IR 与目标文件。报告中的摘要、引言、结论、参考文献和整体排版由两人共同整理。
 
 \begin{table}[H]
 \centering
@@ -20,11 +21,27 @@
 \toprule
 内容 & 成员A & 成员B \\
 \midrule
-小题1 & 独立完成 GCC/Clang 实验并撰写 & 独立完成 Clang/LLVM 编译流程实验并撰写 \\
-共同 SysY 程序 & 共同设计、共同确定测试数据 & 共同设计、共同确定测试数据 \\
-小题2 LLVM IR & 配合核对等价性 & 负责编写、链接、运行验证与撰写 \\
-小题2 RISC-V & 负责编写、链接、运行验证与撰写 & 配合核对等价性 \\
-共同部分 & \multicolumn{2}{c}{题目、摘要、关键词、引言、总体方法、结论、参考文献共同完成} \\
+小题1
+& C++ 阶乘程序、GCC 编译流程分析及对应内容撰写
+& C 程序、Clang/LLVM 编译流程分析及对应内容撰写 \\
+
+SysY 程序
+& \multicolumn{2}{c}{共同编写程序并确定三组基础测试数据} \\
+
+LLVM IR
+& 编写 LLVM IR，完成编译、链接及 native、\texttt{lli} 测试
+& 共同核对测试结果 \\
+
+RISC-V
+& 共同核对测试结果
+& 编写 RISC-V 汇编，完成汇编、运行时库链接、QEMU 测试及扩展测试 \\
+
+MLIR 进阶
+& 整理 \texttt{arith}、\texttt{linalg.matmul} 及其循环 Lowering 结果
+& 核对控制流、LLVM IR 和 x86-64 目标文件，验证 \texttt{matmul} 符号 \\
+
+报告整理
+& \multicolumn{2}{c}{摘要、引言、结论、参考文献及报告整体排版共同完成} \\
 \bottomrule
 \end{tabularx}
 \end{table}

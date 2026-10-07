@@ -1,7 +1,7 @@
-\section{小题1：成员B的语言处理系统完整流程实验}
-本节以成员B独立准备的 C17 程序为对象，按“源程序—预处理—前端分析—中间表示—优化—目标代码—目标文件—链接/执行”的顺序观察编译过程。实验在 Ubuntu 22.04 Docker 容器中完成，工具版本为 Clang/LLVM 14.0.0、GCC 11.4.0 和 Graphviz 2.43.0；目标代码生成分别观察 x86-64 LLVM IR 和 AArch64 汇编/目标文件。与成员A的阶乘实验不同，本程序通过宏、数组、循环、条件分支和全局变量展示另一组典型结构。
+\subsection{成员B：C17/Clang/LLVM 编译流程实验}
+成员B使用一份独立的 C17 程序完成本小题。程序里有宏、数组、循环、条件分支和全局变量，适合从源码一路看到预处理、前端分析、IR、汇编、目标文件和链接结果。实验在 Ubuntu 22.04 Docker 容器中完成，使用 Clang/LLVM 14.0.0、GCC 11.4.0 和 Graphviz 2.43.0；中间表示观察 x86-64 LLVM IR，目标代码部分观察 AArch64 汇编和目标文件。
 
-\subsection{源程序与预处理}
+\subsubsection{源程序与预处理}
 程序读入 $1$ 至 $8$ 个整数。宏 \texttt{ADJUST(value,bias)} 将数组元素乘以比例常数后加上偏置；\texttt{weighted\_sum} 根据计算值的奇偶性累加或扣减，并更新全局计数器 \texttt{processed\_items}。源文件和头文件保存在仓库的 \texttt{pipeline/memberB/q1/} 目录中，原始输入为 \texttt{5} 与 \texttt{1 2 3 4 5}。
 
 \lstinputlisting[language=C,caption={实验使用的 C17 源程序},label={lst:memberb-c-source}]{../pipeline/memberB/q1/src/main.c}
@@ -15,7 +15,7 @@ clang -E -std=c17 -Ipipeline/memberB/q1/include \
 \end{lstlisting}
 预处理结果中，\texttt{stdio.h} 的声明被展开，\texttt{MAX\_ITEMS} 在数组声明中替换为 \texttt{8}，\texttt{ADJUST(values[i], global\_bias)} 展开为 \texttt{((values[i]) * 3 + (global\_bias))}。因此 \texttt{.i} 文件保留了原有计算逻辑，但已不再依赖这两个宏定义。
 
-\subsection{词法、语法与语义分析证据}
+\subsubsection{词法、语法与语义分析证据}
 词法阶段用 Clang 的 token dump 输出 token 种类、词素和源码位置；语法树转储则展示函数、声明、循环、条件分支及表达式的嵌套关系。两个命令都以 \texttt{-fsyntax-only} 避免生成目标文件：
 \begin{lstlisting}[language=bash]
 mkdir -p build/memberB/q1
@@ -30,7 +30,7 @@ clang -std=c17 -Ipipeline/memberB/q1/include -fsyntax-only \
 \labfigure{figures/memberB/q1/tokens.png}{Clang token dump 及源码位置}{fig:q1b-tokens}
 \labfigure{figures/memberB/q1/ast.png}{Clang AST 中的函数、循环与条件节点}{fig:q1b-ast}
 
-\subsection{控制流图与 LLVM IR}
+\subsubsection{控制流图与 LLVM IR}
 为直接观察控制流图，GCC 在编译时写出 tree/CFG 图文件，再由 Graphviz 将 \texttt{.dot} 文件绘制为图~\ref{fig:q1b-cfg}。其中循环回边对应 \texttt{for} 的重复执行，条件分支对应奇偶判断以及 \texttt{main} 中的输入合法性检查。
 \begin{lstlisting}[language=bash]
 mkdir -p build/memberB/q1/gcc-graphs
@@ -49,7 +49,7 @@ clang -std=c17 -Ipipeline/memberB/q1/include -O0 -S -emit-llvm \
 \end{lstlisting}
 \labfigure{figures/memberB/q1/ir-o0.png}{未优化 LLVM IR：函数、基本块与内存操作}{fig:q1b-ir-o0}
 
-\subsection{优化前后比较与目标代码生成}
+\subsubsection{优化前后比较与目标代码生成}
 以相同源程序分别使用 \texttt{-O0} 和 \texttt{-O2} 生成 IR，构成参数对照。图~\ref{fig:q1b-ir-opt} 中，优化版本的局部计算更倾向于使用 SSA 临时值，减少部分冗余栈读写，并带有 \texttt{nsw} 等运算属性；函数属性、循环组织也有变化。优化并不改变本程序的可观察输入输出，但 IR 不再是源代码逐行翻译的形式。
 \begin{lstlisting}[language=bash]
 clang -std=c17 -Ipipeline/memberB/q1/include -O2 -S -emit-llvm \
@@ -74,7 +74,7 @@ aarch64-linux-gnu-readelf -Ws -rW build/memberB/q1/main-O2-aarch64.o
 \labfigure{figures/memberB/q1/object-elf.png}{AArch64 可重定位目标文件的 ELF 头}{fig:q1b-object}
 \labfigure{figures/memberB/q1/symbols-relocs.png}{目标文件的符号表与重定位表}{fig:q1b-symrel}
 
-\subsection{链接、反汇编与运行验证}
+\subsubsection{链接、反汇编与运行验证}
 将目标文件与 C 运行时库链接后，外部函数调用可解析为可执行文件中的动态链接入口。图~\ref{fig:q1b-link} 对照了链接前后的反汇编：目标文件中保留针对 \texttt{printf} 的调用重定位，链接后的程序则显示具体地址和 \texttt{printf@plt} 调用入口。AArch64 可执行文件不能直接作为 macOS arm64 原生程序运行；本实验在 Ubuntu 容器中通过 QEMU 用户态执行，并用同一组输入检查结果。
 \begin{lstlisting}[language=bash]
 clang -std=c17 -Ipipeline/memberB/q1/include -O2 \
@@ -88,5 +88,5 @@ qemu-aarch64 -L /usr/aarch64-linux-gnu \
 样例数据为 $1,2,3,4,5$，调整值分别为 $5,8,11,14,17$，按奇偶规则计算得到 $-11$，处理数为 $5$。报告截图中的目标文件/链接证据来自 AArch64 目标；以上原生编译命令用于验证同一 C 源程序的运行语义。
 \labfigure{figures/memberB/q1/link-disassembly.png}{链接前目标文件与链接后程序的反汇编对照}{fig:q1b-link}
 
-\subsection{阶段观察小结}
-本实验使用不同产物观察同一程序：预处理文件体现宏展开，token 与 AST 体现前端识别出的词法单元和语法结构，CFG/LLVM IR 体现循环、条件和数据流，优化前后 IR 体现中间表示变换，AArch64 汇编与 ELF 目标文件体现后端及汇编器的结果，符号/重定位和链接后反汇编则揭示外部库调用如何延迟到链接阶段处理。\texttt{-O0} 与 \texttt{-O2} 是本次实际比较的编译参数扩展。预处理输出与运行输出已按命令和源程序记录；当前图片集未包含这两项的独立截图，因此不将其描述为截图证据。
+\subsubsection{阶段观察小结}
+本小题中，\texttt{MAX\_ITEMS} 在预处理文件中替换为 \texttt{8}，\texttt{ADJUST(value,bias)} 展开为“元素乘以 \texttt{SCALE\_FACTOR} 后加 \texttt{global\_bias}”的表达式。\texttt{weighted\_sum} 的 token、AST、CFG 和 LLVM IR 分别保留了循环、奇偶分支和对 \texttt{processed\_items} 的更新；\texttt{-O2} 相比 \texttt{-O0} 减少了重复的内存读写。AArch64 目标文件中的符号和重定位项、以及链接后的反汇编说明了 \texttt{printf} 等外部调用在链接阶段得到处理。样例输入 \texttt{1 2 3 4 5} 的结果为 \texttt{result=-11, processed=5}，与源码中的计算一致。

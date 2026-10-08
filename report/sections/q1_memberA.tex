@@ -1,6 +1,6 @@
 \subsection{成员B：GCC 编译流程实验}
 
-本部分由成员B负责。实验使用一个 C++ 阶乘程序，按照 GCC 的预处理、编译、汇编和链接流程依次生成各阶段结果。源程序中加入自定义头文件、普通宏、带参宏、条件编译、全局变量、全局常量、函数、条件分支和循环，用于观察这些内容经过各编译阶段后的变化。实验环境为 WSL2 下的 Ubuntu 22.04，g++ 版本为 11.4.0，目标平台为 x86-64，中间文件统一保存在 \texttt{output} 目录中。
+本部分由成员B负责。成员B在 WSL2 Ubuntu 22.04 中使用 g++ 11.4.0 对 C++ 阶乘程序执行 GCC 的预处理、编译、汇编和链接；目标平台为 x86-64。我们依次生成各阶段结果，并将中间文件写入 \texttt{output} 目录。源程序包含自定义头文件、普通宏、带参宏、条件编译、全局变量、全局常量、函数、条件分支和循环。
 
 \subsubsection{实验准备}
 
@@ -40,11 +40,11 @@ g++ -E main.cpp -o output/main.ii
 
 \labfigure{figures/memberA/q1/image5.png}{生成预处理文件 main.ii}{fig:q1-preprocess}
 
-预处理阶段会处理 \texttt{\#include}。在 \texttt{main.ii} 中可以看到 \texttt{iostream} 的内容已经展开，同时保留了 \texttt{test.h} 的文件切换标记，结果如图~\ref{fig:q1-include} 所示。
+我们在预处理阶段处理 \texttt{\#include}，并在 \texttt{main.ii} 中查看 \texttt{iostream} 的展开内容和 \texttt{test.h} 的文件切换标记，结果如图~\ref{fig:q1-include} 所示。
 
 \labfigure{figures/memberA/q1/image6.png}{头文件展开后的内容}{fig:q1-include}
 
-宏展开后，\texttt{N} 被替换为 \texttt{20}，\texttt{mul(result,i)} 被替换为 \texttt{((result)*(i))}，源文件中的注释已经消失。没有定义 \texttt{DEBUG} 时，\texttt{debug(n)} 展开为空，对应位置只剩一个分号，如图~\ref{fig:q1-nodebug} 所示。
+宏展开后，\texttt{N} 被替换为 \texttt{20}，\texttt{mul(result,i)} 被替换为 \texttt{((result)*(i))}。图~\ref{fig:q1-nodebug} 给出了未定义 \texttt{DEBUG} 时 \texttt{debug(n)} 的展开结果。
 
 \labfigure{figures/memberA/q1/image7.png}{未定义 DEBUG 时的预处理结果}{fig:q1-nodebug}
 
@@ -54,7 +54,7 @@ g++ -E main.cpp -o output/main.ii
 g++ -E -DDEBUG main.cpp -o output/main_debug.ii
 \end{lstlisting}
 
-此时条件编译选择 \texttt{DEBUG} 分支，\texttt{debug(n)} 被展开为 \texttt{cout << n << endl}，结果如图~\ref{fig:q1-debug} 所示。
+我们加入 \texttt{-DDEBUG} 后，条件编译选择 \texttt{DEBUG} 分支，\texttt{debug(n)} 展开为 \texttt{cout << n << endl}，结果如图~\ref{fig:q1-debug} 所示。
 
 \labfigure{figures/memberA/q1/image8.png}{定义 DEBUG 后的预处理结果}{fig:q1-debug}
 
@@ -65,7 +65,7 @@ g++ -E -DDEBUG main.cpp -o output/main_debug.ii
 
 \subsubsection{编译器内部阶段}
 
-这一部分分别从词法分析、语法分析、语义分析、中间代码生成、代码优化和代码生成几个阶段分析编译结果。GCC 的 tree、CFG 和 RTL 用于观察主要的中间表示，词法分析部分使用 Clang 输出 token 序列作为补充。
+这一部分中，我们依次查看词法分析、语法分析、语义分析、中间代码生成、代码优化和代码生成的结果。我们使用 GCC 输出 tree、CFG 和 RTL，并使用 Clang 输出 token 序列。
 
 \paragraph{词法分析}
 
@@ -93,18 +93,18 @@ g++ -fdump-tree-original-raw -c main.cpp -o output/main_ast.o
 
 \labfigure{figures/memberA/q1/image10.png}{生成 GCC tree 输出文件}{fig:q1-treegen}
 
-\texttt{factorial} 函数的 tree 中可以看到 \texttt{function\_decl}、\texttt{parm\_decl}、\texttt{var\_decl}、\texttt{identifier\_node}、\texttt{statement\_list} 和 \texttt{return\_expr} 等节点。函数、参数、局部变量和语句已经按照树结构组织，相关片段如图~\ref{fig:q1-tree} 所示。
+我们在 \texttt{factorial} 函数的 tree 中查看 \texttt{function\_decl}、\texttt{parm\_decl}、\texttt{var\_decl}、\texttt{identifier\_node}、\texttt{statement\_list} 和 \texttt{return\_expr} 等节点；函数、参数、局部变量和语句按树结构组织，相关片段如图~\ref{fig:q1-tree} 所示。
 
 \labfigure{figures/memberA/q1/image11.png}{factorial 函数的 GCC tree 片段}{fig:q1-tree}
 
 
 \paragraph{语义分析}
 
-复制源程序，并将一次 \texttt{factorial(n)} 调用改为 \texttt{factorial("5")}。修改后函数调用的语法形式没有改变，但实参类型由 \texttt{int} 变为 \texttt{const char*}，修改位置如图~\ref{fig:q1-semantic-src} 所示。
+为观察类型检查，我们复制源程序，将一次 \texttt{factorial(n)} 调用改为 \texttt{factorial("5")}；实参类型随之由 \texttt{int} 改为 \texttt{const char*}，修改位置如图~\ref{fig:q1-semantic-src} 所示。
 
 \labfigure{figures/memberA/q1/image12.png}{故意修改的函数调用}{fig:q1-semantic-src}
 
-编译时 GCC 报告 \texttt{invalid conversion from 'const char*' to 'int'}，同时指出 \texttt{factorial(int)} 的参数类型为 \texttt{int}。报错结果如图~\ref{fig:q1-semantic-err} 所示，可以看到 GCC 会根据函数声明和实际参数进行类型检查。
+编译时，GCC 报告 \texttt{invalid conversion from 'const char*' to 'int'}，并指出 \texttt{factorial(int)} 的参数类型为 \texttt{int}。图~\ref{fig:q1-semantic-err} 记录了诊断结果。
 
 \labfigure{figures/memberA/q1/image13.png}{GCC 类型检查报错}{fig:q1-semantic-err}
 
@@ -178,7 +178,7 @@ g++ -O2 -S -masm=att output/main.ii -o output/main_O2.s
 g++ -c output/main_O0.s -o output/main_O0.o
 \end{lstlisting}
 
-\texttt{file} 显示 \texttt{main\_O0.o} 为 \texttt{ELF 64-bit LSB relocatable, x86-64}。此时汇编指令已经编码为机器指令，但文件仍属于可重定位目标文件，结果如图~\ref{fig:q1-obj} 所示。
+我们使用 \texttt{file} 查看 \texttt{main\_O0.o}，得到 \texttt{ELF 64-bit LSB relocatable, x86-64}。汇编指令已编码为机器指令，文件属于可重定位目标文件，结果如图~\ref{fig:q1-obj} 所示。
 
 \labfigure{figures/memberA/q1/image23.png}{生成可重定位目标文件 main\_O0.o}{fig:q1-obj}
 
@@ -199,7 +199,7 @@ g++ -c output/main_O0.s -o output/main_O0.o
 g++ output/main_O0.o -o output/main_O0
 \end{lstlisting}
 
-\texttt{file} 显示生成文件为 \texttt{ELF 64-bit LSB PIE executable}，并采用动态链接。输入 \texttt{5} 后，程序仍输出 \texttt{120} 和 \texttt{1}，结果如图~\ref{fig:q1-linkrun} 所示。
+我们使用 \texttt{file} 查看生成文件，得到 \texttt{ELF 64-bit LSB PIE executable}，并确认其采用动态链接。输入 \texttt{5} 后，程序输出 \texttt{120} 和 \texttt{1}，结果如图~\ref{fig:q1-linkrun} 所示。
 
 \labfigure{figures/memberA/q1/image26.png}{生成并运行动态链接可执行文件}{fig:q1-linkrun}
 
@@ -207,7 +207,7 @@ g++ output/main_O0.o -o output/main_O0
 
 \labfigure{figures/memberA/q1/image27.png}{链接后可执行文件的反汇编结果}{fig:q1-linkdis}
 
-最终可执行文件的符号表如图~\ref{fig:q1-linknm} 所示。\texttt{factorial}、\texttt{main} 和 \texttt{times} 都已经具有确定地址。部分标准库符号仍显示为带版本信息的 \texttt{U} 项，由动态链接器和共享库在程序装载或运行时解析。
+我们在图~\ref{fig:q1-linknm} 的最终可执行文件符号表中查看 \texttt{factorial}、\texttt{main} 和 \texttt{times} 的确定地址，以及带版本信息的 \texttt{U} 项。动态链接器和共享库在程序装载或运行时解析这些标准库符号。
 
 \labfigure{figures/memberA/q1/image28.png}{链接后可执行文件的符号表}{fig:q1-linknm}
 
@@ -224,23 +224,21 @@ g++ output/main_O0.o -o output/main_O0
 
 \paragraph{调试信息 -g}
 
-在相同的 \texttt{-O0} 条件下，分别生成不带 \texttt{-g} 和带 \texttt{-g} 的可执行文件。图~\ref{fig:q1-debug-info} 中，\texttt{main\_nog} 为 17 KB，\texttt{main\_g} 为 34 KB。\texttt{readelf} 的结果显示，不带 \texttt{-g} 的文件没有 \texttt{.debug} 段，而带 \texttt{-g} 的文件包含 \texttt{.debug\_info}、\texttt{.debug\_line} 和 \texttt{.debug\_str} 等调试信息。
+在相同的 \texttt{-O0} 条件下，我们分别生成带 \texttt{-g} 和不带 \texttt{-g} 的可执行文件。图~\ref{fig:q1-debug-info} 中，\texttt{main\_nog} 为 17 KB，\texttt{main\_g} 为 34 KB；\texttt{readelf} 显示 \texttt{main\_g} 包含 \texttt{.debug\_info}、\texttt{.debug\_line} 和 \texttt{.debug\_str} 等调试信息。
 
 \labfigure{figures/memberA/q1/image31.png}{-g 对文件大小和调试段的影响}{fig:q1-debug-info}
 
 
 \paragraph{-fno-omit-frame-pointer}
 
-在相同的 \texttt{-O2} 优化级别下，分别生成默认版本和加入 \texttt{-fno-omit-frame-pointer} 的版本。图~\ref{fig:q1-frame} 中，默认 \texttt{-O2} 版本主要以 \texttt{\%rsp} 为基准访问局部数据；加入该选项后出现 \texttt{movq \%rsp,\%rbp}，后续代码使用 \texttt{\%rbp} 作为栈帧基址。
+在相同的 \texttt{-O2} 优化级别下，我们分别生成默认版本和加入 \texttt{-fno-omit-frame-pointer} 的版本。图~\ref{fig:q1-frame} 中，加入该选项的汇编包含 \texttt{movq \%rsp,\%rbp}，并以 \texttt{\%rbp} 作为栈帧基址。
 
 \labfigure{figures/memberA/q1/image32.png}{-fno-omit-frame-pointer 对 main 栈帧的影响}{fig:q1-frame}
 
 
 \paragraph{自动并行化与优化报告}
 
-使用 \texttt{-O3 -ftree-parallelize-loops=4} 尝试对循环进行自动并行化，同时生成优化报告。图~\ref{fig:q1-parallel} 中，GCC 对阶乘循环给出了 \texttt{couldn't vectorize loop} 和 \texttt{not vectorized}，生成的汇编中也没有出现 GOMP/parallel 运行时调用。
-
-\texttt{factorial} 中的 \texttt{result = mul(result,i)} 使用上一轮循环得到的 \texttt{result}，各次迭代之间存在数据依赖，因此这次编译没有将该循环转换为并行执行形式。
+我们使用 \texttt{-O3 -ftree-parallelize-loops=4} 生成阶乘循环的优化报告。图~\ref{fig:q1-parallel} 中，GCC 记录了 \texttt{couldn't vectorize loop} 和 \texttt{not vectorized}。
 
 \labfigure{figures/memberA/q1/image33.png}{阶乘循环的优化报告与并行化检查}{fig:q1-parallel}
 
@@ -249,4 +247,4 @@ g++ output/main_O0.o -o output/main_O0
 
 预处理结果中，\texttt{N} 被替换为 \texttt{20}，\texttt{mul(result,i)} 被展开为乘法表达式；定义 \texttt{DEBUG} 后，\texttt{debug(n)} 生成输出语句。编译阶段得到的 tree、CFG 和 RTL 分别包含程序的树结构、基本块关系以及更接近机器层的表示。目标文件符号表中，函数、零初始化全局变量和外部符号分别出现了 \texttt{T}、\texttt{B} 和 \texttt{U} 标记。
 
-不同编译参数的结果也存在明显差异。\texttt{-O2} 版本的 \texttt{factorial} 比 \texttt{-O0} 版本减少了栈内存读写；加入 \texttt{-g} 后，文件中增加了调试相关段；加入 \texttt{-fno-omit-frame-pointer} 后，汇编中保留了 \texttt{\%rbp} 栈帧。静态链接版本约为 2.3 MB，而动态链接版本约为 17 KB，但两种程序输入 \texttt{5} 时都输出 \texttt{120} 和 \texttt{1}。阶乘循环存在前后迭代的数据依赖，优化报告中显示该循环没有被向量化，也没有生成 GOMP 并行运行时调用。
+我们比较不同编译参数后发现，\texttt{-O2} 版本的 \texttt{factorial} 比 \texttt{-O0} 版本减少了栈内存读写；加入 \texttt{-g} 后，文件中增加了调试相关段；加入 \texttt{-fno-omit-frame-pointer} 后，汇编保留了 \texttt{\%rbp} 栈帧。静态链接版本约为 2.3 MB，动态链接版本约为 17 KB；两种程序输入 \texttt{5} 时均输出 \texttt{120} 和 \texttt{1}。优化报告记录了阶乘循环的向量化结果。

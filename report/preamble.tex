@@ -106,5 +106,11 @@
   \caption{#2}
   \label{#3}
 \end{figure}}
-\setlength{\headheight}{14pt}
+\newcommand{\labfigurecompact}[4]{%
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=#4\linewidth,height=0.72\textheight,keepaspectratio]{#1}
+  \caption{#2}
+  \label{#3}
+\end{figure}}\setlength{\headheight}{14pt}
 \emergencystretch=3em

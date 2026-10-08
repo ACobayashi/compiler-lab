@@ -27,8 +27,8 @@ clang -std=c17 -Ipipeline/memberB/q1/include -fsyntax-only \
   > build/memberB/q1/ast.txt
 \end{lstlisting}
 图~\ref{fig:q1b-tokens} 中可看到 \texttt{weighted\_sum}、\texttt{for}、比较与算术运算符等 token 以及它们在 \texttt{src/main.c} 中的行列位置。图~\ref{fig:q1b-ast} 展示了 AST 中的 \texttt{FunctionDecl}、\texttt{ForStmt}、\texttt{IfStmt}、\texttt{BinaryOperator} 等节点；节点的类型注记也表明 Clang 已完成语法解析和类型语义检查。此处观察的是编译器对合法程序的成功分析，不是单独构造错误程序验证诊断。
-\labfigure{figures/memberB/q1/tokens.png}{Clang token dump 及源码位置}{fig:q1b-tokens}
-\labfigure{figures/memberB/q1/ast.png}{Clang AST 中的函数、循环与条件节点}{fig:q1b-ast}
+\labfigurecompact{figures/memberB/q1/tokens.png}{Clang token dump 及源码位置}{fig:q1b-tokens}{0.74}
+\labfigurecompact{figures/memberB/q1/ast.png}{Clang AST 中的函数、循环与条件节点}{fig:q1b-ast}{0.74}
 
 \subsubsection{控制流图与 LLVM IR}
 为直接观察控制流图，GCC 在编译时写出 tree/CFG 图文件，再由 Graphviz 将 \texttt{.dot} 文件绘制为图~\ref{fig:q1b-cfg}。其中循环回边对应 \texttt{for} 的重复执行，条件分支对应奇偶判断以及 \texttt{main} 中的输入合法性检查。

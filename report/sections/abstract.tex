@@ -4,11 +4,11 @@
 \begin{abstract}
 \normalsize
 \noindent
-本次实验由两人合作完成。在小题1中，成员A以带有普通宏、带参宏和条件编译的 C++ 阶乘程序为例，使用 GCC 和 Clang 观察预处理、词法分析、tree、CFG、RTL、汇编、目标文件和链接后的可执行文件；成员B以包含宏、数组和循环的 C17 程序为例，使用 Clang/LLVM 保存预处理结果、token、AST、CFG、LLVM IR、AArch64 汇编以及 ELF 符号和重定位信息，并比较 \texttt{-O0} 与 \texttt{-O2} 的输出差异。两部分的命令、截图和中间文件均保留在仓库中。
+本次实验由两人合作完成。在小题1中，成员A使用带有普通宏、带参宏和条件编译的 C++ 阶乘程序，使用 GCC 和 Clang 查看预处理、token、tree、CFG、RTL、汇编、目标文件和链接结果；成员B使用包含宏、数组和循环的 C17 程序，使用 Clang/LLVM 保存预处理结果、token、AST、CFG、LLVM IR、AArch64 汇编、ELF 符号表和重定位信息，并比较 \texttt{-O0} 和 \texttt{-O2}。命令、截图和中间文件均保留在仓库中。
 
-在小题2中，我们共同设计了一个 SysY 程序：程序读入整型数组，计算偶数元素之和，并统计正数元素个数。成员A负责编写等价的 LLVM IR，成员B负责编写等价的 RISC-V 汇编，两种实现都链接 SysY 运行时库完成验证。LLVM IR 分别在本机程序和 \texttt{lli} 中测试，RISC-V 程序在 QEMU 中测试；三组统一数据的结果均与预期一致，RISC-V 版本补充的 100 组特殊和普通数据也全部通过。从测试结果看，LLVM IR 用基本块和 SSA 值表示循环、分支和数组访问，RISC-V 汇编则需要直接处理寄存器、栈帧和数组地址。
+在小题2中，两人共同设计 SysY 程序和测试数据。程序读入整型数组，计算偶数元素之和并统计正数个数。成员A编写 LLVM IR，成员B编写 RISC-V 汇编，两种代码均链接 SysY 运行时库。三组基础数据在 native、\texttt{lli} 和 QEMU 下的输出一致；RISC-V 版本增加的 100 组特殊和普通数据也全部通过。LLVM IR 用基本块、SSA 值和数组地址计算表示程序；RISC-V 汇编还需要处理寄存器、栈帧和地址偏移。
 
-进阶部分中，我们以 $2\times4$、$4\times3$ 矩阵乘法记录 MLIR 中端处理过程。成员A整理了 \texttt{linalg.matmul} 到三层 \texttt{scf.for} 的表示变化，成员B核对基本块形式、LLVM dialect、LLVM IR 和 x86-64 目标文件。保存的 \texttt{matmul.ll} 能重新编译为导出 \texttt{matmul} 符号的 ELF 可重定位文件。
+进阶部分使用 $2\times4$、$4\times3$ 矩阵乘法观察 MLIR 中端处理。成员A整理 \texttt{linalg.matmul} 到三层 \texttt{scf.for} 的变化，成员B核对基本块、LLVM dialect、LLVM IR 和 x86-64 目标文件。\texttt{matmul.ll} 可以重新编译为包含 \texttt{matmul} 符号的 ELF 可重定位文件。
 
 \noindent\textbf{关键词：} GCC；编译流程；SysY；LLVM IR；RISC-V；运行时库
 \end{abstract}

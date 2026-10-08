@@ -63,9 +63,9 @@ mlir-opt-14 matmul.mlir -convert-linalg-to-loops
 mlir-opt-14 matmul.mlir -convert-linalg-to-loops -o matmul_loops.mlir
 \end{lstlisting}
 
-\labfigure{figures/mlir/mlir_linalg_loops.png}{linalg.matmul Lowering 为三层 SCF 循环}{fig:mlir-linalg-loops}
+\labfigurecompact{figures/mlir/mlir_linalg_loops.png}{linalg.matmul Lowering 为三层 SCF 循环}{fig:mlir-linalg-loops}{0.62}
 
-\labfigure{figures/mlir/mlir_loops_saved.png}{matmul\_loops.mlir 的保存结果}{fig:mlir-loops-saved}
+\labfigurecompact{figures/mlir/mlir_loops_saved.png}{matmul\_loops.mlir 的保存结果}{fig:mlir-loops-saved}{0.62}
 
 在 \texttt{matmul\_loops.mlir} 中，最外层循环范围为 $0$ 到 $2$，中间层为 $0$ 到 $3$，最内层为 $0$ 到 $4$。因此，矩阵乘法原来的单条高层操作已经变成了由循环边界、显式内存访问和浮点乘加组成的程序。
 

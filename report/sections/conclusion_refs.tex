@@ -1,12 +1,12 @@
 \section{结论}
 
-小题1中，成员A进行了 C++ 阶乘程序的 GCC 编译实验，成员B进行了 C17 程序的 Clang/LLVM 编译实验。
+小题1中，成员A完成了 C++ 阶乘程序的 GCC 编译实验，成员B完成了 C17 程序的 Clang/LLVM 编译实验。
 
 成员A分析了 \texttt{N}、\texttt{mul} 和 \texttt{DEBUG} 的预处理结果，并生成 \texttt{factorial} 对应的 tree、CFG、RTL、目标文件和链接结果。输入 \texttt{5} 时，动态链接程序和静态链接程序均输出 \texttt{120} 和 \texttt{1}。将加入 \texttt{-g} 与未加入 \texttt{-g} 的目标文件进行对比，加入 \texttt{-g} 后目标文件中包含调试相关段；将使用 \texttt{-fno-omit-frame-pointer} 与默认方式生成的汇编进行对比，前者保留了 \texttt{\%rbp} 栈帧。
 
 成员B分析了 \texttt{MAX\_ITEMS} 和 \texttt{ADJUST} 的宏展开结果，并生成 \texttt{weighted\_sum} 的 CFG、LLVM IR、AArch64 汇编和目标文件，同时检查符号表和重定位项。样例数组 \texttt{1 2 3 4 5} 的运行结果为 \texttt{result=-11, processed=5}。将未优化版本与 \texttt{-O2} 优化版本生成的代码进行对比，\texttt{-O2} 版本减少了部分重复的内存读写。
 
-小题2中，我们共同编写了读取数组、计算偶数和、统计正数个数的 SysY 程序，并准备了三组基础测试数据。成员A进行了 LLVM IR 的编写和测试，成员B进行了 RISC-V 汇编的编写和测试。
+小题2中，我们共同设计并编写了读取数组、计算偶数和、统计正数个数的 SysY 程序，并准备了三组基础测试数据。成员A负责 LLVM IR 的编写和测试，成员B负责 RISC-V 汇编的编写和测试。
 
 成员A编写的 LLVM IR 包含数组读写、循环、条件分支和运行时函数调用。我们分别使用 native 和 \texttt{lli} 运行三组测试数据，两种运行方式的输出均为 \texttt{12/4}、\texttt{6/2}、\texttt{0/5}，结果一致。
 
@@ -14,9 +14,9 @@
 
 我们对 LLVM IR 和 RISC-V 汇编的实现方式也进行了比较。LLVM IR 中主要涉及基本块跳转、\texttt{phi} 值和数组地址计算；RISC-V 汇编中还需要处理参数寄存器、返回值寄存器、保存寄存器、16 B 栈对齐和数组偏移。两部分程序都链接了 SysY 运行时库，符号表中均可以找到 \texttt{getint}、\texttt{putint} 和 \texttt{putch}。
 
-本次实验中，我们实际接触了宏展开、CFG、LLVM IR、汇编代码、目标文件和链接结果，也发现不同编译选项会直接影响生成代码和目标文件的内容。实验过程中，我们进一步熟悉了 LLVM IR 中基本块、\texttt{phi} 指令和数组地址计算的写法，也了解了 RISC-V 汇编中寄存器使用、栈对齐、函数调用和数组访问需要注意的细节。通过两部分实验，我们对程序从源代码到可执行文件的编译过程，以及 LLVM IR 和 RISC-V 汇编各自的特点有了更具体的理解。
+基础部分把宏展开、CFG、LLVM IR、汇编代码、目标文件和链接结果放在同一条流程中对照。不同编译选项会改变生成代码和目标文件的内容；LLVM IR 需要处理基本块、\texttt{phi} 指令和数组地址计算，RISC-V 汇编还要处理寄存器、栈对齐、函数调用和数组访问。
 
-进阶部分中，成员A从 \texttt{linalg.matmul} 和三层 \texttt{scf.for} 对照矩阵乘法的循环结构，成员B检查 \texttt{br}/\texttt{cond\_br}、LLVM dialect 和 \texttt{matmul.o} 的符号。\texttt{matmul.ll} 重新编译后仍生成带 \texttt{matmul} 符号和 \texttt{.debug\_info} 节的 x86-64 ELF 可重定位文件。通过基础部分和进阶部分的对照，我们对程序从源代码到可执行文件的编译过程，以及 LLVM IR、RISC-V 汇编和 MLIR 中端表示各自的特点有了更具体的理解。
+进阶部分中，成员A对照 \texttt{linalg.matmul} 和三层 \texttt{scf.for} 记录矩阵乘法的循环结构，成员B检查 \texttt{br}/\texttt{cond\_br}、LLVM dialect 和 \texttt{matmul.o} 的符号。\texttt{matmul.ll} 重新编译后仍生成带 \texttt{matmul} 符号和 \texttt{.debug\_info} 节的 x86-64 ELF 可重定位文件。基础部分和进阶部分放在一起，可以对应源程序、LLVM IR、RISC-V 汇编和 MLIR 中端表示中的同一类控制流与数据访问。
 
 \begin{thebibliography}{99}
 \bibitem{course_overview} 编译原理课程组. \emph{了解编译器、LLVM IR 编程及汇编编程实验指导} [课程资料].

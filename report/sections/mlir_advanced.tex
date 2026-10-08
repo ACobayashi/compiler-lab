@@ -1,6 +1,6 @@
 \section{进阶要求：观察 AI 编译器 MLIR 中端处理过程}
 
-本节完成实验的进阶要求。我们使用 MLIR 14，以一个基础算术程序和固定尺寸的矩阵乘法程序为例，观察中端表示由高层 \texttt{linalg.matmul} 逐步 Lowering 到循环、控制流、LLVM Dialect、标准 LLVM IR 和 x86-64 目标文件的过程。实验在 WSL2 Ubuntu 22.04 中完成，工具为 \texttt{mlir-opt-14}、\texttt{mlir-translate-14} 和 Clang 14。
+本节记录进阶要求的实验过程。我们使用 MLIR 14，以一个基础算术程序和固定尺寸的矩阵乘法程序为例，查看中端表示从高层 \texttt{linalg.matmul} 到循环、控制流、LLVM Dialect、标准 LLVM IR 和 x86-64 目标文件的变化。实验在 WSL2 Ubuntu 22.04 中完成，工具为 \texttt{mlir-opt-14}、\texttt{mlir-translate-14} 和 Clang 14。
 
 \labfigure{figures/mlir/mlir_env.png}{MLIR 14 实验环境与工具版本}{fig:mlir-env}
 
@@ -129,4 +129,4 @@ nm -g matmul.o | grep ' matmul$'
 
 \subsection{本部分小结}
 
-本部分从基础程序的 Canonicalization 开始，随后以矩阵乘法为例，依次观察 \texttt{linalg.matmul}、\texttt{scf.for}、基本块控制流、LLVM Dialect 和标准 LLVM IR。高层表示保存了矩阵维度和运算语义；经过 Lowering 后，循环边界、内存访问、地址计算和浮点乘加逐步变成更具体的操作。最终的 \texttt{matmul.o} 说明生成的 LLVM IR 已经能够交给 LLVM 后端生成 x86-64 目标文件。
+本部分先对基础程序执行 Canonicalization，再以矩阵乘法为例记录 \texttt{linalg.matmul}、\texttt{scf.for}、基本块控制流、LLVM Dialect 和标准 LLVM IR。高层表示保留矩阵维度和运算语义；Lowering 后，循环边界、内存访问、地址计算和浮点乘加都写成了具体操作。最终生成的 \texttt{matmul.o} 是 x86-64 可重定位目标文件，符号表中保留了 \texttt{matmul}。

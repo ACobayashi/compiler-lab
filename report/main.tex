@@ -1,8 +1,34 @@
-\documentclass[UTF8,zihao=-4]{ctexart}
+% 基于教师提供的 Overleaf 模板：https://www.overleaf.com/read/hnsjbjyknbdj
+\documentclass[UTF8,a4paper,10pt]{ctexart}
 \input{preamble}
 \input{config}
 \begin{document}
+
+\begin{titlepage}
+  \begin{center}
+    \includegraphics[width=0.8\textwidth]{NKU.png}\\[1cm]
+    \textsc{\Huge \kaishu{\textbf{南\ \ \ \ \ 开\ \ \ \ \ 大\ \ \ \ \ 学}}}\\[0.9cm]
+    \textsc{\huge \kaishu{\textbf{计\ \ 算\ \ 机\ \ 学\ \ 院}}}\\[0.5cm]
+    \textsc{\Large \textbf{\CourseName{}上机作业调研报告}}\\[0.8cm]
+    \HRule\\[0.9cm]
+    {\LARGE \bfseries \ReportTitle}\\[0.4cm]
+    \HRule\\[1.6cm]
+    \textsc{\Large \kaishu{成员：\TeamMemberAName（\TeamMemberAID）}}\\[0.45cm]
+    \textsc{\Large \kaishu{成员：\TeamMemberBName（\TeamMemberBID）}}\\[0.45cm]
+    \textsc{\Large \kaishu{班级：\ClassName}}\\[0.45cm]
+    \vfill
+    {\Large \SubmitDate}
+  \end{center}
+\end{titlepage}
+
+\input{sections/abstract}
 \input{sections/title_division}
+\clearpage
+\tableofcontents
+\clearpage
+\watermark{60}{10}{NKU}
+\setcounter{page}{1}
+
 \input{sections/abstract_intro}
 \input{sections/q1_overview}
 \input{sections/q1_memberA}

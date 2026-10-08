@@ -4,7 +4,7 @@
 \begin{abstract}
 \normalsize
 \noindent
-本次实验由两人合作完成。在小题1中，成员A使用带有普通宏、带参宏和条件编译的 C++ 阶乘程序，使用 GCC 和 Clang 查看预处理、token、tree、CFG、RTL、汇编、目标文件和链接结果；成员B使用包含宏、数组和循环的 C17 程序，使用 Clang/LLVM 保存预处理结果、token、AST、CFG、LLVM IR、AArch64 汇编、ELF 符号表和重定位信息，并比较 \texttt{-O0} 和 \texttt{-O2}。命令、截图和中间文件均保留在仓库中。
+本次实验由两人合作完成。在小题1中，成员A使用包含宏、数组和循环的 C 程序，通过 Clang/LLVM 查看预处理结果、token、AST、CFG、LLVM IR、AArch64 汇编、ELF 符号表和重定位信息，并比较 \texttt{-O0} 和 \texttt{-O2}；成员B使用带有普通宏、带参宏和条件编译的 C++ 阶乘程序，通过 GCC 和 Clang 查看预处理、token、tree、CFG、RTL、汇编、目标文件和链接结果。命令、截图和中间文件均保留在仓库中。
 
 在小题2中，两人共同设计 SysY 程序和测试数据。程序读入整型数组，计算偶数元素之和并统计正数个数。成员A编写 LLVM IR，成员B编写 RISC-V 汇编，两种代码均链接 SysY 运行时库。三组基础数据在 native、\texttt{lli} 和 QEMU 下的输出一致；RISC-V 版本增加的 100 组特殊和普通数据也全部通过。LLVM IR 用基本块、SSA 值和数组地址计算表示程序；RISC-V 汇编还需要处理寄存器、栈帧和地址偏移。
 

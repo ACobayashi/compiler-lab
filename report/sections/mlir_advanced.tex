@@ -4,11 +4,11 @@
 
 \labfigure{figures/mlir/mlir_env.png}{MLIR 14 实验环境与工具版本}{fig:mlir-env}
 
-\subsection{任务与分工}
+\subsection{实验任务}
 
 进阶部分使用同一组 MLIR 材料。成员A整理基础 MLIR 程序和高层矩阵乘法表示，执行 \texttt{canonicalize} 与 \texttt{convert-linalg-to-loops}，记录高层操作展开为三层循环的结果。成员B继续检查 \texttt{convert-scf-to-std} 后的基本块和分支，完成 LLVM Dialect、标准 LLVM IR 与目标文件的核对。两人共同对照每个阶段保存的文件和终端输出，将实验过程写入报告。
 
-\subsection{基础 MLIR 与 Canonicalization}
+\subsection{基础 MLIR 程序}
 
 \texttt{mlir/test.mlir} 中定义了两个 \texttt{i32} 常量和一次 \texttt{arith.addi}。加法结果没有被后续操作使用，适合观察规范化前后的变化。
 
@@ -101,7 +101,7 @@ mlir-opt-14 matmul_cfg.mlir \
 
 \labfigure{figures/mlir/mlir_llvm_dialect_address.png}{LLVM Dialect 中的地址计算、读写和浮点乘加}{fig:mlir-llvm-dialect-address}
 
-\subsection{标准 LLVM IR 与目标文件验证}
+\subsection{目标文件检查}
 
 \texttt{matmul\_llvm.mlir} 仍属于 MLIR 体系中的 LLVM Dialect。使用 \texttt{mlir-translate-14} 将其生成标准 LLVM IR：
 

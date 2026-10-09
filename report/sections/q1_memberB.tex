@@ -1,92 +1,248 @@
-\subsection{成员A：Clang/LLVM 编译流程实验}
-在 Ubuntu 22.04 Docker 容器中，使用 Clang/LLVM 14.0.0、GCC 11.4.0 和 Graphviz 2.43.0 分析一份 C 程序。首先执行预处理和前端分析，再生成 x86-64 LLVM IR、AArch64 汇编、目标文件和链接结果。程序包含宏、数组、循环、条件分支和全局变量。
+\subsection{成员B：GCC 编译流程实验}
 
-\subsubsection{预处理}
-在该程序中，输入 $1$ 至 $8$ 个整数；宏 \texttt{ADJUST(value,bias)} 将数组元素乘以比例常数后加上偏置；\texttt{weighted\_sum} 根据计算值的奇偶性累加或扣减，并更新全局计数器 \texttt{processed\_items}。
+在 WSL2 Ubuntu 22.04 中，使用 g++ 11.4.0 对 C++ 阶乘程序执行 GCC 的预处理、编译、汇编和链接，目标平台为 x86-64。首先生成各阶段结果，再比较不同编译参数下的代码。源程序包含自定义头文件、普通宏、带参宏、条件编译、全局变量、全局常量、函数、条件分支和循环。
 
-\lstinputlisting[language=C,caption={实验使用的 C 源程序},label={lst:memberb-c-source}]{../pipeline/memberB/q1/src/main.c}
-\lstinputlisting[language=C,caption={宏与数组长度定义},label={lst:memberb-config}]{../pipeline/memberB/q1/include/config.h}
+\subsubsection{实验准备}
 
-在预处理阶段，使用下列选项执行头文件展开和宏替换，并将结果写入 \texttt{main.i}：
+在自定义头文件 \texttt{test.h} 中，定义了输入上限 \texttt{N}、带参宏 \texttt{mul(a,b)} 和条件编译宏 \texttt{DEBUG}，如图~\ref{fig:q1-testh} 所示。
+
+\labfigure{figures/memberB/q1/image1.png}{自定义头文件 test.h}{fig:q1-testh}
+
+在 \texttt{main.cpp} 中，定义了全局变量 \texttt{times}、全局常量 \texttt{start}、阶乘函数 \texttt{factorial(int n)} 和主函数，如图~\ref{fig:q1-maincpp} 所示。
+
+\labfigure{figures/memberB/q1/image2.png}{主程序 main.cpp}{fig:q1-maincpp}
+
+\labfigure{figures/memberB/q1/image3.png}{实验环境与 GCC 版本}{fig:q1-env}
+
+首先直接编译并运行源程序：
+
 \begin{lstlisting}[language=bash]
-mkdir -p build/memberB/q1
-clang -E -std=c17 -Ipipeline/memberB/q1/include \
-  pipeline/memberB/q1/src/main.c -o build/memberB/q1/main.i
+g++ main.cpp -o main
+./main
 \end{lstlisting}
-我们在预处理结果中查看到 \texttt{stdio.h} 的声明已展开，\texttt{MAX\_ITEMS} 在数组声明中替换为 \texttt{8}，\texttt{ADJUST(values[i], global\_bias)} 展开为 \texttt{((values[i]) * 3 + (global\_bias))}。
 
-\subsubsection{前端分析}
-在词法分析阶段，使用 Clang 的 token dump 输出 token 种类、词素和源码位置；在语法分析阶段，使用语法树转储查看函数、声明、循环、条件分支及表达式的嵌套关系。两个命令均加入 \texttt{-fsyntax-only}：
+输入 \texttt{5} 后，程序输出 \texttt{120} 和 \texttt{1}；其中 \texttt{120} 为 $5!$ 的结果，\texttt{1} 为 \texttt{factorial} 函数的调用次数，如图~\ref{fig:q1-baseline} 所示。
+
+\labfigure{figures/memberB/q1/image4.png}{基准程序运行结果}{fig:q1-baseline}
+
+
+\subsubsection{预处理器}
+
+使用 \texttt{-E} 选项只执行预处理，并将结果保存为 \texttt{main.ii}：
+
 \begin{lstlisting}[language=bash]
-mkdir -p build/memberB/q1
-clang -std=c17 -Ipipeline/memberB/q1/include -fsyntax-only \
-  -Xclang -dump-tokens pipeline/memberB/q1/src/main.c \
-  2> build/memberB/q1/tokens.txt
-clang -std=c17 -Ipipeline/memberB/q1/include -fsyntax-only \
-  -Xclang -ast-dump pipeline/memberB/q1/src/main.c \
-  > build/memberB/q1/ast.txt
+g++ -E main.cpp -o output/main.ii
 \end{lstlisting}
-如图~\ref{fig:q1b-tokens} 所示，token dump 列出了 \texttt{weighted\_sum}、\texttt{for}、比较与算术运算符等 token 及其在源码中的行列位置；如图~\ref{fig:q1b-ast} 所示，语法树中包含 \texttt{FunctionDecl}、\texttt{ForStmt}、\texttt{IfStmt}、\texttt{BinaryOperator} 等节点及类型注记。
-\labfigurecompact{figures/memberB/q1/tokens.png}{Clang token dump 及源码位置}{fig:q1b-tokens}{0.74}
-\labfigurecompact{figures/memberB/q1/ast.png}{Clang AST 中的函数、循环与条件节点}{fig:q1b-ast}{0.74}
 
-\subsubsection{控制流分析}
-在控制流分析阶段，使用 GCC 输出 tree/CFG 图文件，再用 Graphviz 将 \texttt{.dot} 文件绘制为图~\ref{fig:q1b-cfg}。图中的循环回边对应 \texttt{for} 的重复执行，条件分支对应奇偶判断和 \texttt{main} 中的输入检查。
+预处理命令的执行结果如图~\ref{fig:q1-preprocess} 所示。
+
+\labfigure{figures/memberB/q1/image5.png}{生成预处理文件 main.ii}{fig:q1-preprocess}
+
+在预处理阶段，\texttt{\#include} 展开 \texttt{iostream} 的内容，并在 \texttt{main.ii} 中保留 \texttt{test.h} 的文件切换标记，如图~\ref{fig:q1-include} 所示。
+
+\labfigure{figures/memberB/q1/image6.png}{头文件展开后的内容}{fig:q1-include}
+
+宏展开后，\texttt{N} 被替换为 \texttt{20}，\texttt{mul(result,i)} 被替换为 \texttt{((result)*(i))}。如图~\ref{fig:q1-nodebug} 所示，未定义 \texttt{DEBUG} 时 \texttt{debug(n)} 展开为空。
+
+\labfigure{figures/memberB/q1/image7.png}{未定义 DEBUG 时的预处理结果}{fig:q1-nodebug}
+
+加入 \texttt{-DDEBUG} 后重新预处理：
+
 \begin{lstlisting}[language=bash]
-mkdir -p build/memberB/q1/gcc-graphs
-gcc -O0 -Ipipeline/memberB/q1/include -fdump-tree-all-graph \
-  -dumpdir build/memberB/q1/gcc-graphs/ -dumpbase main-gcc \
-  -c pipeline/memberB/q1/src/main.c -o build/memberB/q1/main-gcc.o
-dot -Tpng build/memberB/q1/gcc-graphs/main-gcc.015t.cfg.dot \
-  -o build/memberB/q1/gcc-graphs/main-cfg.png
+g++ -E -DDEBUG main.cpp -o output/main_debug.ii
 \end{lstlisting}
-\labfigure{figures/memberB/q1/cfg.png}{GCC 生成并由 Graphviz 绘制的控制流图}{fig:q1b-cfg}
 
-在生成 LLVM IR 时，使用 Clang 处理同一份 C 源码。\texttt{-O0} 结果包含较多局部存储、\texttt{load/store} 与显式控制流；如图~\ref{fig:q1b-ir-o0} 所示，IR 中保留了函数定义、数组操作、比较和分支。
+加入 \texttt{-DDEBUG} 后，条件编译选择 \texttt{DEBUG} 分支，\texttt{debug(n)} 展开为 \texttt{cout << n << endl}，如图~\ref{fig:q1-debug} 所示。
+
+\labfigure{figures/memberB/q1/image8.png}{定义 DEBUG 后的预处理结果}{fig:q1-debug}
+
+再比较源文件和预处理文件的规模：\texttt{main.cpp} 为 41 行，\texttt{test.h} 为 16 行，\texttt{main.ii} 为 32296 行、约 761 KB。\texttt{iostream} 及其依赖的标准库头文件在预处理阶段一并展开，如图~\ref{fig:q1-size} 所示。
+
+\labfigure{figures/memberB/q1/image9.png}{源文件与预处理文件规模比较}{fig:q1-size}
+
+
+\subsubsection{编译器内部阶段}
+
+这一部分中，我们依次查看词法分析、语法分析、语义分析、中间代码生成、代码优化和代码生成的结果。我们使用 GCC 输出 tree、CFG 和 RTL，并使用 Clang 输出 token 序列。
+
+\paragraph{词法分析}
+
+使用 Clang 输出 \texttt{main.cpp} 的 token 序列。为了减少标准头文件产生的大量输出，只保留来源于 \texttt{main.cpp} 的 token：
+
 \begin{lstlisting}[language=bash]
-clang -std=c17 -Ipipeline/memberB/q1/include -O0 -S -emit-llvm \
-  pipeline/memberB/q1/src/main.c -o build/memberB/q1/main-O0.ll
+clang++ -Xclang -dump-tokens -fsyntax-only main.cpp 2>&1 \
+  | grep "main.cpp:" | head -n 60
 \end{lstlisting}
-\labfigure{figures/memberB/q1/ir-o0.png}{未优化 LLVM IR：函数、基本块与内存操作}{fig:q1b-ir-o0}
 
-\subsubsection{优化选项}
-在优化对比中，使用同一份源程序分别生成 \texttt{-O0} 和 \texttt{-O2} 的 IR。如图~\ref{fig:q1b-ir-opt} 所示，\texttt{-O2} 版本更多使用 SSA 临时值，减少了部分冗余栈读写，并带有 \texttt{nsw} 等运算属性；函数属性和循环组织也发生变化。
+在 token 序列中，包含 \texttt{using}、\texttt{int}、\texttt{const}、\texttt{for} 等关键字，\texttt{times}、\texttt{factorial} 等标识符，以及数值常量和运算符。宏展开生成的 token 保留了 \texttt{test.h} 的位置信息，如图~\ref{fig:q1-token} 所示。
+
+\labfigure{figures/memberB/q1/lexical_1.png}{Clang 输出的 main.cpp 词法 token 序列}{fig:q1-token}
+
+
+\paragraph{语法分析}
+
+使用 \texttt{-fdump-tree-original-raw} 生成 GCC 的 tree：
+
 \begin{lstlisting}[language=bash]
-clang -std=c17 -Ipipeline/memberB/q1/include -O2 -S -emit-llvm \
-  pipeline/memberB/q1/src/main.c -o build/memberB/q1/main-O2.ll
+g++ -fdump-tree-original-raw -c main.cpp -o output/main_ast.o
 \end{lstlisting}
-\labfigure{figures/memberB/q1/ir-o0-o2.png}{同一函数在 -O0 与 -O2 下的 LLVM IR 对照}{fig:q1b-ir-opt}
 
-在目标代码生成阶段，使用 LLVM 后端将 IR 映射为 AArch64 汇编，再使用汇编器生成 AArch64 机器码。汇编中出现了 32 位/64 位通用寄存器、条件分支和数组寻址指令；可重定位 ELF 中保留了符号和重定位项。
+生成的 tree 文件如图~\ref{fig:q1-treegen} 所示。
+
+\labfigure{figures/memberB/q1/image10.png}{生成 GCC tree 输出文件}{fig:q1-treegen}
+
+在 \texttt{factorial} 函数的 tree 中，\texttt{function\_decl}、\texttt{parm\_decl}、\texttt{var\_decl}、\texttt{identifier\_node}、\texttt{statement\_list} 和 \texttt{return\_expr} 等节点将函数、参数、局部变量和语句组织为树结构，如图~\ref{fig:q1-tree} 所示。
+
+\labfigure{figures/memberB/q1/image11.png}{factorial 函数的 GCC tree 片段}{fig:q1-tree}
+
+
+\paragraph{语义分析}
+
+为观察类型检查，我们复制源程序，将一次 \texttt{factorial(n)} 调用改为 \texttt{factorial("5")}；实参类型随之由 \texttt{int} 改为 \texttt{const char*}，修改位置如图~\ref{fig:q1-semantic-src} 所示。
+
+\labfigure{figures/memberB/q1/image12.png}{故意修改的函数调用}{fig:q1-semantic-src}
+
+编译时，GCC 报告 \texttt{invalid conversion from 'const char*' to 'int'}，并指出 \texttt{factorial(int)} 的参数类型为 \texttt{int}，如图~\ref{fig:q1-semantic-err} 所示。
+
+\labfigure{figures/memberB/q1/image13.png}{GCC 类型检查报错}{fig:q1-semantic-err}
+
+
+\paragraph{中间代码生成}
+
+使用 \texttt{-fdump-tree-all-graph} 输出 GCC 多个 tree 阶段的 \texttt{.dot} 文件：
+
 \begin{lstlisting}[language=bash]
-clang --target=aarch64-linux-gnu -std=c17 \
-  -Ipipeline/memberB/q1/include -O2 -S -emit-llvm \
-  pipeline/memberB/q1/src/main.c -o build/memberB/q1/main-O2-aarch64.ll
-llc -O2 build/memberB/q1/main-O2-aarch64.ll \
-  -o build/memberB/q1/main-O2-aarch64.s
-aarch64-linux-gnu-gcc -c build/memberB/q1/main-O2-aarch64.s \
-  -o build/memberB/q1/main-O2-aarch64.o
-aarch64-linux-gnu-readelf -h build/memberB/q1/main-O2-aarch64.o
-aarch64-linux-gnu-readelf -Ws -rW build/memberB/q1/main-O2-aarch64.o
+g++ -O0 -fdump-tree-all-graph -c main.cpp -o output/main_tree.o
 \end{lstlisting}
-如图~\ref{fig:q1b-asm} 所示，AArch64 汇编包含寄存器操作和条件跳转；如图~\ref{fig:q1b-object} 所示，ELF 头中的 \texttt{Type: REL} 与 \texttt{Machine: AArch64} 表明该文件是 AArch64 可重定位目标文件。如图~\ref{fig:q1b-symrel} 所示，符号表列出自定义函数、全局变量和 \texttt{printf}/\texttt{scanf} 等外部函数，重定位表列出 \texttt{R\_AARCH64\_*} 项。
-\labfigure{figures/memberB/q1/asm-aarch64.png}{LLVM 后端生成的 AArch64 汇编}{fig:q1b-asm}
-\labfigure{figures/memberB/q1/object-elf.png}{AArch64 可重定位目标文件的 ELF 头}{fig:q1b-object}
-\labfigure{figures/memberB/q1/symbols-relocs.png}{目标文件的符号表与重定位表}{fig:q1b-symrel}
 
-\subsubsection{链接结果检查}
-在链接阶段，将目标文件与 C 运行时库链接，并对照链接前后的反汇编。如图~\ref{fig:q1b-link} 所示，目标文件保留针对 \texttt{printf} 的调用重定位，链接后的程序显示具体地址和 \texttt{printf@plt} 调用入口。随后在 Ubuntu 容器中通过 QEMU 用户态运行 AArch64 程序。
+生成的多阶段文件如图~\ref{fig:q1-treeall} 所示。
+
+\labfigure{figures/memberB/q1/image14.png}{Tree/CFG 多阶段输出文件}{fig:q1-treeall}
+
+将较早阶段的 \texttt{cfg.dot} 转换为图片后，\texttt{factorial} 中的 \texttt{for} 循环被分成初始化、条件判断、循环体、回跳和退出等基本块；\texttt{main} 中的输入、范围判断、函数调用和输出也被分成不同基本块，如图~\ref{fig:q1-cfg} 所示。
+
+\labfigure{figures/memberB/q1/image15.png}{GCC 生成的 CFG}{fig:q1-cfg}
+
+继续使用 \texttt{-fdump-rtl-all-graph} 输出 RTL：
+
 \begin{lstlisting}[language=bash]
-clang -std=c17 -Ipipeline/memberB/q1/include -O2 \
-  pipeline/memberB/q1/src/main.c -o build/memberB/q1/main-native
-build/memberB/q1/main-native < pipeline/memberB/q1/input/sample.txt
-aarch64-linux-gnu-gcc -no-pie build/memberB/q1/main-O2-aarch64.o \
-  -o build/memberB/q1/main-aarch64
-qemu-aarch64 -L /usr/aarch64-linux-gnu \
-  build/memberB/q1/main-aarch64 < pipeline/memberB/q1/input/sample.txt
+g++ -O0 -fdump-rtl-all-graph -c main.cpp -o output/main_rtl.o
 \end{lstlisting}
-输入 $1,2,3,4,5$ 后，调整值依次为 $5,8,11,14,17$，按奇偶规则计算得到 $-11$，处理数为 $5$。
-\labfigure{figures/memberB/q1/link-disassembly.png}{链接前目标文件与链接后程序的反汇编对照}{fig:q1b-link}
 
-\subsubsection{阶段观察小结}
-在本小题中，预处理文件展示了 \texttt{MAX\_ITEMS} 和 \texttt{ADJUST(value,bias)} 的展开结果；token、AST、CFG 和 LLVM IR 分别记录了循环、奇偶分支和 \texttt{processed\_items} 的更新。\texttt{-O2} 相比 \texttt{-O0} 减少了部分重复的内存读写，AArch64 目标文件和链接后的反汇编展示了 \texttt{printf} 等外部调用的处理过程。
+RTL 文件如图~\ref{fig:q1-rtl-files} 所示，RTL expand 阶段的控制流图如图~\ref{fig:q1-rtl-cfg} 所示。RTL 中出现了寄存器、函数调用、比较和跳转等低层内容。
+
+\labfigure{figures/memberB/q1/image16.png}{RTL 多阶段输出文件}{fig:q1-rtl-files}
+\labfigure{figures/memberB/q1/image17.png}{RTL expand 阶段控制流图}{fig:q1-rtl-cfg}
+
+
+\paragraph{代码优化}
+
+使用同一个预处理文件分别生成 \texttt{-O0} 和 \texttt{-O2} 两个版本的汇编：
+
+\begin{lstlisting}[language=bash]
+g++ -O0 -S -masm=att output/main.ii -o output/main_O0.s
+g++ -O2 -S -masm=att output/main.ii -o output/main_O2.s
+\end{lstlisting}
+
+如图~\ref{fig:q1-o0o2} 所示，\texttt{-O0} 版本约为 3.6 KB、193 行，\texttt{-O2} 版本约为 4.2 KB、222 行。
+
+\labfigure{figures/memberB/q1/image18.png}{-O0 与 -O2 汇编文件比较}{fig:q1-o0o2}
+
+再比较两个版本中的 \texttt{factorial} 函数。\texttt{-O2} 版本使用寄存器保存循环变量和中间结果，循环体主要由 \texttt{imulq}、\texttt{addq}、\texttt{cmpq} 和 \texttt{jne} 等指令组成，\texttt{times++} 变为直接对内存加一；与 \texttt{-O0} 相比，栈内存读写有所减少，如图~\ref{fig:q1-o2fact} 所示。
+
+\labfigure{figures/memberB/q1/image19.png}{-O2 下 factorial 函数的汇编结果}{fig:q1-o2fact}
+
+
+\paragraph{代码生成}
+
+在代码生成阶段，使用 \texttt{-S} 让 GCC 在生成汇编后停止，得到 x86-64 AT\&T 语法的 \texttt{main\_O0.s}，如图~\ref{fig:q1-codegen} 所示。
+
+\labfigure{figures/memberB/q1/image20.png}{由 main.ii 生成汇编文件 main\_O0.s}{fig:q1-codegen}
+
+在 \texttt{-O0} 版本的 \texttt{factorial} 中，\texttt{movq \$1,-8(\%rbp)} 对应 \texttt{result=1}，\texttt{movl \$2,-12(\%rbp)} 对应循环初值，\texttt{imulq} 对应乘法，\texttt{cmpl/jle} 对应循环条件，返回前将 \texttt{result} 放入 \texttt{\%rax}。相关汇编如图~\ref{fig:q1-o0fact} 所示。
+
+\labfigure{figures/memberB/q1/image21.png}{-O0 下 factorial 函数的汇编结果}{fig:q1-o0fact}
+
+\texttt{main} 函数中包含 \texttt{cin}、\texttt{cout} 对应的库函数调用，以及 \texttt{call \_Z9factoriali}。\texttt{\_Z9factoriali} 是 C++ 对 \texttt{factorial(int)} 进行名字修饰后的符号名，相关代码如图~\ref{fig:q1-mainasm} 所示。
+
+\labfigure{figures/memberB/q1/image22.png}{main 函数中的输入、判断、函数调用和输出}{fig:q1-mainasm}
+
+
+\subsubsection{汇编器}
+
+使用 \texttt{-c} 将汇编文件转换为可重定位目标文件：
+
+\begin{lstlisting}[language=bash]
+g++ -c output/main_O0.s -o output/main_O0.o
+\end{lstlisting}
+
+使用 \texttt{file} 查看 \texttt{main\_O0.o}，得到 \texttt{ELF 64-bit LSB relocatable, x86-64}。汇编指令已编码为机器指令，文件属于可重定位目标文件，结果如图~\ref{fig:q1-obj} 所示。
+
+\labfigure{figures/memberB/q1/image23.png}{生成可重定位目标文件 main\_O0.o}{fig:q1-obj}
+
+在目标文件检查阶段，使用 \texttt{objdump -d} 进行反汇编。如图~\ref{fig:q1-objdump} 所示，左侧为十六进制机器码，右侧为对应的 x86 指令，例如 \texttt{eb 15} 对应 \texttt{jmp}，\texttt{7e e3} 对应 \texttt{jle}。
+
+\labfigure{figures/memberB/q1/image24.png}{目标文件 main\_O0.o 的反汇编结果}{fig:q1-objdump}
+
+使用 \texttt{nm} 分析目标文件的符号表。如图~\ref{fig:q1-nmobj} 所示，\texttt{main} 和 \texttt{\_Z9factoriali} 标记为 \texttt{T}，表示代码段中已定义的全局符号；\texttt{times} 标记为 \texttt{B}，表示 BSS 段中的零初始化全局变量；\texttt{cin}、\texttt{cout} 等外部符号标记为 \texttt{U}，由链接阶段解析。
+
+\labfigure{figures/memberB/q1/image25.png}{目标文件 main\_O0.o 的符号表}{fig:q1-nmobj}
+
+
+\subsubsection{链接器}
+
+使用 g++ 将 \texttt{main\_O0.o} 与程序所需的 C++ 运行库链接：
+
+\begin{lstlisting}[language=bash]
+g++ output/main_O0.o -o output/main_O0
+\end{lstlisting}
+
+使用 \texttt{file} 查看生成文件，得到 \texttt{ELF 64-bit LSB PIE executable}，并确认其采用动态链接。输入 \texttt{5} 后，程序输出 \texttt{120} 和 \texttt{1}，结果如图~\ref{fig:q1-linkrun} 所示。
+
+\labfigure{figures/memberB/q1/image26.png}{生成并运行动态链接可执行文件}{fig:q1-linkrun}
+
+对链接后的可执行文件再次进行反汇编。如图~\ref{fig:q1-linkdis} 所示，\texttt{factorial} 和 \texttt{main} 具有链接后的地址，\texttt{main} 中对 \texttt{factorial} 的调用指向相应地址。
+
+\labfigure{figures/memberB/q1/image27.png}{链接后可执行文件的反汇编结果}{fig:q1-linkdis}
+
+如图~\ref{fig:q1-linknm} 所示，最终可执行文件的符号表中列出 \texttt{factorial}、\texttt{main} 和 \texttt{times} 的确定地址，以及带版本信息的 \texttt{U} 项；动态链接器和共享库在程序装载或运行时解析这些标准库符号。
+
+\labfigure{figures/memberB/q1/image28.png}{链接后可执行文件的符号表}{fig:q1-linknm}
+
+使用 \texttt{-static} 生成静态链接版本，并与动态链接版本比较文件大小。如图~\ref{fig:q1-static-size} 所示，动态链接版本约为 17 KB，静态链接版本约为 2.3 MB。
+
+\labfigure{figures/memberB/q1/image29.png}{动态链接与静态链接文件大小比较}{fig:q1-static-size}
+
+静态链接版本输入 \texttt{5} 后输出 \texttt{120} 和 \texttt{1}，如图~\ref{fig:q1-static-run} 所示。
+
+\labfigure{figures/memberB/q1/image30.png}{静态链接程序运行结果}{fig:q1-static-run}
+
+
+\subsubsection{编译参数扩展探索}
+
+\paragraph{调试信息 -g}
+
+在相同的 \texttt{-O0} 条件下，分别生成带 \texttt{-g} 和不带 \texttt{-g} 的可执行文件。如图~\ref{fig:q1-debug-info} 所示，\texttt{main\_nog} 为 17 KB，\texttt{main\_g} 为 34 KB；\texttt{readelf} 显示 \texttt{main\_g} 包含 \texttt{.debug\_info}、\texttt{.debug\_line} 和 \texttt{.debug\_str} 等调试信息。
+
+\labfigure{figures/memberB/q1/image31.png}{-g 对文件大小和调试段的影响}{fig:q1-debug-info}
+
+
+\paragraph{-fno-omit-frame-pointer}
+
+在相同的 \texttt{-O2} 优化级别下，分别生成默认版本和加入 \texttt{-fno-omit-frame-pointer} 的版本。如图~\ref{fig:q1-frame} 所示，加入该选项的汇编包含 \texttt{movq \%rsp,\%rbp}，并以 \texttt{\%rbp} 作为栈帧基址。
+
+\labfigure{figures/memberB/q1/image32.png}{-fno-omit-frame-pointer 对 main 栈帧的影响}{fig:q1-frame}
+
+
+\paragraph{自动并行化与优化报告}
+
+使用 \texttt{-O3 -ftree-parallelize-loops=4} 生成阶乘循环的优化报告。如图~\ref{fig:q1-parallel} 所示，GCC 记录了 \texttt{couldn't vectorize loop} 和 \texttt{not vectorized}。
+
+\labfigure{figures/memberB/q1/image33.png}{阶乘循环的优化报告与并行化检查}{fig:q1-parallel}
+
+
+\subsubsection{本小题小结}
+
+在本小题中，预处理结果展示了 \texttt{N}、\texttt{mul(result,i)} 和 \texttt{DEBUG} 的展开情况；tree、CFG 和 RTL 分别展示了程序的树结构、基本块关系和更接近机器层的表示。目标文件符号表中，函数、零初始化全局变量和外部符号分别带有 \texttt{T}、\texttt{B} 和 \texttt{U} 标记。
+
+比较不同编译参数后，\texttt{-O2} 版本的 \texttt{factorial} 减少了栈内存读写；加入 \texttt{-g} 后，文件中增加了调试相关段；加入 \texttt{-fno-omit-frame-pointer} 后，汇编保留了 \texttt{\%rbp} 栈帧。静态链接版本约为 2.3 MB，动态链接版本约为 17 KB；优化报告记录了阶乘循环的向量化结果。

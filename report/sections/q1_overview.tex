@@ -1,3 +1,3 @@
 \section{小题1：编译过程分析}
 
-在小题1中，成员A使用包含宏、数组、循环和条件分支的 C 程序，通过 Clang/LLVM 分析预处理结果、token、AST、CFG、LLVM IR、AArch64 汇编和目标文件；成员B使用带有普通宏、带参宏和条件编译的 C++ 阶乘程序，通过 GCC 分析预处理、tree、CFG、RTL、汇编、目标文件和链接结果，并使用 Clang 输出 token。我们分别比较不同编译参数下的结果。
+在小题1中，成员A使用包含宏、数组、循环和条件分支的 C 程序，以 Clang/LLVM 分析预处理结果、token、AST、LLVM IR、AArch64 汇编和目标文件；为补充观察基本块控制流，另用 GCC 生成同一程序的 Tree/GIMPLE CFG。成员B使用带有普通宏、带参宏和条件编译的 C++ 阶乘程序，通过 GCC 分析预处理、tree、CFG、RTL、汇编、目标文件和链接结果，并使用 Clang 输出 token。我们分别比较不同编译参数下的结果。

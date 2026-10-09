@@ -36,15 +36,15 @@
 
 \lstinputlisting[
 caption={LLVM IR 程序 main.ll},
-label={lst:memberb-main-ll}
-]{../llvm/memberB/main.ll}
+label={lst:membera-main-ll}
+]{../llvm/memberA/main.ll}
 
 \subsubsection{运行 LLVM IR 程序}
 
 在 Ubuntu 22.04 中，使用 LLVM/Clang 14 编译 LLVM IR，target triple 为 \texttt{x86\_64-pc-linux-gnu}；再将 SysY 运行时库编译并链接。
 
 \begin{lstlisting}[language=bash]
-cd llvm/memberB
+cd llvm/memberA
 make all
 llvm-readelf -h build/main.o
 llvm-readelf -rW build/main.o

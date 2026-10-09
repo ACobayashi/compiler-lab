@@ -1,12 +1,12 @@
 \section{进阶要求：观察 AI 编译器 MLIR 中端处理过程}
 
-我们在 WSL2 Ubuntu 22.04 中使用 MLIR 14、\texttt{mlir-opt-14}、\texttt{mlir-translate-14} 和 Clang 14，先处理基础算术程序，再处理固定尺寸的矩阵乘法程序。我们依次查看高层 \texttt{linalg.matmul}、循环、控制流、LLVM Dialect、标准 LLVM IR 和 x86-64 目标文件。
+在 WSL2 Ubuntu 22.04 中，使用 MLIR 14、\texttt{mlir-opt-14}、\texttt{mlir-translate-14} 和 Clang 14，先处理基础算术程序，再处理固定尺寸的矩阵乘法程序。实验依次生成高层 \texttt{linalg.matmul}、循环、控制流、LLVM Dialect、标准 LLVM IR 和 x86-64 目标文件。
 
 \labfigure{figures/mlir/mlir_env.png}{MLIR 14 实验环境与工具版本}{fig:mlir-env}
 
 \subsection{实验任务}
 
-成员A负责基础 MLIR 程序和矩阵乘法前两步转换，执行 \texttt{canonicalize} 和 \texttt{convert-linalg-to-loops}；成员B负责核对 \texttt{convert-scf-to-std} 后的基本块和分支，以及 LLVM Dialect、标准 LLVM IR 与目标文件。我们共同整理各阶段的文件和终端输出。
+在进阶部分中，成员A负责基础 MLIR 程序和矩阵乘法前两步转换，执行 \texttt{canonicalize} 和 \texttt{convert-linalg-to-loops}；成员B负责核对 \texttt{convert-scf-to-std} 后的基本块和分支，以及 LLVM Dialect、标准 LLVM IR 与目标文件。我们共同整理各阶段的结果。
 
 \subsection{基础 MLIR 程序}
 
@@ -23,7 +23,7 @@ label={lst:mlir-test}
 mlir-opt-14 test.mlir
 \end{lstlisting}
 
-我们在输出中查看 \texttt{module}、\texttt{func}、\texttt{arith.constant} 和 \texttt{arith.addi}。图\ref{fig:mlir-basic}给出了该命令的输出。
+运行命令后，输出中包含 \texttt{module}、\texttt{func}、\texttt{arith.constant} 和 \texttt{arith.addi}，如图~\ref{fig:mlir-basic} 所示。
 
 \labfigure{figures/mlir/mlir_basic.png}{基础 MLIR 程序的输出}{fig:mlir-basic}
 
@@ -33,7 +33,7 @@ mlir-opt-14 test.mlir
 mlir-opt-14 test.mlir -canonicalize
 \end{lstlisting}
 
-执行规范化后，函数体保留 \texttt{return}。图\ref{fig:mlir-canonicalize}给出了转换前后的结果。
+执行规范化后，函数体保留 \texttt{return}，如图~\ref{fig:mlir-canonicalize} 所示。
 
 \labfigure{figures/mlir/mlir_canonicalize.png}{Canonicalization 前后的 MLIR 对比}{fig:mlir-canonicalize}
 
@@ -50,7 +50,7 @@ label={lst:mlir-matmul}
 mlir-opt-14 matmul.mlir
 \end{lstlisting}
 
-我们在图\ref{fig:mlir-linalg-matmul}中查看矩阵乘法的输入、输出和维度。
+如图~\ref{fig:mlir-linalg-matmul} 所示，\texttt{linalg.matmul} 直接给出矩阵乘法的输入、输出和维度。
 
 \labfigure{figures/mlir/mlir_linalg_matmul.png}{Linalg Dialect 中的矩阵乘法表示}{fig:mlir-linalg-matmul}
 
@@ -71,7 +71,7 @@ mlir-opt-14 matmul.mlir -convert-linalg-to-loops -o matmul_loops.mlir
 
 \subsection{SCF 到控制流形式的 Lowering}
 
-MLIR 14 的 Pass 名称与资料中的写法存在差异。我们先通过帮助信息确认本机可用的转换 Pass，再使用 \texttt{convert-scf-to-std} 处理保存的循环程序。
+在 SCF Lowering 阶段，先通过帮助信息确认本机可用的转换 Pass，再使用 \texttt{convert-scf-to-std} 处理保存的循环程序。
 
 \begin{lstlisting}[language=bash]
 mlir-opt-14 --help | grep -E 'convert-(scf|memref|arith|std)'
@@ -80,7 +80,7 @@ mlir-opt-14 matmul_loops.mlir -convert-scf-to-std -o matmul_cfg.mlir
 
 \labfigure{figures/mlir/mlir_pass_help.png}{MLIR 14 中可用的关键 Lowering Pass}{fig:mlir-pass-help}
 
-我们在 \texttt{matmul\_cfg.mlir} 中查看三层循环转换出的基本块、\texttt{br}、\texttt{cond\_br} 和块参数；\texttt{arith.cmpi} 控制循环是否继续。\texttt{memref.load}、\texttt{arith.mulf}、\texttt{arith.addf} 和 \texttt{memref.store} 位于相应的基本块中。
+在 \texttt{matmul\_cfg.mlir} 中，三层循环转换为基本块、\texttt{br}、\texttt{cond\_br} 和块参数；\texttt{arith.cmpi} 控制循环是否继续，\texttt{memref.load}、\texttt{arith.mulf}、\texttt{arith.addf} 和 \texttt{memref.store} 位于相应的基本块中。
 
 \labfigure{figures/mlir/mlir_cfg.png}{SCF 结构化循环转为基本块和条件分支}{fig:mlir-cfg}
 
@@ -95,7 +95,7 @@ mlir-opt-14 matmul_cfg.mlir \
   -o matmul_llvm.mlir
 \end{lstlisting}
 
-我们在转换结果中查看 \texttt{llvm.func}、\texttt{llvm.br}、\texttt{llvm.cond\_br}、\texttt{llvm.getelementptr}、\texttt{llvm.load}、\texttt{llvm.fmul}、\texttt{llvm.fadd} 和 \texttt{llvm.store}。memref 访问在这一阶段写成指针、偏移和维度信息，矩阵元素地址由 \texttt{llvm.getelementptr} 计算。
+转换结果中包含 \texttt{llvm.func}、\texttt{llvm.br}、\texttt{llvm.cond\_br}、\texttt{llvm.getelementptr}、\texttt{llvm.load}、\texttt{llvm.fmul}、\texttt{llvm.fadd} 和 \texttt{llvm.store}。在这一阶段，memref 访问写成指针、偏移和维度信息，矩阵元素地址由 \texttt{llvm.getelementptr} 计算。
 
 \labfigure{figures/mlir/mlir_llvm_dialect_front.png}{矩阵乘法转换为 LLVM Dialect 的前半部分}{fig:mlir-llvm-dialect-front}
 
@@ -103,19 +103,19 @@ mlir-opt-14 matmul_cfg.mlir \
 
 \subsection{目标文件检查}
 
-\texttt{matmul\_llvm.mlir} 属于 MLIR 的 LLVM Dialect。我们使用 \texttt{mlir-translate-14} 将其生成标准 LLVM IR：
+在目标文件检查阶段，使用 \texttt{mlir-translate-14} 将 \texttt{matmul\_llvm.mlir} 转换为标准 LLVM IR：
 
 \begin{lstlisting}[language=bash]
 mlir-translate-14 --mlir-to-llvmir matmul_llvm.mlir -o matmul.ll
 \end{lstlisting}
 
-我们在 \texttt{matmul.ll} 中查看 \texttt{define}、\texttt{phi}、\texttt{icmp}、\texttt{br}、\texttt{getelementptr}、\texttt{load}、\texttt{fmul}、\texttt{fadd}、\texttt{store} 和 \texttt{ret}。\texttt{phi} 在基本块之间传递循环变量，乘法和加法将矩阵下标写成地址偏移。
+在 \texttt{matmul.ll} 中，包含 \texttt{define}、\texttt{phi}、\texttt{icmp}、\texttt{br}、\texttt{getelementptr}、\texttt{load}、\texttt{fmul}、\texttt{fadd}、\texttt{store} 和 \texttt{ret}。\texttt{phi} 在基本块之间传递循环变量，乘法和加法将矩阵下标写成地址偏移。
 
 \labfigure{figures/mlir/mlir_standard_llvm_front.png}{MLIR LLVM Dialect 生成的标准 LLVM IR 前半部分}{fig:mlir-standard-llvm-front}
 
 \labfigure{figures/mlir/mlir_standard_llvm_loop.png}{标准 LLVM IR 中的循环结构与浮点乘加}{fig:mlir-standard-llvm-loop}
 
-最后使用 Clang 将标准 LLVM IR 编译为目标文件：
+最后，使用 Clang 将标准 LLVM IR 编译为目标文件：
 
 \begin{lstlisting}[language=bash]
 clang -c matmul.ll -o matmul.o
@@ -123,10 +123,10 @@ file matmul.o
 nm -g matmul.o | grep ' matmul$'
 \end{lstlisting}
 
-我们得到 x86-64 ELF 可重定位文件 \texttt{matmul.o}，并在符号表中检查 \texttt{matmul}。我们使用 \texttt{clang -c -O0 -g} 编译仓库中的 \texttt{matmul.ll}，得到带 \texttt{matmul} 符号和 \texttt{.debug\_info} 节的目标文件。
+编译后得到 x86-64 ELF 可重定位文件 \texttt{matmul.o}，符号表中包含 \texttt{matmul}。使用 \texttt{clang -c -O0 -g} 编译 \texttt{matmul.ll} 后，目标文件还包含 \texttt{.debug\_info} 节。
 
 \labfigure{figures/mlir/mlir_clang_object.png}{标准 LLVM IR 编译为 x86-64 可重定位目标文件}{fig:mlir-clang-object}
 
 \subsection{本部分小结}
 
-我们先对基础程序执行 Canonicalization，再以矩阵乘法为例依次记录 \texttt{linalg.matmul}、\texttt{scf.for}、基本块控制流、LLVM Dialect 和标准 LLVM IR。最后，我们生成 \texttt{matmul.o}，并在符号表中检查 \texttt{matmul}。
+在本部分中，先对基础程序执行 Canonicalization，再以矩阵乘法为例处理 \texttt{linalg.matmul}、\texttt{scf.for}、基本块控制流、LLVM Dialect 和标准 LLVM IR，最后生成 \texttt{matmul.o} 并检查 \texttt{matmul} 符号。

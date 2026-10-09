@@ -1,13 +1,13 @@
 \subsection{成员A：Clang/LLVM 编译流程实验}
-本部分由成员A负责。成员A在 Ubuntu 22.04 Docker 容器中使用 Clang/LLVM 14.0.0、GCC 11.4.0 和 Graphviz 2.43.0 对一份 C 程序执行实验。我们依次查看预处理、前端分析、x86-64 LLVM IR、AArch64 汇编、目标文件和链接结果。程序中包含宏、数组、循环、条件分支和全局变量。
+在 Ubuntu 22.04 Docker 容器中，使用 Clang/LLVM 14.0.0、GCC 11.4.0 和 Graphviz 2.43.0 分析一份 C 程序。首先执行预处理和前端分析，再生成 x86-64 LLVM IR、AArch64 汇编、目标文件和链接结果。程序包含宏、数组、循环、条件分支和全局变量。
 
 \subsubsection{预处理}
-我们用该程序读入 $1$ 至 $8$ 个整数。宏 \texttt{ADJUST(value,bias)} 将数组元素乘以比例常数后加上偏置；\texttt{weighted\_sum} 根据计算值的奇偶性累加或扣减，并更新全局计数器 \texttt{processed\_items}。源文件和头文件位于 \texttt{pipeline/memberB/q1/} 目录，输入为 \texttt{5} 与 \texttt{1 2 3 4 5}。
+在该程序中，输入 $1$ 至 $8$ 个整数；宏 \texttt{ADJUST(value,bias)} 将数组元素乘以比例常数后加上偏置；\texttt{weighted\_sum} 根据计算值的奇偶性累加或扣减，并更新全局计数器 \texttt{processed\_items}。
 
 \lstinputlisting[language=C,caption={实验使用的 C 源程序},label={lst:memberb-c-source}]{../pipeline/memberB/q1/src/main.c}
 \lstinputlisting[language=C,caption={宏与数组长度定义},label={lst:memberb-config}]{../pipeline/memberB/q1/include/config.h}
 
-使用预处理选项只执行头文件展开和宏替换，输出写入 \texttt{main.i}：
+在预处理阶段，使用下列选项执行头文件展开和宏替换，并将结果写入 \texttt{main.i}：
 \begin{lstlisting}[language=bash]
 mkdir -p build/memberB/q1
 clang -E -std=c17 -Ipipeline/memberB/q1/include \
@@ -16,7 +16,7 @@ clang -E -std=c17 -Ipipeline/memberB/q1/include \
 我们在预处理结果中查看到 \texttt{stdio.h} 的声明已展开，\texttt{MAX\_ITEMS} 在数组声明中替换为 \texttt{8}，\texttt{ADJUST(values[i], global\_bias)} 展开为 \texttt{((values[i]) * 3 + (global\_bias))}。
 
 \subsubsection{前端分析}
-词法阶段用 Clang 的 token dump 输出 token 种类、词素和源码位置；语法树转储则展示函数、声明、循环、条件分支及表达式的嵌套关系。两个命令都以 \texttt{-fsyntax-only} 避免生成目标文件：
+在词法分析阶段，使用 Clang 的 token dump 输出 token 种类、词素和源码位置；在语法分析阶段，使用语法树转储查看函数、声明、循环、条件分支及表达式的嵌套关系。两个命令均加入 \texttt{-fsyntax-only}：
 \begin{lstlisting}[language=bash]
 mkdir -p build/memberB/q1
 clang -std=c17 -Ipipeline/memberB/q1/include -fsyntax-only \
@@ -26,12 +26,12 @@ clang -std=c17 -Ipipeline/memberB/q1/include -fsyntax-only \
   -Xclang -ast-dump pipeline/memberB/q1/src/main.c \
   > build/memberB/q1/ast.txt
 \end{lstlisting}
-我们在图~\ref{fig:q1b-tokens} 中查看 \texttt{weighted\_sum}、\texttt{for}、比较与算术运算符等 token 及其在 \texttt{src/main.c} 中的行列位置；在图~\ref{fig:q1b-ast} 中查看 \texttt{FunctionDecl}、\texttt{ForStmt}、\texttt{IfStmt}、\texttt{BinaryOperator} 等节点和类型注记。
+如图~\ref{fig:q1b-tokens} 所示，token dump 列出了 \texttt{weighted\_sum}、\texttt{for}、比较与算术运算符等 token 及其在源码中的行列位置；如图~\ref{fig:q1b-ast} 所示，语法树中包含 \texttt{FunctionDecl}、\texttt{ForStmt}、\texttt{IfStmt}、\texttt{BinaryOperator} 等节点及类型注记。
 \labfigurecompact{figures/memberB/q1/tokens.png}{Clang token dump 及源码位置}{fig:q1b-tokens}{0.74}
 \labfigurecompact{figures/memberB/q1/ast.png}{Clang AST 中的函数、循环与条件节点}{fig:q1b-ast}{0.74}
 
 \subsubsection{控制流分析}
-为观察控制流图，我们让 GCC 在编译时写出 tree/CFG 图文件，再用 Graphviz 将 \texttt{.dot} 文件绘制为图~\ref{fig:q1b-cfg}。其中循环回边对应 \texttt{for} 的重复执行，条件分支对应奇偶判断以及 \texttt{main} 中的输入合法性检查。
+在控制流分析阶段，使用 GCC 输出 tree/CFG 图文件，再用 Graphviz 将 \texttt{.dot} 文件绘制为图~\ref{fig:q1b-cfg}。图中的循环回边对应 \texttt{for} 的重复执行，条件分支对应奇偶判断和 \texttt{main} 中的输入检查。
 \begin{lstlisting}[language=bash]
 mkdir -p build/memberB/q1/gcc-graphs
 gcc -O0 -Ipipeline/memberB/q1/include -fdump-tree-all-graph \
@@ -42,7 +42,7 @@ dot -Tpng build/memberB/q1/gcc-graphs/main-gcc.015t.cfg.dot \
 \end{lstlisting}
 \labfigure{figures/memberB/q1/cfg.png}{GCC 生成并由 Graphviz 绘制的控制流图}{fig:q1b-cfg}
 
-我们使用 Clang 从同一份 C 源码生成 LLVM IR。\texttt{-O0} 结果包含较多局部存储、\texttt{load/store} 与显式控制流；图~\ref{fig:q1b-ir-o0} 展示了函数定义、数组操作、比较和分支。
+在生成 LLVM IR 时，使用 Clang 处理同一份 C 源码。\texttt{-O0} 结果包含较多局部存储、\texttt{load/store} 与显式控制流；如图~\ref{fig:q1b-ir-o0} 所示，IR 中保留了函数定义、数组操作、比较和分支。
 \begin{lstlisting}[language=bash]
 clang -std=c17 -Ipipeline/memberB/q1/include -O0 -S -emit-llvm \
   pipeline/memberB/q1/src/main.c -o build/memberB/q1/main-O0.ll
@@ -50,14 +50,14 @@ clang -std=c17 -Ipipeline/memberB/q1/include -O0 -S -emit-llvm \
 \labfigure{figures/memberB/q1/ir-o0.png}{未优化 LLVM IR：函数、基本块与内存操作}{fig:q1b-ir-o0}
 
 \subsubsection{优化选项}
-我们以相同源程序分别使用 \texttt{-O0} 和 \texttt{-O2} 生成 IR。图~\ref{fig:q1b-ir-opt} 中，\texttt{-O2} 版本更多使用 SSA 临时值，减少部分冗余栈读写，并带有 \texttt{nsw} 等运算属性；函数属性和循环组织也发生变化。
+在优化对比中，使用同一份源程序分别生成 \texttt{-O0} 和 \texttt{-O2} 的 IR。如图~\ref{fig:q1b-ir-opt} 所示，\texttt{-O2} 版本更多使用 SSA 临时值，减少了部分冗余栈读写，并带有 \texttt{nsw} 等运算属性；函数属性和循环组织也发生变化。
 \begin{lstlisting}[language=bash]
 clang -std=c17 -Ipipeline/memberB/q1/include -O2 -S -emit-llvm \
   pipeline/memberB/q1/src/main.c -o build/memberB/q1/main-O2.ll
 \end{lstlisting}
 \labfigure{figures/memberB/q1/ir-o0-o2.png}{同一函数在 -O0 与 -O2 下的 LLVM IR 对照}{fig:q1b-ir-opt}
 
-我们使用 LLVM 后端将 IR 映射为 AArch64 汇编，再使用汇编器生成 AArch64 机器码。我们在汇编中查看 32 位/64 位通用寄存器、条件分支和数组寻址指令，并在可重定位 ELF 中查看符号和重定位项。
+在目标代码生成阶段，使用 LLVM 后端将 IR 映射为 AArch64 汇编，再使用汇编器生成 AArch64 机器码。汇编中出现了 32 位/64 位通用寄存器、条件分支和数组寻址指令；可重定位 ELF 中保留了符号和重定位项。
 \begin{lstlisting}[language=bash]
 clang --target=aarch64-linux-gnu -std=c17 \
   -Ipipeline/memberB/q1/include -O2 -S -emit-llvm \
@@ -69,13 +69,13 @@ aarch64-linux-gnu-gcc -c build/memberB/q1/main-O2-aarch64.s \
 aarch64-linux-gnu-readelf -h build/memberB/q1/main-O2-aarch64.o
 aarch64-linux-gnu-readelf -Ws -rW build/memberB/q1/main-O2-aarch64.o
 \end{lstlisting}
-我们在图~\ref{fig:q1b-asm} 中查看 AArch64 汇编片段，在图~\ref{fig:q1b-object} 的 ELF 头中查看 \texttt{Type: REL} 与 \texttt{Machine: AArch64}。我们还在图~\ref{fig:q1b-symrel} 中查看自定义函数、全局变量、\texttt{printf}/\texttt{scanf} 等外部函数的符号，以及 \texttt{R\_AARCH64\_*} 重定位项。
+如图~\ref{fig:q1b-asm} 所示，AArch64 汇编包含寄存器操作和条件跳转；如图~\ref{fig:q1b-object} 所示，ELF 头中的 \texttt{Type: REL} 与 \texttt{Machine: AArch64} 表明该文件是 AArch64 可重定位目标文件。如图~\ref{fig:q1b-symrel} 所示，符号表列出自定义函数、全局变量和 \texttt{printf}/\texttt{scanf} 等外部函数，重定位表列出 \texttt{R\_AARCH64\_*} 项。
 \labfigure{figures/memberB/q1/asm-aarch64.png}{LLVM 后端生成的 AArch64 汇编}{fig:q1b-asm}
 \labfigure{figures/memberB/q1/object-elf.png}{AArch64 可重定位目标文件的 ELF 头}{fig:q1b-object}
 \labfigure{figures/memberB/q1/symbols-relocs.png}{目标文件的符号表与重定位表}{fig:q1b-symrel}
 
 \subsubsection{链接结果检查}
-我们将目标文件与 C 运行时库链接，并对照链接前后的反汇编。图~\ref{fig:q1b-link} 中，目标文件保留针对 \texttt{printf} 的调用重定位，链接后的程序显示具体地址和 \texttt{printf@plt} 调用入口。我们在 Ubuntu 容器中通过 QEMU 用户态运行 AArch64 程序，并输入同一组数据。
+在链接阶段，将目标文件与 C 运行时库链接，并对照链接前后的反汇编。如图~\ref{fig:q1b-link} 所示，目标文件保留针对 \texttt{printf} 的调用重定位，链接后的程序显示具体地址和 \texttt{printf@plt} 调用入口。随后在 Ubuntu 容器中通过 QEMU 用户态运行 AArch64 程序。
 \begin{lstlisting}[language=bash]
 clang -std=c17 -Ipipeline/memberB/q1/include -O2 \
   pipeline/memberB/q1/src/main.c -o build/memberB/q1/main-native
@@ -85,8 +85,8 @@ aarch64-linux-gnu-gcc -no-pie build/memberB/q1/main-O2-aarch64.o \
 qemu-aarch64 -L /usr/aarch64-linux-gnu \
   build/memberB/q1/main-aarch64 < pipeline/memberB/q1/input/sample.txt
 \end{lstlisting}
-样例数据为 $1,2,3,4,5$，调整值分别为 $5,8,11,14,17$，按奇偶规则计算得到 $-11$，处理数为 $5$。我们分别记录 AArch64 目标文件、链接结果和本机程序的运行输出。
+输入 $1,2,3,4,5$ 后，调整值依次为 $5,8,11,14,17$，按奇偶规则计算得到 $-11$，处理数为 $5$。
 \labfigure{figures/memberB/q1/link-disassembly.png}{链接前目标文件与链接后程序的反汇编对照}{fig:q1b-link}
 
 \subsubsection{阶段观察小结}
-在本小题中，我们在预处理文件中核对 \texttt{MAX\_ITEMS} 和 \texttt{ADJUST(value,bias)} 的展开结果，在 token、AST、CFG 和 LLVM IR 中查看循环、奇偶分支和 \texttt{processed\_items} 的更新。\texttt{-O2} 相比 \texttt{-O0} 减少了部分重复的内存读写；AArch64 目标文件和链接后的反汇编记录了 \texttt{printf} 等外部调用的处理。样例输入 \texttt{1 2 3 4 5} 的输出为 \texttt{result=-11, processed=5}。
+在本小题中，预处理文件展示了 \texttt{MAX\_ITEMS} 和 \texttt{ADJUST(value,bias)} 的展开结果；token、AST、CFG 和 LLVM IR 分别记录了循环、奇偶分支和 \texttt{processed\_items} 的更新。\texttt{-O2} 相比 \texttt{-O0} 减少了部分重复的内存读写，AArch64 目标文件和链接后的反汇编展示了 \texttt{printf} 等外部调用的处理过程。

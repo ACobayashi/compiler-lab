@@ -1,14 +1,14 @@
 \subsection{LLVM IR 实现}
 
-本部分由成员A负责。我们根据 SysY 程序编写 \texttt{llvm/memberB/main.ll}，其中包含 \texttt{sum\_even}、\texttt{count\_pos} 和 \texttt{main} 三个函数。我们使用基本块实现循环和条件分支，使用 SSA 临时值和 \texttt{phi} 指令传递循环变量和计算结果，并调用 SysY 运行时库中的 \texttt{getint}、\texttt{putint} 和 \texttt{putch}。
+成员A负责 LLVM IR 的编写。根据 SysY 程序，编写 \texttt{main.ll}，其中包含 \texttt{sum\_even}、\texttt{count\_pos} 和 \texttt{main} 三个函数。使用基本块实现循环和条件分支，使用 SSA 临时值和 \texttt{phi} 指令传递循环变量和计算结果，并调用 SysY 运行时库中的 \texttt{getint}、\texttt{putint} 和 \texttt{putch}。
 
 \subsubsection{LLVM IR 的程序结构}
 
-我们在表中整理 SysY 程序的主要结构及其在 LLVM IR 中的实现方式。
+表~\ref{tab:q2-llvm-structure} 列出 SysY 程序的主要结构及其在 LLVM IR 中的实现方式。
 
 \begin{table}[H]
 \centering
-\caption{SysY 结构与 LLVM IR 的对应关系}
+
 \begin{tabularx}{0.94\linewidth}{>{\ttfamily}p{3.2cm} >{\ttfamily}p{4.1cm} X}
 \toprule
 \normalfont SysY 结构 & \normalfont LLVM IR 指令/结构 & \normalfont 实现方式 \\
@@ -22,11 +22,13 @@
 输入/输出 & \texttt{call} & 调用 \texttt{getint}、\texttt{putint} 和 \texttt{putch} \\
 \bottomrule
 \end{tabularx}
+\caption{SysY 结构与 LLVM IR 的对应关系}
+\label{tab:q2-llvm-structure}
 \end{table}
 
-在 \texttt{sum\_even} 中，循环头使用 \texttt{phi} 保存循环下标和当前累计和。程序先通过 \texttt{srem} 计算数组元素对 2 的余数，再根据判断结果决定是否更新累计和。\texttt{count\_pos} 使用相同的循环结构，通过比较元素是否大于 0 更新正数个数。
+在 \texttt{sum\_even} 中，循环头通过 \texttt{phi} 保存循环下标和当前累计和；\texttt{srem} 计算数组元素对 2 的余数，条件分支决定是否更新累计和。在 \texttt{count\_pos} 中，使用相同的循环结构，通过比较元素是否大于 0 更新正数个数。
 
-\texttt{main} 使用 \texttt{alloca} 分配数组空间，通过 \texttt{getint} 读入 $n$ 和数组元素，再将数组首地址和 $n$ 传给 \texttt{sum\_even} 和 \texttt{count\_pos}。两个函数返回结果后，使用 \texttt{putint} 和 \texttt{putch} 输出。
+在 \texttt{main} 中，\texttt{alloca} 分配数组空间，\texttt{getint} 读入 $n$ 和数组元素，再将数组首地址和 $n$ 传给 \texttt{sum\_even} 和 \texttt{count\_pos}；得到返回值后，通过 \texttt{putint} 和 \texttt{putch} 输出。
 
 \subsubsection{LLVM IR 程序}
 
@@ -39,7 +41,7 @@ label={lst:memberb-main-ll}
 
 \subsubsection{运行 LLVM IR 程序}
 
-我们在 Ubuntu 22.04 中使用 LLVM/Clang 14 编译 LLVM IR，target triple 为 \texttt{x86\_64-pc-linux-gnu}。我们链接仓库中的 \texttt{riscv/lib/sylib.c}，并在 \texttt{llvm/memberB/Makefile} 中执行编译和测试命令，将生成文件写入 \texttt{build/} 目录。
+在 Ubuntu 22.04 中，使用 LLVM/Clang 14 编译 LLVM IR，target triple 为 \texttt{x86\_64-pc-linux-gnu}；再将 SysY 运行时库编译并链接。
 
 \begin{lstlisting}[language=bash]
 cd llvm/memberB
@@ -50,17 +52,17 @@ nm build/main-native | grep -E "getint|putint|putch|sum_even|count_pos| main$"
 make test
 \end{lstlisting}
 
-我们使用 \texttt{llvm-as} 将 \texttt{main.ll} 转换为 bitcode，再用 Clang 生成本机目标文件并与 SysY 运行时链接为可执行文件。我们还将运行时库编译为共享库，供 \texttt{lli} 加载。
+使用 \texttt{llvm-as} 将 \texttt{main.ll} 转换为 bitcode，再用 Clang 生成本机目标文件并与 SysY 运行时库链接为可执行文件。运行时库同时编译为共享库，供 \texttt{lli} 加载。
 
-我们使用 \texttt{llvm-readelf} 查看目标文件的 ELF 信息和重定位项，使用 \texttt{nm} 查看 \texttt{sum\_even}、\texttt{count\_pos}、\texttt{main} 以及 \texttt{getint}、\texttt{putint}、\texttt{putch} 等符号。
+使用 \texttt{llvm-readelf} 检查目标文件的 ELF 信息和重定位项，使用 \texttt{nm} 检查 \texttt{sum\_even}、\texttt{count\_pos}、\texttt{main} 以及 \texttt{getint}、\texttt{putint}、\texttt{putch} 等符号。
 
 \subsubsection{测试结果}
 
-我们使用 \texttt{make test-native} 和 \texttt{make test-lli} 分别运行本机可执行文件和 LLVM \texttt{lli}，并输入三组基础测试数据。
+使用 \texttt{make test-native} 和 \texttt{make test-lli} 分别运行本机可执行文件和 LLVM \texttt{lli}，并输入设计的测试数据。
 
 \begin{table}[H]
 \centering
-\caption{LLVM IR 两种执行方式的测试结果}
+
 \begin{tabularx}{0.94\linewidth}{c X c X}
 \toprule
 组别 & 输入 & 预期输出 & native / lli 实际输出 \\
@@ -70,14 +72,12 @@ make test
 3 & 5；1 3 5 7 9 & 0；5 & 0；5 \\
 \bottomrule
 \end{tabularx}
+\caption{LLVM IR 两种执行方式的测试结果}
+\label{tab:q2-llvm-tests}
 \end{table}
 
-第1组输入中同时包含正数、负数、奇数和偶数，程序输出偶数和 \texttt{12}、正数个数 \texttt{4}。第2组中包含负偶数 \texttt{-2}，计算结果为偶数和 \texttt{6}、正数个数 \texttt{2}。第3组全部为正奇数，因此偶数和为 \texttt{0}，正数个数为 \texttt{5}。
-
-三组数据在 native 和 \texttt{lli} 下的输出分别为 \texttt{12/4}、\texttt{6/2} 和 \texttt{0/5}，与前面的测试结果一致。
+如表~\ref{tab:q2-llvm-tests} 所示，native 和 \texttt{lli} 的实际输出均与预期输出一致。
 
 \subsubsection{本部分小结}
 
-LLVM IR 中，\texttt{sum\_even} 使用 \texttt{srem} 判断偶数，并通过 \texttt{phi} 保存循环下标和累计结果；\texttt{count\_pos} 使用比较和条件分支统计正数个数；\texttt{main} 使用 \texttt{getelementptr} 计算数组元素地址，并调用 SysY 运行时函数完成输入输出。
-
-三组测试数据在 native 和 \texttt{lli} 两种方式下均得到 \texttt{12/4}、\texttt{6/2} 和 \texttt{0/5}，数组访问、循环、条件分支和函数调用的结果与前面的 SysY 程序一致。
+在 LLVM IR 中，\texttt{sum\_even} 使用 \texttt{srem} 判断偶数，并通过 \texttt{phi} 保存循环下标和累计结果；\texttt{count\_pos} 使用比较和条件分支统计正数个数；\texttt{main} 使用 \texttt{getelementptr} 计算数组元素地址，并调用 SysY 运行时函数完成输入输出。native 和 \texttt{lli} 的测试均通过。

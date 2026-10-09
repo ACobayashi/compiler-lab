@@ -1,16 +1,16 @@
 \section{结论}
 
-在小题1中，我们分别完成了 C 程序和 C++ 阶乘程序的预处理、编译、汇编和链接实验。通过预处理结果，我们核对了宏替换和头文件展开；通过 token、tree、AST、CFG、RTL 和 LLVM IR，我们查看了函数、循环、条件分支和数组访问在不同中间表示中的形式；通过汇编、符号表、重定位项和链接后的反汇编，我们继续查看了目标文件和外部函数调用的处理过程。C 程序输入 \texttt{1 2 3 4 5} 后输出 \texttt{result=-11, processed=5}；C++ 阶乘程序输入 \texttt{5} 后，动态链接和静态链接版本均输出 \texttt{120} 和 \texttt{1}。比较 \texttt{-O0} 和 \texttt{-O2} 后，我们在优化版本中观察到部分重复的内存读写被减少；加入 \texttt{-g} 后，目标文件中增加了调试信息；加入 \texttt{-fno-omit-frame-pointer} 后，汇编保留了 \texttt{\%rbp} 栈帧。
+在小题1中，我们分别完成了 C 程序和 C++ 阶乘程序的预处理、编译、汇编和链接实验。通过预处理文件，我们核对了宏替换和头文件展开；通过 token、tree、AST、CFG、RTL 和 LLVM IR，我们观察了函数、循环、条件分支和数组访问在不同中间表示中的形式；通过汇编、符号表、重定位项和链接后的反汇编，我们分析了目标文件和外部函数调用的处理过程。比较 \texttt{-O0} 与 \texttt{-O2} 后，我们在优化版本中观察到部分重复的内存读写被减少；加入 \texttt{-g} 后，目标文件中增加了调试信息；加入 \texttt{-fno-omit-frame-pointer} 后，汇编保留了 \texttt{\%rbp} 栈帧。
 
-在小题2中，我们共同完成 SysY 程序和三组基础测试数据，再按分工编写 LLVM IR 和 RISC-V 汇编。我们在 LLVM IR 中使用基本块、\texttt{phi}、\texttt{getelementptr} 和 \texttt{load/store} 表示循环、分支和数组访问；在 RISC-V 汇编中使用寄存器、栈帧、地址计算和调用约定实现相同逻辑。两份程序均链接 SysY 运行时库。native、\texttt{lli} 和 QEMU 对三组基础数据分别得到 \texttt{12/4}、\texttt{6/2} 和 \texttt{0/5}；RISC-V 程序的 100 组扩展测试全部通过。
+在小题2中，我们共同完成 SysY 程序和测试数据的设计，再按分工编写 LLVM IR 和 RISC-V 汇编。我们使用基本块、\texttt{phi}、\texttt{getelementptr} 和 \texttt{load/store} 表示 LLVM IR 中的循环、分支和数组访问；在 RISC-V 汇编中处理寄存器、栈帧、地址计算和调用约定。我们将两种实现与 SysY 运行时库链接，并完成测试。
 
-在进阶部分，我们从 \texttt{linalg.matmul} 开始，依次执行 Linalg 到 SCF、SCF 到基本块控制流、LLVM Dialect 和标准 LLVM IR 的转换。矩阵乘法在三层 \texttt{scf.for} 中展开为循环边界、读写和浮点乘加，再转换为 \texttt{br}、\texttt{cond\_br}、\texttt{phi} 和地址计算。最后，我们将 \texttt{matmul.ll} 编译为 x86-64 ELF 可重定位文件，并在符号表中检查 \texttt{matmul}。
+在进阶部分中，我们从 \texttt{linalg.matmul} 开始，依次完成 Linalg 到 SCF、SCF 到基本块控制流、LLVM Dialect 和标准 LLVM IR 的转换。矩阵乘法在三层 \texttt{scf.for} 中展开为循环边界、读写和浮点乘加，再转换为 \texttt{br}、\texttt{cond\_br}、\texttt{phi} 和地址计算。最后，我们将 \texttt{matmul.ll} 编译为 x86-64 ELF 可重定位文件，并在符号表中检查 \texttt{matmul}。
 
 \subsection{实验收获与感想}
 
-实验中，MLIR 14 的部分 Pass 名称与资料中的写法不同。我们先使用 \texttt{mlir-opt-14 --help} 查询本机支持的 Pass，再使用 \texttt{convert-scf-to-std} 等命令完成转换。链接 RISC-V 程序时，最初调用到的 SiFive GCC-Metal 工具链报告 \texttt{zmmul} ISA 属性不兼容；我们通过 \texttt{type -a} 确认工具链路径，将课程工具链放到 \texttt{PATH} 前端后重新生成目标文件，程序完成链接并通过测试。
+通过这次实验，我们把源程序、中间表示和目标代码放在同一组结果中对照，对宏展开、控制流图、LLVM IR 的基本块和 \texttt{phi} 指令有了更具体的认识，也熟悉了 RISC-V 中参数寄存器、保存寄存器、16 B 栈对齐和数组偏移的处理方式。MLIR 的转换过程让我们进一步理解了矩阵乘法如何从高层操作逐步展开为循环、控制流和指针访问。
 
-这次实验让我们把源程序、中间表示和目标代码放在同一组结果中对照。我们对宏展开、控制流图、LLVM IR 的基本块和 \texttt{phi} 指令有了更具体的认识，也熟悉了 RISC-V 中参数寄存器、保存寄存器、16 B 栈对齐和数组偏移的处理方式。MLIR 的转换过程进一步说明，同一段矩阵乘法可以从高层操作逐步展开为循环、控制流和指针访问。
+实验中，我们通过 \texttt{mlir-opt-14 --help} 查询可用的转换 Pass，再完成 SCF 到控制流的转换。链接 RISC-V 程序时，SiFive GCC-Metal 工具链报告 \texttt{zmmul} ISA 属性不兼容；我们使用 \texttt{type -a} 确认工具链路径，将课程工具链放到 \texttt{PATH} 前端后重新生成目标文件，程序完成链接并通过测试。
 
 \begin{thebibliography}{99}
 \bibitem{course_overview} 编译原理课程组. \emph{了解编译器、LLVM IR 编程及汇编编程实验指导} [课程资料].

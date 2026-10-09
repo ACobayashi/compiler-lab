@@ -3,12 +3,13 @@
 \renewcommand{\abstractname}{\kaishu \sihao \textbf{摘要}}
 \begin{abstract}
 \normalsize
-\noindent
-本次实验由成员A和成员B合作完成。在小题1中，成员A使用包含宏、数组、循环和条件分支的 C 程序，依次完成预处理、前端分析、LLVM IR、AArch64 汇编和目标文件的生成，并比较 \texttt{-O0} 与 \texttt{-O2} 的结果；成员B使用带有普通宏、带参宏和条件编译的 C++ 阶乘程序，使用 GCC 和 Clang 分析预处理、token、tree、CFG、RTL、汇编、目标文件和链接结果。
+\indent 本次实验由两人合作完成。
 
-在小题2中，我们共同设计了读取整型数组、计算偶数元素之和和统计正数个数的 SysY 程序，并设计测试数据进行验证。成员A负责 LLVM IR，成员B负责 RISC-V 汇编。我们将 LLVM IR 和 RISC-V 程序分别与 SysY 运行时库链接，在 native、\texttt{lli} 和 QEMU 中运行，输出均符合预期。编写过程中，我们使用基本块、SSA 值和数组地址计算表示 LLVM IR 中的循环与分支，使用寄存器、栈帧和地址偏移完成 RISC-V 汇编中的对应操作。
+在小题1中，成员A使用包含宏、数组、循环和条件分支的 C 程序，依次完成预处理、前端分析、LLVM IR、AArch64 汇编和目标文件的生成，并比较 \texttt{-O0} 与 \texttt{-O2} 的结果；成员B使用带有普通宏、带参宏和条件编译的 C++ 阶乘程序，使用 GCC 和 Clang 分析预处理、token、tree、CFG、RTL、汇编、目标文件和链接结果。
 
-在进阶部分中，我们以 $2\times4$、$4\times3$ 矩阵乘法为例，依次处理 \texttt{linalg.matmul}、三层 \texttt{scf.for}、基本块控制流、LLVM Dialect 和标准 LLVM IR。成员A整理前两步 Lowering 的结果，成员B核对 LLVM IR 和 x86-64 目标文件。我们将 \texttt{matmul.ll} 编译为 ELF 可重定位文件，并在符号表中检查 \texttt{matmul}。
+在小题2中，我们共同设计了读取整型数组、计算偶数元素之和和统计正数个数的 SysY 程序，并设计测试数据进行验证。成员A负责 LLVM IR部分，成员B负责 RISC-V 汇编部分。我们将 LLVM IR 和 RISC-V 程序分别与 SysY 运行时库链接，在 native、\texttt{lli} 和 QEMU 中运行，输出均符合预期。编写过程中，我们使用基本块、SSA 值和数组地址计算表示 LLVM IR 中的循环与分支，使用寄存器、栈帧和地址偏移完成 RISC-V 汇编中的对应操作。
+
+在进阶部分中，我们以 $2\times4$、$4\times3$ 矩阵乘法为例，依次处理 \texttt{linalg.matmul}、三层 \texttt{scf.for}、基本块控制流、LLVM Dialect 和标准 LLVM IR。成员A整理前两步 Lowering 的结果，成员B核对 LLVM IR 和 x86-64 目标文件，将 \texttt{matmul.ll} 编译为 ELF 可重定位文件，在符号表中检查 \texttt{matmul}。
 
 \noindent\textbf{关键词：} GCC；编译流程；SysY；LLVM IR；RISC-V；运行时库
 \end{abstract}

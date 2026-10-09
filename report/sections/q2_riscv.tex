@@ -1,6 +1,6 @@
-\subsection{RISC-V 汇编程序}
+\subsection{成员B：RISC-V 汇编编程}
 
-成员B负责 RISC-V 汇编的编写。根据 SysY 程序，编写数组输入、偶数求和和正数个数统计的汇编代码，并与 SysY 运行时库链接。使用 \texttt{qemu-riscv64} 运行测试数据，再检查目标文件和最终可执行文件中的函数符号。
+成员B负责 RISC-V 汇编的编写，源码归档在 \path{riscv/memberB/main.s}。根据共享的 SysY 程序，编写数组输入、偶数求和和正数个数统计的汇编代码，并与 \path{shared/sysy/lib/} 中的运行时库链接。使用 \texttt{qemu-riscv64} 运行测试数据，再检查目标文件和最终可执行文件中的函数符号。以下命令从 \path{riscv/memberB/} 执行。
 
 \subsubsection{寄存器使用}
 
@@ -143,6 +143,7 @@ main:
 在生成可执行文件时，先使用 RISC-V 交叉编译器将 \texttt{main.s} 汇编为目标文件 \texttt{main.o}：
 
 \begin{lstlisting}[language=bash]
+cd riscv/memberB
 riscv64-unknown-elf-gcc main.s -c -o main.o -w
 file main.o
 \end{lstlisting}
@@ -153,7 +154,7 @@ file main.o
 
 \begin{lstlisting}[language=bash]
 riscv64-unknown-elf-gcc main.o -o main \
-  -L./lib -lsysy_riscv \
+  -L../../shared/sysy/lib -lsysy_riscv \
   -static -mcmodel=medany \
   -Wl,--no-relax,-Ttext=0x90000000
 \end{lstlisting}
@@ -162,7 +163,7 @@ riscv64-unknown-elf-gcc main.o -o main \
 
 目标文件检查和链接结果如图~\ref{fig:q2-rv-link} 所示。
 
-\labfigure{figures/shared/q2_riscv/q2_1.png}{RV64 目标文件检查与 SysY 运行时库链接}{fig:q2-rv-link}
+\labfigure{figures/memberB/q2/q2_1.png}{RV64 目标文件检查与 SysY 运行时库链接}{fig:q2-rv-link}
 
 \subsubsection{运行结果}
 
@@ -174,9 +175,9 @@ qemu-riscv64 ./main
 
 测试数据的运行结果如图~\ref{fig:q2-rv-test1} 至图~\ref{fig:q2-rv-test3} 所示。
 
-\labfigure{figures/shared/q2_riscv/q2_2.png}{可执行文件类型与第 1 组运行结果}{fig:q2-rv-test1}
-\labfigure{figures/shared/q2_riscv/q2_3.png}{第 2 组运行结果}{fig:q2-rv-test2}
-\labfigure{figures/shared/q2_riscv/q2_4.png}{第 3 组运行结果}{fig:q2-rv-test3}
+\labfigure{figures/memberB/q2/q2_2.png}{可执行文件类型与第 1 组运行结果}{fig:q2-rv-test1}
+\labfigure{figures/memberB/q2/q2_3.png}{第 2 组运行结果}{fig:q2-rv-test2}
+\labfigure{figures/memberB/q2/q2_4.png}{第 3 组运行结果}{fig:q2-rv-test3}
 
 \begin{table}[H]
 \centering
@@ -226,7 +227,7 @@ riscv64-unknown-elf-nm main \
 
 如图~\ref{fig:q2-rv-nm} 所示，符号表中包含 \texttt{sum\_even}、\texttt{count\_pos}、\texttt{main} 以及 \texttt{getint}、\texttt{putint} 和 \texttt{putch}。
 
-\labfigure{figures/shared/q2_riscv/q2_5.png}{最终可执行文件中的程序函数与 SysY 运行时库符号}{fig:q2-rv-nm}
+\labfigure{figures/memberB/q2/q2_5.png}{最终可执行文件中的程序函数与 SysY 运行时库符号}{fig:q2-rv-nm}
 
 \subsubsection{本部分小结}
 

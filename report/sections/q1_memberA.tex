@@ -1,5 +1,5 @@
 \subsection{成员A：Clang/LLVM 编译流程实验}
-在 Ubuntu 22.04 Docker 容器中，使用 Clang/LLVM 14.0.0 为主流程，分析一份包含宏、数组、循环、条件分支和全局变量的 C 程序。GCC 11.4.0 仅作为辅助，用 \texttt{-fdump-tree-all-graph} 导出 Tree/GIMPLE 阶段图；该命令同时会生成一个不参与后续流程的辅助目标文件。Graphviz 2.43.0 用于绘图；AArch64 汇编由 LLVM 后端生成，交叉 GCC 驱动用于汇编和链接。以下按预处理器、编译器、汇编器和链接器的顺序观察各阶段。
+在 Ubuntu 22.04 Docker 容器中，使用 Clang/LLVM 14.0.0 为主流程，分析一份包含宏、数组、循环、条件分支和全局变量的 C 程序。GCC 11.4.0 仅作为辅助，用 \texttt{-fdump-tree-all-graph} 导出 Tree/GIMPLE 阶段图；该命令同时会生成一个不参与后续流程的辅助目标文件。Graphviz 2.43.0 用于绘图；AArch64 汇编由 LLVM 后端生成，交叉 GCC 驱动用于汇编和链接。阶段产物已归档到 \path{pipeline/memberA/q1/build-linux/}，其中 GCC 辅助图仍属于成员A。以下按预处理器、编译器、汇编器和链接器的顺序观察各阶段；进入 \path{pipeline/memberA/q1/} 后，后续命令均在该目录执行。
 
 \subsubsection{预处理器}
 在该程序中，输入 $1$ 至 $8$ 个整数；宏 \texttt{ADJUST(value,bias)} 将数组元素乘以比例常数后加上偏置；\texttt{weighted\_sum} 根据计算值的奇偶性累加或扣减，并更新全局计数器 \texttt{processed\_items}。
@@ -10,10 +10,11 @@
 使用 Clang 14 驱动的 \texttt{-E} 选项只执行预处理；\texttt{mkdir} 是 shell 命令，用于创建输出目录：
 \begin{lstlisting}[language=bash]
 # shell: create the output directory
-mkdir -p build/memberA/q1
+cd pipeline/memberA/q1
+mkdir -p build-linux
 # Clang 14 driver/preprocessor
-clang -E -std=c17 -Ipipeline/memberA/q1/include \
-  pipeline/memberA/q1/src/main.c -o build/memberA/q1/main.i
+clang-14 -E -std=c17 -Iinclude \
+  src/main.c -o build-linux/main.i
 \end{lstlisting}
 预处理结果中，\texttt{stdio.h} 的声明已展开，\texttt{MAX\_ITEMS} 在数组声明中替换为 \texttt{8}，\texttt{ADJUST(values[i], global\_bias)} 展开为 \texttt{((values[i]) * 3 + (global\_bias))}。
 
@@ -24,9 +25,9 @@ clang -E -std=c17 -Ipipeline/memberA/q1/include \
 使用 Clang 14 前端输出 token 种类、词素和源码位置；\texttt{-fsyntax-only} 让 Clang 完成前端检查后停止：
 \begin{lstlisting}[language=bash]
 # Clang 14 driver (frontend: dump tokens to stderr)
-clang -std=c17 -Ipipeline/memberA/q1/include -fsyntax-only \
-  -Xclang -dump-tokens pipeline/memberA/q1/src/main.c \
-  2> build/memberA/q1/tokens.txt
+clang-14 -std=c17 -Iinclude -fsyntax-only \
+  -Xclang -dump-tokens src/main.c \
+  2> build-linux/tokens.txt
 \end{lstlisting}
 如图~\ref{fig:q1a-tokens} 所示，token dump 列出了 \texttt{weighted\_sum}、\texttt{for}、比较与算术运算符等 token 及其在源码中的行列位置；如图~\ref{fig:q1a-ast} 所示，语法树中包含 \texttt{FunctionDecl}、\texttt{ForStmt}、\texttt{IfStmt}、\texttt{BinaryOperator} 等节点及类型注记。
 \labfigurecompact{figures/memberA/q1/tokens.png}{Clang token dump 及源码位置}{fig:q1a-tokens}{0.74}
@@ -35,9 +36,9 @@ clang -std=c17 -Ipipeline/memberA/q1/include -fsyntax-only \
 使用 Clang 14 前端的 AST dump 查看函数、声明、循环、条件分支及表达式的嵌套关系：
 \begin{lstlisting}[language=bash]
 # Clang 14 driver (frontend: dump the abstract syntax tree)
-clang -std=c17 -Ipipeline/memberA/q1/include -fsyntax-only \
-  -Xclang -ast-dump pipeline/memberA/q1/src/main.c \
-  > build/memberA/q1/ast.txt
+clang-14 -std=c17 -Iinclude -fsyntax-only \
+  -Xclang -ast-dump src/main.c \
+  > build-linux/ast.txt
 \end{lstlisting}
 \labfigurecompact{figures/memberA/q1/ast.png}{Clang AST 中的函数、循环与条件节点}{fig:q1a-ast}{0.74}
 
@@ -48,17 +49,17 @@ Clang 前端在构造 AST 时检查表达式和函数调用的类型。AST 节�
 Clang 可直接生成 LLVM IR。另为观察 CFG 的基本块关系，使用 GCC 11.4 对同一源文件生成 Tree/GIMPLE 图；该 GCC 图是辅助观察，不是后续 Clang/LLVM 编译链的中间输入。Graphviz 的 \texttt{dot} 将 \texttt{.dot} 文件绘制成图：
 \begin{lstlisting}[language=bash]
 # shell: create the graph output directory
-mkdir -p build/memberA/q1/gcc-graphs
+mkdir -p build-linux/gcc-graphs
 # GCC 11.4 driver: compile and emit Tree/GIMPLE CFG dumps (the .o is auxiliary)
-gcc -O0 -Ipipeline/memberA/q1/include -fdump-tree-all-graph \
-  -dumpdir build/memberA/q1/gcc-graphs/ -dumpbase main-gcc \
-  -c pipeline/memberA/q1/src/main.c -o build/memberA/q1/main-gcc.o
+gcc -O0 -Iinclude -fdump-tree-all-graph \
+  -dumpdir build-linux/gcc-graphs/ -dumpbase main-gcc \
+  -c src/main.c -o build-linux/main-gcc.o
 # Graphviz 2.43: render the selected GCC .dot graph
-dot -Tpng build/memberA/q1/gcc-graphs/main-gcc.c.015t.cfg.dot \
-  -o build/memberA/q1/gcc-graphs/main-cfg.png
+dot -Tpng build-linux/gcc-graphs/main-gcc.c.015t.cfg.dot \
+  -o build-linux/gcc-graphs/main-cfg.png
 # Clang 14 driver/frontend: emit unoptimized LLVM IR
-clang -std=c17 -Ipipeline/memberA/q1/include -O0 -S -emit-llvm \
-  pipeline/memberA/q1/src/main.c -o build/memberA/q1/main-O0.ll
+clang-14 -std=c17 -Iinclude -O0 -S -emit-llvm \
+  src/main.c -o build-linux/main-O0-ubuntu.ll
 \end{lstlisting}
 图~\ref{fig:q1a-cfg} 中的循环回边对应 \texttt{for} 的重复执行，分支对应奇偶判断和输入检查。未优化 IR 则保留较多局部存储、\texttt{load/store} 与显式控制流，可与源程序的函数、数组访问和条件分支对照。
 \labfigure{figures/memberA/q1/cfg.png}{GCC 生成并由 Graphviz 绘制的控制流图}{fig:q1a-cfg}
@@ -68,8 +69,8 @@ clang -std=c17 -Ipipeline/memberA/q1/include -O0 -S -emit-llvm \
 使用 Clang 14 对同一份源程序分别指定 \texttt{-O0} 和 \texttt{-O2}，比较优化前后的 LLVM IR：
 \begin{lstlisting}[language=bash]
 # Clang 14 driver and LLVM optimizer: emit IR at -O2
-clang -std=c17 -Ipipeline/memberA/q1/include -O2 -S -emit-llvm \
-  pipeline/memberA/q1/src/main.c -o build/memberA/q1/main-O2.ll
+clang-14 -std=c17 -Iinclude -O2 -S -emit-llvm \
+  src/main.c -o build-linux/main-O2-ubuntu.ll
 \end{lstlisting}
 如图~\ref{fig:q1a-ir-opt} 所示，\texttt{-O2} 版本更多使用 SSA 临时值，减少部分冗余栈读写，并出现 \texttt{nsw} 等运算属性；函数属性和循环组织也发生变化。
 \labfigure{figures/memberA/q1/ir-o0-o2.png}{同一函数在 -O0 与 -O2 下的 LLVM IR 对照}{fig:q1a-ir-opt}
@@ -78,12 +79,12 @@ clang -std=c17 -Ipipeline/memberA/q1/include -O2 -S -emit-llvm \
 目标平台设为 AArch64。Clang 14 前端先为该目标生成 LLVM IR，再由 LLVM 14 后端 \texttt{llc} 映射为 AArch64 汇编：
 \begin{lstlisting}[language=bash]
 # Clang 14 driver/frontend: emit LLVM IR for AArch64
-clang --target=aarch64-linux-gnu -std=c17 \
-  -Ipipeline/memberA/q1/include -O2 -S -emit-llvm \
-  pipeline/memberA/q1/src/main.c -o build/memberA/q1/main-O2-aarch64.ll
+clang-14 --target=aarch64-linux-gnu -std=c17 \
+  -Iinclude -O2 -S -emit-llvm \
+  src/main.c -o build-linux/main-O2-aarch64.ll
 # LLVM 14 backend: lower LLVM IR to AArch64 assembly
-llc -O2 build/memberA/q1/main-O2-aarch64.ll \
-  -o build/memberA/q1/main-O2-aarch64.s
+llc-14 -O2 build-linux/main-O2-aarch64.ll \
+  -o build-linux/main-O2-aarch64.s
 \end{lstlisting}
 \labfigure{figures/memberA/q1/asm-aarch64.png}{LLVM 后端生成的 AArch64 汇编}{fig:q1a-asm}
 
@@ -91,12 +92,12 @@ llc -O2 build/memberA/q1/main-O2-aarch64.ll \
 GNU AArch64 GCC 驱动的 \texttt{-c} 调用汇编器，将汇编助记符编码为机器指令并生成可重定位 ELF 目标文件；\texttt{aarch64-linux-gnu-readelf} 是 GNU binutils 的 ELF 检查工具，用于查看 ELF 头、符号和重定位：
 \begin{lstlisting}[language=bash]
 # GNU AArch64 GCC driver: invoke the assembler and write a relocatable object
-aarch64-linux-gnu-gcc -c build/memberA/q1/main-O2-aarch64.s \
-  -o build/memberA/q1/main-O2-aarch64.o
+aarch64-linux-gnu-gcc -c build-linux/main-O2-aarch64.s \
+  -o build-linux/main-O2-aarch64.o
 # GNU binutils: inspect the ELF header
-aarch64-linux-gnu-readelf -h build/memberA/q1/main-O2-aarch64.o
+aarch64-linux-gnu-readelf -h build-linux/main-O2-aarch64.o
 # GNU binutils: inspect symbols and relocations
-aarch64-linux-gnu-readelf -Ws -rW build/memberA/q1/main-O2-aarch64.o
+aarch64-linux-gnu-readelf -Ws -rW build-linux/main-O2-aarch64.o
 \end{lstlisting}
 目标文件的 \texttt{Type: REL} 和 \texttt{Machine: AArch64} 表明它是 AArch64 可重定位文件。符号表包含自定义函数、全局变量及 \texttt{printf}/\texttt{scanf} 等外部符号；重定位表中的 \texttt{R\_AARCH64\_*} 项记录了尚待链接器处理的位置。
 \labfigure{figures/memberA/q1/object-elf.png}{AArch64 可重定位目标文件的 ELF 头}{fig:q1a-object}
@@ -106,16 +107,16 @@ aarch64-linux-gnu-readelf -Ws -rW build/memberA/q1/main-O2-aarch64.o
 链接器将目标文件与启动代码和运行库组合，解析可解析的符号并处理重定位，生成可执行文件。下面的 \texttt{aarch64-linux-gnu-gcc} 是 GCC 驱动程序：它调用链接器并自动配置目标平台的启动文件和默认 C 运行库；\texttt{-no-pie} 控制可执行文件形式。另用 Clang 驱动构建原生程序作对照，AArch64 程序则由 QEMU 用户态模拟器运行：
 \begin{lstlisting}[language=bash]
 # Clang 14 driver: compile and link a native x86-64 executable
-clang -std=c17 -Ipipeline/memberA/q1/include -O2 \
-  pipeline/memberA/q1/src/main.c -o build/memberA/q1/main-native
+clang-14 -std=c17 -Iinclude -O2 \
+  src/main.c -o build-linux/main-native
 # shell: run the native executable with the sample input
-build/memberA/q1/main-native < pipeline/memberA/q1/input/sample.txt
+build-linux/main-native < input/sample.txt
 # GNU AArch64 GCC driver: invoke the linker for the AArch64 object
-aarch64-linux-gnu-gcc -no-pie build/memberA/q1/main-O2-aarch64.o \
-  -o build/memberA/q1/main-aarch64
+aarch64-linux-gnu-gcc -no-pie build-linux/main-O2-aarch64.o \
+  -o build-linux/main-aarch64
 # QEMU user-mode emulator: run the AArch64 executable
 qemu-aarch64 -L /usr/aarch64-linux-gnu \
-  build/memberA/q1/main-aarch64 < pipeline/memberA/q1/input/sample.txt
+  build-linux/main-aarch64 < input/sample.txt
 \end{lstlisting}
 对照反汇编可见，未链接目标文件保留针对 \texttt{printf} 的调用重定位；链接后的程序显示具体地址和 \texttt{printf@plt} 入口。输入 $1,2,3,4,5$ 后，调整值依次为 $5,8,11,14,17$，按奇偶规则计算得到 $-11$，处理数为 $5$。
 \labfigure{figures/memberA/q1/link-disassembly.png}{链接前目标文件与链接后程序的反汇编对照}{fig:q1a-link}

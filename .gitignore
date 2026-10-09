@@ -5,12 +5,12 @@
 *.o
 *.out
 *.exe
-/main
-/riscv/main
-/output/main_O0
-/output/main_g
-/output/main_nog
-/output/main_static
+/pipeline/memberB/q1/main
+/pipeline/memberB/q1/output/main_O0
+/pipeline/memberB/q1/output/main_g
+/pipeline/memberB/q1/output/main_nog
+/pipeline/memberB/q1/output/main_static
+/riscv/memberB/main
 
 # LaTeX build intermediates
 *.aux
@@ -26,3 +26,10 @@
 .idea/
 .DS_Store
 Thumbs.db
+
+# Preserve selected experiment snapshots, separate from rebuild directories.
+!/pipeline/memberA/q1/build-linux/main-O2-aarch64.o
+!/pipeline/memberA/q1/build-linux/llc-passes.log
+!/pipeline/memberA/q1/build-linux/llc-o2-passes.log
+!/llvm/memberA/build-linux/*.o
+!/llvm/memberA/results/*.out

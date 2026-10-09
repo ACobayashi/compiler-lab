@@ -1,6 +1,6 @@
-\subsection{LLVM IR 实现}
+\subsection{成员A：LLVM IR 编程}
 
-成员A负责 LLVM IR 的编写。根据 SysY 程序，编写 \texttt{main.ll}，其中包含 \texttt{sum\_even}、\texttt{count\_pos} 和 \texttt{main} 三个函数。使用基本块实现循环和条件分支，使用 SSA 临时值和 \texttt{phi} 指令传递循环变量和计算结果，并调用 SysY 运行时库中的 \texttt{getint}、\texttt{putint} 和 \texttt{putch}。
+成员A负责 LLVM IR 的编写。本次手写源码为 \path{llvm/memberA/src/handwritten.ll}，其中包含 \texttt{sum\_even}、\texttt{count\_pos} 和 \texttt{main} 三个函数。使用基本块实现循环和条件分支，使用 SSA 临时值和 \texttt{phi} 指令传递循环变量和计算结果，并调用共享 SysY 运行时库中的 \texttt{getint}、\texttt{putint} 和 \texttt{putch}。源程序和运行时库统一放在 \path{shared/sysy/}；成员A的参考 IR、编译产物和测试记录分别归档在 \texttt{reference/}、\texttt{build-linux/} 和 \texttt{results/}，不再使用 \texttt{practice} 作为实验目录。
 
 \subsubsection{LLVM IR 的程序结构}
 
@@ -35,48 +35,61 @@
 完整 LLVM IR 如下：
 
 \lstinputlisting[
-caption={LLVM IR 程序 main.ll},
+caption={成员A手写的 LLVM IR 程序 handwritten.ll},
 label={lst:membera-main-ll}
-]{../llvm/memberA/main.ll}
+]{../llvm/memberA/src/handwritten.ll}
 
 \subsubsection{运行 LLVM IR 程序}
 
-在 Ubuntu 22.04 中，使用 LLVM/Clang 14 编译 LLVM IR，target triple 为 \texttt{x86\_64-pc-linux-gnu}；再将 SysY 运行时库编译并链接。
+在 Ubuntu 22.04 中，使用 LLVM/Clang 14 编译 LLVM IR，target triple 为 \texttt{x86\_64-pc-linux-gnu}；再将 SysY 运行时库编译并链接。本次手工复现实验在 macOS 宿主机的 \texttt{linux/amd64} Docker 容器中完成，实际编译和执行环境仍为 Ubuntu，而非宿主机的 Apple Silicon 工具链。
+
+当前手写程序可通过 Makefile 批量构建和测试；使用带版本号的命令指定 LLVM 14。重建产物写入 \texttt{build/}，不覆盖已保存的 \texttt{build-linux/} 和 \texttt{results/}：
 
 \begin{lstlisting}[language=bash]
 cd llvm/memberA
-make all
-llvm-readelf -h build/main.o
-llvm-readelf -rW build/main.o
-nm build/main-native | grep -E "getint|putint|putch|sum_even|count_pos| main$"
-make test
+make all CLANG=clang-14 LLVM_AS=llvm-as-14
+make test CLANG=clang-14 LLVM_AS=llvm-as-14 LLI=lli-14
 \end{lstlisting}
 
-使用 \texttt{llvm-as} 将 \texttt{main.ll} 转换为 bitcode，再用 Clang 生成本机目标文件并与 SysY 运行时库链接为可执行文件。运行时库同时编译为共享库，供 \texttt{lli} 加载。
+\texttt{llvm-as} 将文本 IR 转换为 bitcode，但不生成机器目标文件。Clang 则直接读取 \texttt{.ll}，生成本机目标文件，并与 SysY 运行时库的目标文件链接为可执行文件；运行时库还可编译为共享库，供 \texttt{lli} 加载。这是两条执行支路，并不是先将 \texttt{.ll} 转成 \texttt{.bc} 后，Clang 才能编译它。当前 Makefile 的 \texttt{test-lli} 读取 \texttt{build/handwritten.bc}，与本次手工验证采用的 bitcode 执行方式一致。
 
-使用 \texttt{llvm-readelf} 检查目标文件的 ELF 信息和重定位项，使用 \texttt{nm} 检查 \texttt{sum\_even}、\texttt{count\_pos}、\texttt{main} 以及 \texttt{getint}、\texttt{putint}、\texttt{putch} 等符号。
+图~\ref{fig:q2-llvm-native-lli} 记录了成员A分步编写并验证该程序的过程，截图中的原始 \texttt{practice} 路径保留为当时的操作记录；目录整理后，源码移至 \texttt{src/}，产物移至 \texttt{build-linux/}。先使用 \texttt{clang-14 -c -x ir} 生成目标文件，再与 \texttt{sylib.o} 链接；另一支路使用 \texttt{clang-14 -shared -fPIC} 生成 \texttt{sylib.so}，由 \texttt{lli-14 -load} 加载并执行 \texttt{handwritten.bc}。两种方式在第一组输入下均输出 12 和 4。截图中的 \texttt{TOTAL} 是运行时库写入 \texttt{stderr} 的计时信息，不属于程序的计算输出。
+
+\labfigurecompact{figures/memberA/q2/native-lli.png}{手写 LLVM IR 的编译、链接及 native / lli 执行验证}{fig:q2-llvm-native-lli}{1.0}
+
+\subsubsection{链接前后的符号与重定位}
+
+图~\ref{fig:q2-llvm-symbols-relocs} 使用 \texttt{llvm-nm-14} 对比链接前后的符号，并使用 \texttt{llvm-readelf-14 -r} 查看目标文件的重定位记录。
+
+\labfigurecompact{figures/memberA/q2/symbols-relocs.png}{LLVM IR 目标文件与可执行文件的符号及重定位记录}{fig:q2-llvm-symbols-relocs}{1.0}
+
+\begin{samepage}
+在 \texttt{handwritten.o} 中，\texttt{sum\_even}、\texttt{count\_pos} 和 \texttt{main} 显示为 \texttt{T}，表示在代码节中定义；\texttt{getint}、\texttt{putint} 和 \texttt{putch} 显示为 \texttt{U}，表示它们在本目标文件中尚未定义。链接 \texttt{sylib.o} 后，六个函数在 \texttt{ir-native} 中均显示为 \texttt{T}，说明运行时库的定义已被解析并纳入程序。这里的 \texttt{U} 不是编译错误，将运行时库目标文件链接进程序也不等于整个程序完全静态链接，C 标准库仍可采用动态链接。
+\end{samepage}
+
+\texttt{.rela.text} 中有 8 个 \texttt{R\_X86\_64\_PLT32} 重定位项，对应 \texttt{getint}、\texttt{putint}、\texttt{putch} 各两个调用位置，以及 \texttt{sum\_even}、\texttt{count\_pos} 各一个调用位置。两个本文件已定义的函数也有重定位项，可见重定位并不只针对未定义符号；链接器仍需根据符号绑定及最终布局处理调用位移。\texttt{.rela.eh\_frame} 中另有 3 个 \texttt{R\_X86\_64\_PC32} 项，用于三个函数的调用帧/栈展开信息，不应与业务函数调用的重定位混淆。
 
 \subsubsection{测试结果}
 
-使用 \texttt{make test-native} 和 \texttt{make test-lli} 分别运行本机可执行文件和 LLVM \texttt{lli}，并输入设计的测试数据。
+使用相同的三组输入验证源程序与 IR。源程序属于 C 兼容子集，在不修改 \texttt{main.sy} 的前提下，用仅补充运行时函数声明并包含原源码的 C 包装文件生成执行基线；这不意味着 Clang 原生支持完整 SysY。随后分别运行手写 IR 的本机可执行文件及 \texttt{lli}，将三种方式的 \texttt{stdout} 保存后使用 \texttt{diff -u} 对比，同时将 \texttt{stderr} 单独保存，避免计时信息干扰比较。
 
 \begin{table}[H]
 \centering
 
 \begin{tabularx}{0.94\linewidth}{c X c X}
 \toprule
-组别 & 输入 & 预期输出 & native / lli 实际输出 \\
+组别 & 输入 & 预期输出 & 源程序 / native / lli 实际输出 \\
 \midrule
 1 & 5；1 2 -3 4 6 & 12；4 & 12；4 \\
 2 & 4；-2 3 8 -5 & 6；2 & 6；2 \\
 3 & 5；1 3 5 7 9 & 0；5 & 0；5 \\
 \bottomrule
 \end{tabularx}
-\caption{LLVM IR 两种执行方式的测试结果}
+\caption{源程序与 LLVM IR 两种执行方式的测试结果}
 \label{tab:q2-llvm-tests}
 \end{table}
 
-如表~\ref{tab:q2-llvm-tests} 所示，native 和 \texttt{lli} 的实际输出均与预期输出一致。
+如表~\ref{tab:q2-llvm-tests} 所示，三组测试均显示 \texttt{MATCH}，三种执行方式的输出相同，并与预期结果一致。测试输入满足 $0\leq n\leq 10$，累计和不发生有符号溢出；程序本身未加入数组长度检查。
 
 \subsubsection{本部分小结}
 

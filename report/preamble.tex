@@ -7,16 +7,25 @@
 \usepackage{caption}
 \usepackage{enumerate}
 \usepackage{booktabs}
-\usepackage{multirow}
 \newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
 
-% 模板字体设置；保留 Windows 环境可用的回退字体。
+% 显式配置中西文字体，避免依赖 ctex 按操作系统自动选择的字体集。
 \usepackage{fontspec}
 \usepackage{xeCJK}
-\IfFontExistsTF{Noto Serif CJK SC}{\setCJKmainfont{Noto Serif CJK SC}}{\setCJKmainfont{SimSun}}
-\IfFontExistsTF{Noto Sans CJK SC}{\setCJKsansfont{Noto Sans CJK SC}}{\setCJKsansfont{Microsoft YaHei}}
+\IfFileExists{/System/Library/Fonts/Supplemental/Songti.ttc}{%
+  \setCJKmainfont{Songti.ttc}[Path=/System/Library/Fonts/Supplemental/,FontIndex=6]}{%
+  \IfFontExistsTF{Noto Serif CJK SC}{\setCJKmainfont{Noto Serif CJK SC}}{\setCJKmainfont{SimSun}}}
+\IfFileExists{/System/Library/Fonts/STHeiti Medium.ttc}{%
+  \setCJKsansfont{STHeiti Medium.ttc}[Path=/System/Library/Fonts/,FontIndex=1]}{%
+  \IfFontExistsTF{Noto Sans CJK SC}{\setCJKsansfont{Noto Sans CJK SC}}{\setCJKsansfont{Microsoft YaHei}}}
 \setmonofont{Courier New}
-\IfFontExistsTF{Noto Sans Mono CJK SC}{\setCJKmonofont{Noto Sans Mono CJK SC}}{\setCJKmonofont{Microsoft YaHei}}
+\IfFileExists{/System/Library/Fonts/STHeiti Medium.ttc}{%
+  \setCJKmonofont{STHeiti Medium.ttc}[Path=/System/Library/Fonts/,FontIndex=1]}{%
+  \IfFontExistsTF{Noto Sans Mono CJK SC}{\setCJKmonofont{Noto Sans Mono CJK SC}}{\setCJKmonofont{Microsoft YaHei}}}
+\IfFileExists{/System/Library/AssetsV2/com_apple_MobileAsset_Font8/88d6cc32a907955efa1d014207889413890573be.asset/AssetData/Kaiti.ttc}{%
+  \newCJKfontfamily\kaishu{Kaiti.ttc}[Path=/System/Library/AssetsV2/com_apple_MobileAsset_Font8/88d6cc32a907955efa1d014207889413890573be.asset/AssetData/,FontIndex=0]}{%
+  \IfFontExistsTF{Noto Serif CJK SC}{\newCJKfontfamily\kaishu{Noto Serif CJK SC}}{%
+    \newCJKfontfamily\kaishu{SimSun}}}
 \newcommand{\yihao}{\fontsize{26pt}{36pt}\selectfont}
 \newcommand{\erhao}{\fontsize{22pt}{28pt}\selectfont}
 \newcommand{\xiaoer}{\fontsize{18pt}{18pt}\selectfont}
